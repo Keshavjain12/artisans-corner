@@ -1,0 +1,47 @@
+# Render blueprint for the Artisan's Corner API.
+# Create the frontend on Vercel/Netlify (see vercel.json / netlify.toml).
+services:
+  - type: web
+    name: artisans-corner-api
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ALLOW_MOCK_PAYMENTS
+        value: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: PLATFORM_COMMISSION_RATE
+        value: "0.05"
+      - key: SHIPPING_FLAT_RATE
+        value: "5"
+      - key: FREE_SHIPPING_THRESHOLD
+        value: "75"
+      - key: CURRENCY
+        value: usd
+      # Set these in the Render dashboard - never commit real values.
+      - key: MONGO_URI
+        sync: false
+      - key: CLIENT_URL
+        sync: false
+      - key: SERVER_URL
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false

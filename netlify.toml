@@ -1,0 +1,13 @@
+[build]
+  base = "client"
+  command = "npm run build"
+  publish = "dist"
+
+# Single-page app: every path is served by index.html so deep links survive a refresh.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build.environment]
+  NODE_VERSION = "20"

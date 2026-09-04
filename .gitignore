@@ -1,0 +1,32 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# env / secrets
+.env
+.env.local
+.env.*.local
+*.pem
+
+# builds
+dist/
+build/
+client/dist/
+coverage/
+
+# local uploads (dev fallback storage)
+server/uploads/*
+!server/uploads/.gitkeep
+
+# logs
+logs/
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# editors / os
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

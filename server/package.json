@@ -11,7 +11,8 @@
     "seed": "node seed/seed.js",
     "seed:destroy": "node seed/seed.js --destroy",
     "test": "cross-env NODE_ENV=test ALLOW_MOCK_PAYMENTS=true JWT_SECRET=test-secret-value-not-for-production NODE_OPTIONS=--experimental-vm-modules jest --runInBand --forceExit",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "dev:memory": "node scripts/dev-memory-db.mjs"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

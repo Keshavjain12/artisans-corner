@@ -11,10 +11,13 @@
     "seed": "npm --prefix server run seed",
     "test": "npm --prefix server test",
     "build": "npm --prefix client run build",
-    "lint": "npm --prefix server run lint && npm --prefix client run lint"
+    "lint": "npm --prefix server run lint && npm --prefix client run lint",
+    "dev:memory": "concurrently -n server,client -c blue,magenta \"npm --prefix server run dev:memory\" \"npm --prefix client run dev\""
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
   },
-  "engines": { "node": ">=18.18" }
+  "engines": {
+    "node": ">=18.18"
+  }
 }

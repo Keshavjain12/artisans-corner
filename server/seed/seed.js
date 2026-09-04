@@ -7,6 +7,7 @@
  *   npm run seed:destroy    # wipe only
  */
 import mongoose from 'mongoose';
+import { pathToFileURL } from 'node:url';
 import env from '../config/env.js';
 import { connectDB, disconnectDB } from '../config/db.js';
 import { CATEGORY_SEED } from '../config/categories.js';
@@ -231,7 +232,7 @@ async function seedOrdersAndReviews(buyers) {
   console.log(`[seed] ${reviewCount} verified reviews`);
 }
 
-async function run() {
+export async function run() {
   const destroyOnly = process.argv.includes('--destroy');
 
   await connectDB();
@@ -259,8 +260,14 @@ async function run() {
   console.log('[seed] done');
 }
 
-run().catch(async (error) => {
-  console.error('[seed] failed:', error);
-  await disconnectDB().catch(() => {});
-  process.exit(1);
-});
+// Only self-execute when run directly (`npm run seed`); importing just
+// exposes `run` so the in-memory dev server can seed before it boots.
+const isEntryPoint = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (isEntryPoint) {
+  run().catch(async (error) => {
+    console.error('[seed] failed:', error);
+    await disconnectDB().catch(() => {});
+    process.exit(1);
+  });
+}

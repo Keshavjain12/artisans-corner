@@ -191,11 +191,24 @@ npm run dev
 
 Open <http://localhost:5173>.
 
+### No MongoDB installed?
+
+```bash
+npm run dev:memory
+```
+
+Starts a throwaway in-memory MongoDB, seeds it, and runs the API and client
+against it - useful for a quick demo on a clean machine. The first run downloads
+a MongoDB binary (~600MB, cached afterwards). **Data is not persisted**: every
+restart reseeds from scratch, so use a real `MONGO_URI` with `npm run dev` for
+anything you want to keep.
+
 Individual commands:
 
 | Command | What it does |
 | --- | --- |
 | `npm run dev` | API + client together |
+| `npm run dev:memory` | Same, but against a seeded in-memory MongoDB (no install needed) |
 | `npm run dev:server` | API only, with `node --watch` |
 | `npm run dev:client` | Vite dev server only |
 | `npm run seed` | Wipe and reseed the database |

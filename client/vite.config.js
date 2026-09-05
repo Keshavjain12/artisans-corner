@@ -4,12 +4,14 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 5173,
+    port: 5273,
+    // Fail loudly on a port clash instead of silently hopping to another port.
+    strictPort: true,
     // Keeps the browser on one origin in development, so cookies and CORS
     // behave the same locally as they do in production.
     proxy: {
-      '/api': { target: 'http://localhost:5000', changeOrigin: true },
-      '/uploads': { target: 'http://localhost:5000', changeOrigin: true },
+      '/api': { target: 'http://localhost:5055', changeOrigin: true },
+      '/uploads': { target: 'http://localhost:5055', changeOrigin: true },
     },
   },
   build: {

@@ -1,6 +1,6 @@
 # API Documentation - Artisan's Corner
 
-Base URL: `${SERVER_URL}/api` (development: `http://localhost:5000/api`).
+Base URL: `${SERVER_URL}/api` (development: `http://localhost:5055/api`).
 
 ## Conventions
 

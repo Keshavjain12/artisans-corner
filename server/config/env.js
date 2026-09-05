@@ -16,18 +16,18 @@ const env = {
   nodeEnv: process.env.NODE_ENV || 'development',
   isProd: process.env.NODE_ENV === 'production',
   isTest: process.env.NODE_ENV === 'test',
-  port: num(process.env.PORT, 5000),
+  port: num(process.env.PORT, 5055),
 
   mongoUri: process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/artisans-corner',
 
   jwtSecret: process.env.JWT_SECRET || 'dev-only-insecure-secret-change-me',
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '7d',
 
-  clientUrls: (process.env.CLIENT_URL || 'http://localhost:5173')
+  clientUrls: (process.env.CLIENT_URL || 'http://localhost:5273')
     .split(',')
     .map((url) => url.trim().replace(/\/$/, ''))
     .filter(Boolean),
-  serverUrl: (process.env.SERVER_URL || 'http://localhost:5000').replace(/\/$/, ''),
+  serverUrl: (process.env.SERVER_URL || 'http://localhost:5055').replace(/\/$/, ''),
 
   commissionRate: num(process.env.PLATFORM_COMMISSION_RATE, 0.05),
   taxRate: num(process.env.TAX_RATE, 0),

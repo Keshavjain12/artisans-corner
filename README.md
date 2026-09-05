@@ -185,11 +185,11 @@ cp client/.env.example client/.env
 # seed demo data (6 shops, 30 products, orders, reviews)
 npm run seed
 
-# run API (:5000) and client (:5173) together
+# run API (:5055) and client (:5273) together
 npm run dev
 ```
 
-Open <http://localhost:5173>.
+Open <http://localhost:5273>.
 
 ### No MongoDB installed?
 
@@ -230,8 +230,8 @@ Backend (`server/.env`) - see `.env.example` for the full annotated list:
 | `MONGO_URI` | **yes** | local mongod | MongoDB connection string |
 | `JWT_SECRET` | **yes** | dev fallback | Signing key - use a long random string |
 | `JWT_EXPIRES_IN` | no | `7d` | Token lifetime |
-| `CLIENT_URL` | no | `http://localhost:5173` | CORS allow-list (comma separated) |
-| `SERVER_URL` | no | `http://localhost:5000` | Used for locally stored image URLs |
+| `CLIENT_URL` | no | `http://localhost:5273` | CORS allow-list (comma separated) |
+| `SERVER_URL` | no | `http://localhost:5055` | Used for locally stored image URLs |
 | `PLATFORM_COMMISSION_RATE` | no | `0.05` | Marketplace commission |
 | `SHIPPING_FLAT_RATE` | no | `5` | Flat shipping charge |
 | `FREE_SHIPPING_THRESHOLD` | no | `75` | Subtotal above which shipping is free |
@@ -301,7 +301,7 @@ production requires real credentials.
 
    ```bash
    stripe login
-   stripe listen --forward-to localhost:5000/api/payments/webhook
+   stripe listen --forward-to localhost:5055/api/payments/webhook
    ```
 
    Copy the printed `whsec_...` into `STRIPE_WEBHOOK_SECRET`.

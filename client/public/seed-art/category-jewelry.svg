@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Jewelry">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F6EBE3"/>
+      <stop offset="100%" stop-color="#E7CFC1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#g)"/>
+  <circle cx="-558" cy="-418" r="170" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="-195" cy="-38" r="260" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="-50" cy="-303" r="350" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/>
+  <g transform="rotate(2 600 450)">
+    <circle cx="600" cy="470" r="150" fill="none" stroke="#8F5739" stroke-width="22" opacity="0.85"/>
+    <circle cx="600" cy="470" r="96" fill="none" stroke="#A96F4C" stroke-width="12" opacity="0.8"/>
+    <path d="M600 250 l38 62 l-38 62 l-38 -62 z" fill="#8F5739" opacity="0.9"/>
+    <circle cx="600" cy="470" r="30" fill="#A96F4C" opacity="0.55"/></g>
+</svg>

@@ -39,7 +39,8 @@ export function DashboardShell({ title, subtitle, links, badge }) {
             nav stretches to its content width and the tab strip below never
             scrolls - it drags the whole page sideways on a phone instead. */}
         <nav aria-label="Dashboard" className="min-w-0 lg:sticky lg:top-8 lg:h-fit">
-          <ul className="flex gap-1.5 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
+          <div className="relative lg:contents">
+            <ul className="flex gap-1.5 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
             {links.map((link) => (
               <li key={link.to} className="shrink-0">
                 <NavLink
@@ -59,7 +60,13 @@ export function DashboardShell({ title, subtitle, links, badge }) {
                 </NavLink>
               </li>
             ))}
-          </ul>
+            </ul>
+            {/* Hints that the tab strip continues past the right edge. */}
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-cream to-transparent lg:hidden"
+            />
+          </div>
         </nav>
 
         <div className="min-w-0">

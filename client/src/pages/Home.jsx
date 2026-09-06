@@ -151,7 +151,9 @@ export default function Home() {
               />
               <div className="p-3.5">
                 <h3 className="text-sm font-medium text-ink">{category.name}</h3>
-                <p className="text-xs text-ink-soft">{category.productCount} pieces</p>
+                <p className="text-xs text-ink-soft">
+                  {category.productCount} piece{category.productCount === 1 ? '' : 's'}
+                </p>
               </div>
             </Link>
           ))}

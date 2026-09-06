@@ -82,6 +82,29 @@ check('README API port matches env.js', envJs.includes('5055') && readme.include
 check('no stale 5173/5000 references in the README', !/localhost:5173|localhost:5000/.test(readme));
 
 /* ---- secrets ------------------------------------------------------------ */
+/* ---- seed artwork ------------------------------------------------------- */
+console.log('\n=== SEED ARTWORK ===');
+
+const { PRODUCTS, STORES, productArt, storeArt } = await import('../../server/seed/data.js');
+const { CATEGORY_SEED } = await import('../../server/config/categories.js');
+
+const artRefs = [
+  ...PRODUCTS.flatMap((product) => productArt(product.name).map((image) => image.url)),
+  ...STORES.flatMap((store) => Object.values(storeArt(store.key))),
+  ...CATEGORY_SEED.map((category) => category.image),
+];
+const missingArt = artRefs.filter((url) => !fs.existsSync(path.join('client/public', url)));
+check(
+  'every seeded image exists (re-run npm run seed:art after renaming a product)',
+  missingArt.length === 0,
+  missingArt.join(', ')
+);
+check(
+  'seed imagery needs no external host',
+  artRefs.every((url) => url.startsWith('/seed-art/')),
+  artRefs.find((url) => !url.startsWith('/seed-art/')) || ''
+);
+
 console.log('\n=== SECRETS ===');
 const gitignore = fs.readFileSync('.gitignore', 'utf8');
 check('.env is gitignored', /^\.env$/m.test(gitignore));

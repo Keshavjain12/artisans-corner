@@ -213,6 +213,7 @@ Individual commands:
 | `npm run dev:server` | API only, with `node --watch` |
 | `npm run dev:client` | Vite dev server only |
 | `npm run seed` | Wipe and reseed the database |
+| `npm run seed:art` | Regenerate the seed artwork SVGs |
 | `npm --prefix server run seed:destroy` | Empty the database |
 | `npm test` | Backend + frontend test suites |
 | `npm run audit` | 189-check quality-bar audit against a running app |
@@ -335,14 +336,16 @@ npm run seed
 ```
 
 Creates 10 categories, 1 admin, 3 buyers, 6 vendor accounts with stores,
-30 realistic handmade products, 26 paid orders spread over the last 90 days
+30 realistic handmade products, 90 paid orders spread over the last 110 days
 (each one through the real pricing and payout pipeline, with fulfilment statuses
 that age with the order) and verified reviews on delivered items.
 
 `npm --prefix server run seed:destroy` empties every collection.
 
-Seed imagery uses deterministic placeholder photography so a fresh clone always
-renders complete cards; real vendors upload through Cloudinary.
+Seed imagery is generated locally by `npm run seed:art` into
+`client/public/seed-art` - small SVGs in the marketplace palette with a motif
+per craft. They are deterministic, need no network, and match the product they
+illustrate. Real vendors upload photographs through Cloudinary.
 
 ---
 

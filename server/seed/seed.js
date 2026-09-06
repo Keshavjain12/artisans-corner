@@ -21,7 +21,7 @@ import User from '../models/User.js';
 import { buildCheckoutQuote } from '../services/pricing.service.js';
 import { finalizePaidOrder } from '../services/order.service.js';
 import { slugify } from '../utils/slugify.js';
-import { ADMIN, BUYERS, PRODUCTS, STORES, seedImage } from './data.js';
+import { ADMIN, BUYERS, PRODUCTS, STORES, productArt, storeArt } from './data.js';
 
 const daysAgo = (n) => new Date(Date.now() - n * 24 * 60 * 60 * 1000);
 const pick = (list) => list[Math.floor(Math.random() * list.length)];
@@ -89,8 +89,8 @@ async function seedPeopleAndStores() {
       tagline: definition.tagline,
       description: definition.description,
       location: definition.location,
-      logo: seedImage(`ac-logo-${definition.key}`, 400, 400),
-      banner: seedImage(`ac-banner-${definition.key}`, 1600, 600),
+      logo: storeArt(definition.key).logo,
+      banner: storeArt(definition.key).banner,
       contactEmail: definition.owner.email,
       contactPhone: '+1 555 0100',
       isActive: true,
@@ -117,7 +117,7 @@ async function seedProducts(storesByKey) {
       price: item.price,
       compareAtPrice: item.compareAtPrice,
       category: item.category,
-      images: item.images.map((image) => ({ ...image, alt: item.name })),
+      images: productArt(item.name),
       vendor: entry.store._id,
       vendorUser: entry.owner._id,
       stock: item.stock,
@@ -136,8 +136,10 @@ async function seedProducts(storesByKey) {
 
 /** Builds one paid order through the real pricing + payout pipeline. */
 async function seedOneOrder(buyer, address, when) {
-  // Re-read live stock so the seeded orders never try to oversell a product.
-  const available = await Product.find({ stock: { $gte: 2 }, isActive: true })
+  /* Re-read live stock so the seeded orders never oversell, and leave the
+     scarce pieces alone: one-of-a-kind items should still be in stock for
+     someone browsing the demo, rather than sold out by the seeder. */
+  const available = await Product.find({ stock: { $gte: 6 }, isActive: true })
     .select('_id')
     .lean();
   if (available.length === 0) return null;
@@ -145,7 +147,7 @@ async function seedOneOrder(buyer, address, when) {
   const chosen = pickSome(available, Math.random() > 0.55 ? 3 : Math.random() > 0.4 ? 2 : 1);
   const items = chosen.map((product) => ({
     productId: String(product._id),
-    quantity: Math.random() > 0.8 ? 2 : 1,
+    quantity: Math.random() > 0.85 ? 2 : 1,
   }));
 
   const quote = await buildCheckoutQuote(items);
@@ -196,10 +198,12 @@ async function seedOneOrder(buyer, address, when) {
 
 async function seedOrdersAndReviews(buyers) {
   const orders = [];
-  for (let i = 0; i < 26; i += 1) {
+  /* Enough orders, weighted towards recent days, that the analytics charts read
+     like a working marketplace rather than three isolated spikes. */
+  for (let i = 0; i < 90; i += 1) {
     const buyer = buyers[i % buyers.length];
     const address = ADDRESSES[i % ADDRESSES.length];
-    const when = daysAgo(Math.floor(Math.random() * 88) + 1);
+    const when = daysAgo(Math.floor(Math.random() ** 1.5 * 110) + 1);
      
     const seeded = await seedOneOrder(buyer, { ...address, fullName: buyer.name }, when);
     if (seeded) orders.push(seeded);

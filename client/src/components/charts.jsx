@@ -81,7 +81,16 @@ export function TopProductsChart({ data = [], height = 260 }) {
       <BarChart data={data} layout="vertical" margin={{ top: 4, right: 16, left: 8, bottom: 4 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="#F3EDE6" horizontal={false} />
         <XAxis type="number" tickFormatter={(value) => `$${value}`} {...AXIS} />
-        <YAxis type="category" dataKey="name" width={140} {...AXIS} tickFormatter={(value) => (value.length > 20 ? `${value.slice(0, 19)}...` : value)} />
+        <YAxis
+          type="category"
+          dataKey="name"
+          width={190}
+          {...AXIS}
+          // Trim on a word boundary so a label never breaks mid-word.
+          tickFormatter={(value) =>
+            value.length > 28 ? `${value.slice(0, 27).replace(/\s\S*$/, '')}...` : value
+          }
+        />
         <Tooltip {...tooltipStyle} formatter={(value) => [formatCurrency(value), 'Revenue']} />
         <Bar dataKey="revenue" radius={[0, 6, 6, 0]} maxBarSize={22}>
           {data.map((entry, index) => (

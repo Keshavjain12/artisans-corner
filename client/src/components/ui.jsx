@@ -78,21 +78,45 @@ export function Field({ label, error, hint, id, required, className, children })
   );
 }
 
-export function Input({ invalid, className, ...props }) {
-  return <input className={cn('field', invalid && 'field-error', className)} {...props} />;
-}
+/* These forward their ref on purpose: react-hook-form's `register()` returns a
+   ref that has to reach the real DOM node. A plain function component drops it
+   silently, and every field then validates as empty however much the user
+   types. */
 
-export function Textarea({ invalid, className, ...props }) {
-  return <textarea className={cn('field', invalid && 'field-error', className)} {...props} />;
-}
-
-export function Select({ invalid, className, children, ...props }) {
+export const Input = forwardRef(function Input({ invalid, className, ...props }, ref) {
   return (
-    <select className={cn('field', invalid && 'field-error', className)} {...props}>
+    <input
+      ref={ref}
+      aria-invalid={invalid || undefined}
+      className={cn('field', invalid && 'field-error', className)}
+      {...props}
+    />
+  );
+});
+
+export const Textarea = forwardRef(function Textarea({ invalid, className, ...props }, ref) {
+  return (
+    <textarea
+      ref={ref}
+      aria-invalid={invalid || undefined}
+      className={cn('field', invalid && 'field-error', className)}
+      {...props}
+    />
+  );
+});
+
+export const Select = forwardRef(function Select({ invalid, className, children, ...props }, ref) {
+  return (
+    <select
+      ref={ref}
+      aria-invalid={invalid || undefined}
+      className={cn('field', invalid && 'field-error', className)}
+      {...props}
+    >
       {children}
     </select>
   );
-}
+});
 
 export function PageHeader({ title, subtitle, action, className }) {
   return (

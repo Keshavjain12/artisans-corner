@@ -213,7 +213,7 @@ Individual commands:
 | `npm run dev:client` | Vite dev server only |
 | `npm run seed` | Wipe and reseed the database |
 | `npm --prefix server run seed:destroy` | Empty the database |
-| `npm test` | Backend test suite |
+| `npm test` | Backend + frontend test suites |
 | `npm run build` | Production build of the client |
 | `npm run lint` | ESLint over both workspaces |
 
@@ -427,11 +427,13 @@ a product never rewrites order history.
 ## Testing
 
 ```bash
-npm test          # from the repo root, or: npm --prefix server test
+npm test              # both suites
+npm run test:server   # 34 API + business-logic tests
+npm run test:client   # 3 form-primitive regression tests
 ```
 
-34 tests run against an in-memory MongoDB (`mongodb-memory-server`), so no
-running database is needed.
+The backend suite runs against an in-memory MongoDB (`mongodb-memory-server`),
+so no running database is needed. The frontend suite runs in jsdom via Vitest.
 
 | Suite | Covers |
 | --- | --- |
@@ -440,6 +442,7 @@ running database is needed.
 | `checkout.test.js` | Server-side pricing, 5% commission split, client-sent prices ignored, shipping threshold, stock ceiling, inactive products, auth required |
 | `order-review.test.js` | Order creation, stock decrement, payout recording, idempotent confirmation, price snapshots surviving a price change, cross-buyer order access denied, verified-purchase reviews, duplicate reviews, rating range |
 | `money.test.js` | Commission maths, rounding invariants, Stripe minor-unit conversion |
+| `form-primitives.test.jsx` (client) | `Input`/`Textarea`/`Select` forward their ref to react-hook-form, so typed values submit instead of every field reporting itself empty |
 
 ---
 
@@ -555,7 +558,8 @@ Add screenshots here when submitting:
 - **No real-time updates.** Dashboards refresh on navigation, not over sockets.
 - **Search is regex-based**, which is fine at this scale but would want Atlas
   Search or a text index with relevance scoring for a large catalogue.
-- **Frontend has no automated tests.** Testing effort went into backend business
+- **Frontend test coverage is thin.** Only the form primitives are covered by a
+  regression test; the rest of the testing effort went into backend business
   logic and API authorisation, which is where the risk is.
 
 ---

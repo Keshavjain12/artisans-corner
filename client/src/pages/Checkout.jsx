@@ -292,7 +292,9 @@ export default function Checkout() {
     </form>
   );
 
-  const paymentPanel = (
+  /* Built only once an intent exists: this JSX dereferences intent.totals
+     eagerly, so constructing it with no intent crashes the whole page. */
+  const paymentPanel = intent ? (
     <div className="card space-y-5 p-6">
       <h2 className="text-lg font-semibold text-ink">Payment</h2>
 
@@ -341,11 +343,11 @@ export default function Checkout() {
       )}
 
       <p className="text-xs text-ink-soft">
-        Order <span className="font-medium text-ink">{intent?.orderNumber}</span> is reserved and
+        Order <span className="font-medium text-ink">{intent.orderNumber}</span> is reserved and
         will only be confirmed once payment succeeds.
       </p>
     </div>
-  );
+  ) : null;
 
   return (
     <div className="container-page py-10 lg:py-14">

@@ -9,6 +9,12 @@ node_modules/
 .env.*.local
 *.pem
 
+# playwright
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+
 # builds
 dist/
 build/

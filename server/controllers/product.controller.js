@@ -49,16 +49,31 @@ async function buildProductFilter(query) {
   if (query.q) {
     const term = safeSearchTerm(query.q);
     if (!term) return filter;
-    const rx = new RegExp(term.split(' ').filter(Boolean).join('|'), 'i');
-    // Shop names are matched too, so "Terra" finds the studio and its products.
-    const storeIds = await Store.find({ name: rx, isActive: true }).select('_id').lean();
-    filter.$or = [
-      { name: rx },
-      { description: rx },
-      { tags: rx },
-      { category: rx },
-      { vendor: { $in: storeIds.map((s) => s._id) } },
-    ];
+
+    const words = term.split(' ').filter(Boolean);
+
+    /* Every word must match something, and each word may match any field.
+       ANDing the words is what a shopper expects: adding a word should narrow
+       the results, not widen them the way an OR would. */
+    const anyWord = new RegExp(words.join('|'), 'i');
+    const candidateStores = await Store.find({ name: anyWord, isActive: true })
+      .select('_id name')
+      .lean();
+
+    filter.$and = words.map((word) => {
+      const rx = new RegExp(word, 'i');
+      // Shop names count too, so "Terra vase" finds that studio's vases.
+      const storeIds = candidateStores.filter((store) => rx.test(store.name)).map((s) => s._id);
+      return {
+        $or: [
+          { name: rx },
+          { description: rx },
+          { tags: rx },
+          { category: rx },
+          { vendor: { $in: storeIds } },
+        ],
+      };
+    });
   }
 
   return filter;
@@ -174,7 +189,9 @@ export const listMyProducts = asyncHandler(async (req, res) => {
   if (req.query.category) filter.category = String(req.query.category).toLowerCase();
   if (req.query.q) {
     const term = safeSearchTerm(req.query.q);
-    if (term) filter.name = new RegExp(term.split(' ').filter(Boolean).join('|'), 'i');
+    // Same AND semantics as the public search: more words means fewer results.
+    const words = term.split(' ').filter(Boolean);
+    if (words.length) filter.$and = words.map((word) => ({ name: new RegExp(word, 'i') }));
   }
 
   const [products, total] = await Promise.all([

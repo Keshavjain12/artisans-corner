@@ -164,6 +164,7 @@ export function Navbar() {
                   className="btn-ghost gap-1.5 px-2.5"
                   aria-expanded={accountOpen}
                   aria-haspopup="menu"
+                  aria-label={`Account menu for ${user.name}`}
                 >
                   <span className="flex h-7 w-7 items-center justify-center rounded-full bg-clay-100 text-xs font-semibold text-clay-700">
                     {user.name.charAt(0).toUpperCase()}

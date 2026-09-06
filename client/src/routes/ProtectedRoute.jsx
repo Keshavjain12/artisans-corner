@@ -25,12 +25,14 @@ export function ProtectedRoute({ roles, requireStore = false }) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (roles && !roles.includes(user.role)) {
-    return <Navigate to="/" replace />;
-  }
-
+  // Checked before the role test: a buyer heading for the seller dashboard is
+  // better served by the "open your shop" page than by a silent bounce home.
   if (requireStore && !store) {
     return <Navigate to="/become-a-seller" replace />;
+  }
+
+  if (roles && !roles.includes(user.role)) {
+    return <Navigate to="/" replace />;
   }
 
   return <Outlet />;

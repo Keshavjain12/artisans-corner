@@ -215,7 +215,10 @@ Individual commands:
 | `npm run seed` | Wipe and reseed the database |
 | `npm --prefix server run seed:destroy` | Empty the database |
 | `npm test` | Backend + frontend test suites |
-| `npm run audit` | 189-check quality-bar audit against the running app |
+| `npm run audit` | 189-check quality-bar audit against a running app |
+| `npm run audit:ci` | Same audit, but boots and tears down its own server |
+| `npm run test:e2e` | 26 browser tests through real Chrome (desktop + phone) |
+| `npm run verify` | Everything: lint, tests, audit and browser suite |
 | `npm run build` | Production build of the client |
 | `npm run lint` | ESLint over both workspaces |
 
@@ -429,14 +432,36 @@ a product never rewrites order history.
 ## Testing
 
 ```bash
-npm test              # both suites (34 backend + 36 frontend)
+npm run verify        # everything below, in order
+
+npm test              # 51 backend + 36 frontend
 npm run test:server   # API and business logic, in-memory MongoDB
 npm run test:client   # components, cart and route guards, jsdom + Vitest
-npm run audit         # 189 checks against the running application
+npm run test:e2e      # 26 browser tests in real Chrome, desktop and phone
+npm run audit:ci      # 189 checks against a disposable server
 ```
+
+**113 automated tests and 189 audit checks**, none of which need a database,
+a Stripe account or a Cloudinary account to run.
 
 The backend suite runs against an in-memory MongoDB (`mongodb-memory-server`),
 so no running database is needed. The frontend suite runs in jsdom via Vitest.
+
+### The browser suite
+
+`npm run test:e2e` drives real Chrome through Playwright - it uses the Chrome
+already installed on the machine rather than downloading one, and starts the
+application itself. It covers what only a browser can:
+
+- registering, signing in, signing out, and being redirected when not allowed
+- the whole purchase: browse, add to cart, three checkout steps, payment,
+  confirmation, and the order appearing in the buyer's history
+- the cart surviving a refresh, and quantity stopping at available stock
+- a vendor listing a product with a real image upload, and finding it in the shop
+- both dashboards, with charts and money on screen
+- five phone-sized checks: the nav collapsing to a menu, the grid reflowing to
+  two columns, dashboard tables scrolling instead of the page, and no horizontal
+  overflow anywhere
 
 ### The audit
 
@@ -450,7 +475,9 @@ API and asserts the behaviour end to end:
 | `api` | Registration and login rules, JWT and role authorisation, catalogue search-filter-sort-paginate, server-side pricing and commission, order lifecycle, verified reviews, vendor analytics, admin moderation and revenue |
 | `flows` | Real multipart image upload (including a file only pretending to be an image), multi-vendor baskets and their per-shop payouts, payment failure paths, cancellation and restock, paused shops and sold-out stock |
 
-It exits non-zero on the first regression, so it works in CI. Run it against a
+It exits non-zero on the first regression, so it works in CI. `npm run audit:ci`
+boots a disposable server, audits it and shuts it down, which makes it safe to
+run repeatedly and in CI. Run the plain `npm run audit` against a
 freshly started server: the audit makes enough payment calls that a back-to-back
 second run trips the API rate limiter, which it detects and reports rather than
 misreporting as failures.
@@ -462,6 +489,7 @@ misreporting as failures.
 | `checkout.test.js` | Server-side pricing, 5% commission split, client-sent prices ignored, shipping threshold, stock ceiling, inactive products, auth required |
 | `order-review.test.js` | Order creation, stock decrement, payout recording, idempotent confirmation, price snapshots surviving a price change, cross-buyer order access denied, verified-purchase reviews, duplicate reviews, rating range |
 | `money.test.js` | Commission maths, rounding invariants, Stripe minor-unit conversion |
+| `stripe.test.js` | The real Stripe branch: the amount sent to Stripe is the server's total in minor units, the intent is re-read rather than trusted, declines and `processing` are handled, and webhook signatures are verified against the genuine `stripe` library - a forged signature, a tampered payload and an unsigned request are all rejected |
 | `form-primitives.test.jsx` (client) | `Input`/`Textarea`/`Select` forward their ref to react-hook-form, so typed values submit instead of every field reporting itself empty |
 | `cartSlice.test.js` (client) | Cart contents, inventory clamping, subtotal rounding, and survival of a refresh including corrupt storage |
 | `ProductCard.test.jsx` (client) | Add to cart, sold-out guard, sale pricing, and the image fallback for shops without a banner |
@@ -570,10 +598,12 @@ Add screenshots here when submitting:
 - **Payouts are recorded, not transferred.** The ledger is complete and correct,
   but no money moves to a vendor's bank. A production build would use Stripe
   Connect with destination charges or transfers.
-- **The Stripe card path is not covered by an automated test.** The audit and
-  the test suite exercise the full order pipeline through the simulated payment
-  provider, which shares all of the server-side code; only Stripe Elements and
-  webhook signature verification need a manual pass with test keys.
+- **Stripe Elements itself is the one piece never exercised automatically.**
+  `stripe.test.js` covers the server side of the card path, including genuine
+  webhook signature verification, with the Stripe *client* mocked so no network
+  call is made. What that cannot cover is Stripe's own iframe: entering a test
+  card and watching 3D Secure appear still wants one manual pass with real test
+  keys.
 - **Refunds are not automated.** Cancelling an order restocks the items and
   reverses the payout rows, but the Stripe refund would have to be issued from
   the dashboard. If an item sells out between the payment intent and capture,
@@ -586,10 +616,11 @@ Add screenshots here when submitting:
 - **No real-time updates.** Dashboards refresh on navigation, not over sockets.
 - **Search is regex-based**, which is fine at this scale but would want Atlas
   Search or a text index with relevance scoring for a large catalogue.
-- **Frontend tests cover the risky parts, not every screen.** The cart, route
-  guards, product card, form primitives and the registration page are tested;
-  the remaining pages are covered indirectly by `npm run audit`, which exercises
-  the API behind them. There is no browser-level end-to-end suite.
+- **The browser suite covers the main journeys, not every screen.** It walks
+  registration, sign-in and sign-out, the full purchase from shop to
+  confirmation, vendor listing with a real image upload, both dashboards, and
+  five phone-sized checks. Pages outside those journeys are covered indirectly
+  by `npm run audit`, which exercises the API behind them.
 
 ---
 

@@ -35,7 +35,10 @@ export function DashboardShell({ title, subtitle, links, badge }) {
       </header>
 
       <div className="container-page grid gap-8 py-8 lg:grid-cols-[220px_1fr]">
-        <nav aria-label="Dashboard" className="lg:sticky lg:top-8 lg:h-fit">
+        {/* min-w-0: a grid item defaults to min-width:auto, so without this the
+            nav stretches to its content width and the tab strip below never
+            scrolls - it drags the whole page sideways on a phone instead. */}
+        <nav aria-label="Dashboard" className="min-w-0 lg:sticky lg:top-8 lg:h-fit">
           <ul className="flex gap-1.5 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
             {links.map((link) => (
               <li key={link.to} className="shrink-0">

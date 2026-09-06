@@ -15,9 +15,14 @@
     "dev:memory": "concurrently -n server,client -c blue,magenta \"npm --prefix server run dev:memory\" \"npm --prefix client run dev\"",
     "test:server": "npm --prefix server test",
     "test:client": "npm --prefix client test",
-    "audit": "node scripts/audit/index.mjs"
+    "audit": "node scripts/audit/index.mjs",
+    "audit:ci": "node scripts/audit/ci.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "verify": "npm run lint && npm test && npm run audit:ci && npm run test:e2e"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "concurrently": "^9.1.2"
   },
   "engines": {

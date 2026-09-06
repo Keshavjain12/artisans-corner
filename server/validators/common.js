@@ -12,13 +12,6 @@ export const trimmed = (min, max, label = 'This field') =>
     .min(min, `${label} must be at least ${min} characters`)
     .max(max, `${label} must be at most ${max} characters`);
 
-export const optionalUrl = z
-  .string()
-  .trim()
-  .url('Must be a valid URL')
-  .or(z.literal(''))
-  .optional();
-
 export const passwordSchema = z
   .string({ required_error: 'Password is required' })
   .min(8, 'Password must be at least 8 characters')

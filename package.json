@@ -14,7 +14,8 @@
     "lint": "npm --prefix server run lint && npm --prefix client run lint",
     "dev:memory": "concurrently -n server,client -c blue,magenta \"npm --prefix server run dev:memory\" \"npm --prefix client run dev\"",
     "test:server": "npm --prefix server test",
-    "test:client": "npm --prefix client test"
+    "test:client": "npm --prefix client test",
+    "audit": "node scripts/audit/index.mjs"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"

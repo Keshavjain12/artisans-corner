@@ -76,20 +76,10 @@ const cartSlice = createSlice({
       state.items = [];
       state.lastAdded = null;
     },
-    /** Refreshes price/stock after the server re-prices the basket. */
-    reconcileCart(state, action) {
-      const serverLines = action.payload || [];
-      state.items = state.items
-        .map((item) => {
-          const line = serverLines.find((entry) => String(entry.product) === String(item.productId));
-          return line ? { ...item, price: line.unitPrice } : item;
-        })
-        .filter(Boolean);
-    },
   },
 });
 
-export const { addItem, updateQuantity, removeItem, clearCart, reconcileCart } = cartSlice.actions;
+export const { addItem, updateQuantity, removeItem, clearCart } = cartSlice.actions;
 
 export const selectCartItems = (state) => state.cart.items;
 export const selectCartCount = (state) =>

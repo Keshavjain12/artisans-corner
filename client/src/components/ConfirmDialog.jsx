@@ -18,15 +18,46 @@ export function ConfirmDialog({
   onCancel,
 }) {
   const confirmRef = useRef(null);
+  const panelRef = useRef(null);
 
   useEffect(() => {
     if (!open) return undefined;
+
+    const previouslyFocused = document.activeElement;
     confirmRef.current?.focus();
+
     const onKeyDown = (event) => {
-      if (event.key === 'Escape') onCancel?.();
+      if (event.key === 'Escape') {
+        onCancel?.();
+        return;
+      }
+      if (event.key !== 'Tab') return;
+
+      // Keep Tab inside the dialog: a modal that lets focus wander onto the
+      // page behind it is unusable with a keyboard or a screen reader.
+      const focusable = panelRef.current?.querySelectorAll(
+        'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusable?.length) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
+
     document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      // Hand focus back to whatever opened the dialog.
+      if (typeof previouslyFocused?.focus === 'function') previouslyFocused.focus();
+    };
   }, [open, onCancel]);
 
   if (!open) return null;
@@ -39,6 +70,7 @@ export function ConfirmDialog({
         aria-hidden="true"
       />
       <div
+        ref={panelRef}
         role="alertdialog"
         aria-modal="true"
         aria-labelledby="confirm-title"

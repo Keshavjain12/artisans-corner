@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import CoverImage from '../components/CoverImage.jsx';
 import catalogService from '../services/catalogService.js';
 import useAsync from '../hooks/useAsync.js';
 import useDocumentTitle from '../hooks/useDocumentTitle.js';
@@ -26,10 +27,9 @@ export default function Categories() {
                 to={`/shop?category=${category.slug}`}
                 className="group overflow-hidden rounded-2xl border border-sand bg-white transition-shadow hover:shadow-lift"
               >
-                <img
+                <CoverImage
                   src={category.image}
-                  alt=""
-                  loading="lazy"
+                  label={category.name}
                   className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="p-4">

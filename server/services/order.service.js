@@ -1,4 +1,3 @@
-import Order from '../models/Order.js';
 import Payout from '../models/Payout.js';
 import Product from '../models/Product.js';
 import Store from '../models/Store.js';
@@ -151,10 +150,4 @@ export function deriveOrderStatus(order) {
     Number.POSITIVE_INFINITY
   );
   return ['processing', 'confirmed', 'shipped', 'delivered'][lowest] || 'processing';
-}
-
-/** Cleans up abandoned checkouts so they never clutter a buyer's history. */
-export async function purgeStaleUnpaidOrders(olderThanMinutes = 60) {
-  const cutoff = new Date(Date.now() - olderThanMinutes * 60 * 1000);
-  await Order.deleteMany({ paymentStatus: 'pending', createdAt: { $lt: cutoff } });
 }

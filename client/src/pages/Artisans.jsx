@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Store } from 'lucide-react';
+import CoverImage from '../components/CoverImage.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import Pagination from '../components/Pagination.jsx';
 import catalogService from '../services/catalogService.js';
@@ -66,10 +67,9 @@ export default function Artisans() {
                   to={`/shop/${store.slug}`}
                   className="group overflow-hidden rounded-2xl border border-sand bg-white transition-shadow hover:shadow-lift"
                 >
-                  <img
+                  <CoverImage
                     src={store.banner}
-                    alt=""
-                    loading="lazy"
+                    label={store.name}
                     className="h-32 w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="p-5">

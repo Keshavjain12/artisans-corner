@@ -46,14 +46,6 @@ export function Badge({ children, className, tone = 'bg-sand text-ink-muted' }) 
   return <span className={cn('badge', tone, className)}>{children}</span>;
 }
 
-export function Card({ className, children, ...props }) {
-  return (
-    <div className={cn('card', className)} {...props}>
-      {children}
-    </div>
-  );
-}
-
 /** Labelled input that wires its own error text to the field for screen readers. */
 export function Field({ label, error, hint, id, required, className, children }) {
   const describedBy = error ? `${id}-error` : hint ? `${id}-hint` : undefined;

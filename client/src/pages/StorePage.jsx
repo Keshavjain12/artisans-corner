@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { MapPin, Store } from 'lucide-react';
+import CoverImage from '../components/CoverImage.jsx';
 import ProductCard from '../components/ProductCard.jsx';
 import EmptyState from '../components/EmptyState.jsx';
 import { ProductGridSkeleton } from '../components/Skeletons.jsx';
@@ -47,18 +48,16 @@ export default function StorePage() {
   return (
     <div>
       <div className="relative h-48 w-full overflow-hidden bg-sand sm:h-64">
-        {store.banner && <img src={store.banner} alt="" className="h-full w-full object-cover" />}
+        <CoverImage src={store.banner} label={store.name} className="h-full w-full object-cover" />
       </div>
 
       <div className="container-page">
         <div className="-mt-12 flex flex-wrap items-end gap-5 rounded-2xl border border-sand bg-white p-6 shadow-card">
-          {store.logo && (
-            <img
-              src={store.logo}
-              alt=""
-              className="h-20 w-20 rounded-2xl border-4 border-white object-cover shadow-card"
-            />
-          )}
+          <CoverImage
+            src={store.logo}
+            label={store.name}
+            className="h-20 w-20 rounded-2xl border-4 border-white object-cover shadow-card"
+          />
           <div className="min-w-0 flex-1">
             <h1 className="text-2xl text-ink sm:text-3xl">{store.name}</h1>
             {store.tagline && <p className="mt-1 text-sm text-ink-muted">{store.tagline}</p>}

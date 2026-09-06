@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Award, HeartHandshake, PackageCheck, Sparkles } from 'lucide-react';
+import CoverImage from '../components/CoverImage.jsx';
 import ProductCard from '../components/ProductCard.jsx';
 import { ProductGridSkeleton } from '../components/Skeletons.jsx';
 import catalogService from '../services/catalogService.js';
@@ -143,10 +144,9 @@ export default function Home() {
               to={`/shop?category=${category.slug}`}
               className="group relative overflow-hidden rounded-2xl border border-sand bg-white"
             >
-              <img
+              <CoverImage
                 src={category.image}
-                alt=""
-                loading="lazy"
+                label={category.name}
                 className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="p-3.5">
@@ -227,10 +227,9 @@ export default function Home() {
               to={`/shop/${store.slug}`}
               className="group overflow-hidden rounded-2xl border border-sand bg-white transition-shadow hover:shadow-lift"
             >
-              <img
+              <CoverImage
                 src={store.banner}
-                alt=""
-                loading="lazy"
+                label={store.name}
                 className="h-28 w-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="p-4">

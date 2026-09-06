@@ -155,6 +155,7 @@ artisans-corner/
 │   ├── seed/                seed.js + demo catalogue
 │   ├── tests/               Jest + Supertest suites
 │   ├── app.js  server.js
+├── scripts/audit/           executable quality-bar audit (npm run audit)
 ├── docs/
 │   ├── database-schema.md   ER diagram + collection notes
 │   └── api-documentation.md every endpoint
@@ -214,6 +215,7 @@ Individual commands:
 | `npm run seed` | Wipe and reseed the database |
 | `npm --prefix server run seed:destroy` | Empty the database |
 | `npm test` | Backend + frontend test suites |
+| `npm run audit` | 189-check quality-bar audit against the running app |
 | `npm run build` | Production build of the client |
 | `npm run lint` | ESLint over both workspaces |
 
@@ -427,13 +429,31 @@ a product never rewrites order history.
 ## Testing
 
 ```bash
-npm test              # both suites
-npm run test:server   # 34 API + business-logic tests
-npm run test:client   # 3 form-primitive regression tests
+npm test              # both suites (34 backend + 36 frontend)
+npm run test:server   # API and business logic, in-memory MongoDB
+npm run test:client   # components, cart and route guards, jsdom + Vitest
+npm run audit         # 189 checks against the running application
 ```
 
 The backend suite runs against an in-memory MongoDB (`mongodb-memory-server`),
 so no running database is needed. The frontend suite runs in jsdom via Vitest.
+
+### The audit
+
+`npm run audit` is the quality bar as an executable, not a checklist someone
+ticks by hand. With the app running (`npm run dev:memory`), it drives the real
+API and asserts the behaviour end to end:
+
+| Pass | Covers |
+| --- | --- |
+| `project` | Every route is documented, README credentials match the seed, `.env.example` is complete, ports agree with the code, no secret appears in the built bundle, mobile nav / responsive grids / focus rings / empty states are present |
+| `api` | Registration and login rules, JWT and role authorisation, catalogue search-filter-sort-paginate, server-side pricing and commission, order lifecycle, verified reviews, vendor analytics, admin moderation and revenue |
+| `flows` | Real multipart image upload (including a file only pretending to be an image), multi-vendor baskets and their per-shop payouts, payment failure paths, cancellation and restock, paused shops and sold-out stock |
+
+It exits non-zero on the first regression, so it works in CI. Run it against a
+freshly started server: the audit makes enough payment calls that a back-to-back
+second run trips the API rate limiter, which it detects and reports rather than
+misreporting as failures.
 
 | Suite | Covers |
 | --- | --- |
@@ -443,6 +463,10 @@ so no running database is needed. The frontend suite runs in jsdom via Vitest.
 | `order-review.test.js` | Order creation, stock decrement, payout recording, idempotent confirmation, price snapshots surviving a price change, cross-buyer order access denied, verified-purchase reviews, duplicate reviews, rating range |
 | `money.test.js` | Commission maths, rounding invariants, Stripe minor-unit conversion |
 | `form-primitives.test.jsx` (client) | `Input`/`Textarea`/`Select` forward their ref to react-hook-form, so typed values submit instead of every field reporting itself empty |
+| `cartSlice.test.js` (client) | Cart contents, inventory clamping, subtotal rounding, and survival of a refresh including corrupt storage |
+| `ProductCard.test.jsx` (client) | Add to cart, sold-out guard, sale pricing, and the image fallback for shops without a banner |
+| `ProtectedRoute.test.jsx` (client) | Signed-out redirect, role gating, vendor-without-store onboarding redirect, no bounce while the session loads |
+| `Register.test.jsx` (client) | The real page: valid submit reaches the API, session lands in Redux, and each validation rule fires |
 
 ---
 
@@ -546,6 +570,10 @@ Add screenshots here when submitting:
 - **Payouts are recorded, not transferred.** The ledger is complete and correct,
   but no money moves to a vendor's bank. A production build would use Stripe
   Connect with destination charges or transfers.
+- **The Stripe card path is not covered by an automated test.** The audit and
+  the test suite exercise the full order pipeline through the simulated payment
+  provider, which shares all of the server-side code; only Stripe Elements and
+  webhook signature verification need a manual pass with test keys.
 - **Refunds are not automated.** Cancelling an order restocks the items and
   reverses the payout rows, but the Stripe refund would have to be issued from
   the dashboard. If an item sells out between the payment intent and capture,
@@ -558,9 +586,10 @@ Add screenshots here when submitting:
 - **No real-time updates.** Dashboards refresh on navigation, not over sockets.
 - **Search is regex-based**, which is fine at this scale but would want Atlas
   Search or a text index with relevance scoring for a large catalogue.
-- **Frontend test coverage is thin.** Only the form primitives are covered by a
-  regression test; the rest of the testing effort went into backend business
-  logic and API authorisation, which is where the risk is.
+- **Frontend tests cover the risky parts, not every screen.** The cart, route
+  guards, product card, form primitives and the registration page are tested;
+  the remaining pages are covered indirectly by `npm run audit`, which exercises
+  the API behind them. There is no browser-level end-to-end suite.
 
 ---
 

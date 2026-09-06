@@ -5,11 +5,6 @@ export const formatCurrency = (amount, currency = 'USD') =>
     maximumFractionDigits: 2,
   }).format(Number(amount) || 0);
 
-export const formatCompact = (value) =>
-  new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(
-    Number(value) || 0
-  );
-
 export const formatDate = (value, options = {}) =>
   value
     ? new Date(value).toLocaleDateString('en-US', {
@@ -36,6 +31,3 @@ export const titleCase = (value = '') =>
     .split('-')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
-
-export const pluralise = (count, singular, plural = `${singular}s`) =>
-  `${count} ${count === 1 ? singular : plural}`;

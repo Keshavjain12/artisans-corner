@@ -30,6 +30,18 @@ const PALETTES = [
   { from: '#F4EEE9', to: '#E0D2C8', ink: '#3A4C38', accent: '#8F5739' },
 ];
 
+/**
+ * SVG is XML, so a raw & in a name ("Kiln & Coast") makes the whole file fail
+ * to parse and the browser shows a broken image rather than the artwork.
+ */
+const esc = (value) =>
+  String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+
 /** Stable hash so the same name always gets the same look. */
 const hash = (value) => {
   let h = 0;
@@ -115,7 +127,7 @@ function tile({ name, category, width = 1200, height = 900 }) {
   const motif = MOTIFS[category] || MOTIFS.pottery;
   const rotation = (seed % 7) - 3;
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="${width}" height="${height}" role="img" aria-label="${name}">
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="${width}" height="${height}" role="img" aria-label="${esc(name)}">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="${c.from}"/>
@@ -135,7 +147,7 @@ function banner({ name, category }) {
   const c = PALETTES[seed % PALETTES.length];
   const motif = MOTIFS[category] || MOTIFS.pottery;
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 600" width="1600" height="600" role="img" aria-label="${name}">
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 600" width="1600" height="600" role="img" aria-label="${esc(name)}">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="${c.from}"/>
@@ -161,11 +173,11 @@ function logo({ name }) {
     .map((w) => w[0].toUpperCase())
     .join('');
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" role="img" aria-label="${name}">
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" role="img" aria-label="${esc(name)}">
   <rect width="400" height="400" rx="72" fill="${c.to}"/>
   <circle cx="200" cy="200" r="150" fill="none" stroke="${c.ink}" stroke-width="6" opacity="0.25"/>
   <text x="200" y="200" text-anchor="middle" dominant-baseline="central"
-    font-family="Georgia, 'Times New Roman', serif" font-size="150" fill="${c.ink}">${initials}</text>
+    font-family="Georgia, 'Times New Roman', serif" font-size="150" fill="${c.ink}">${esc(initials)}</text>
 </svg>
 `;
 }

@@ -99,6 +99,17 @@ check(
   missingArt.length === 0,
   missingArt.join(', ')
 );
+/* SVG is XML: one unescaped & anywhere makes the browser refuse the whole
+   file and show a broken image instead of the artwork. */
+const artDir = 'client/public/seed-art';
+const malformed = fs
+  .readdirSync(artDir)
+  .filter((file) => {
+    const svg = fs.readFileSync(path.join(artDir, file), 'utf8');
+    return /&(?!amp;|lt;|gt;|quot;|apos;|#d+;|#x[0-9a-fA-F]+;)/.test(svg);
+  });
+check('every seed SVG is well-formed XML', malformed.length === 0, malformed.join(', '));
+
 check(
   'seed imagery needs no external host',
   artRefs.every((url) => url.startsWith('/seed-art/')),

@@ -27,6 +27,12 @@
     @apply outline-none ring-2 ring-clay-500 ring-offset-2 ring-offset-cream rounded-sm;
   }
 
+  /* Native checkboxes default to the browser blue, which fights the palette. */
+  input[type='checkbox'],
+  input[type='radio'] {
+    accent-color: theme('colors.clay.600');
+  }
+
   ::selection {
     @apply bg-clay-200 text-clay-900;
   }

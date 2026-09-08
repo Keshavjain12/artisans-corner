@@ -1,0 +1,305 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1720 1300" width="1720" height="1300" font-family="'Inter',system-ui,sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#C8B9AC"/>
+    </marker>
+  </defs>
+
+  <rect width="1720" height="1300" fill="#FCFAF7"/>
+
+  <text x="60" y="62" font-size="27" font-weight="700" fill="#1F1B18">Artisan&#8217;s Corner &#8212; database schema</text>
+  <text x="60" y="90" font-size="14" fill="#6F655D">MongoDB / Mongoose. Accent tables are the four the brief names: how Users, Products, Orders and Reviews connect.</text>
+
+  
+  <g>
+    <path d="M360 250 L415 250 L415 210 L470 210" fill="none" stroke="#C8B9AC" stroke-width="2"  marker-end="url(#arrow)"/>
+    <rect x="380.6" y="219" width="68.8" height="22" rx="11" fill="#FCFAF7" stroke="#C8B9AC"/>
+    <text x="415" y="234" font-size="11.5" text-anchor="middle" fill="#74452E" font-weight="600" font-family="'Inter',system-ui,sans-serif">1 : 0..1</text>
+    <text x="415" y="256" font-size="10.5" text-anchor="middle" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">becomes a seller</text>
+  </g>
+  
+  <g>
+    <path d="M620 355 L620 392.5 L620 392.5 L620 430" fill="none" stroke="#C8B9AC" stroke-width="2"  marker-end="url(#arrow)"/>
+    <rect x="595.5" y="381.5" width="49" height="22" rx="11" fill="#FCFAF7" stroke="#C8B9AC"/>
+    <text x="620" y="396.5" font-size="11.5" text-anchor="middle" fill="#74452E" font-weight="600" font-family="'Inter',system-ui,sans-serif">1 : N</text>
+    <text x="620" y="418.5" font-size="10.5" text-anchor="middle" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">lists</text>
+  </g>
+  
+  <g>
+    <path d="M210 560 L210 505 L470 505 L470 505" fill="none" stroke="#C8B9AC" stroke-width="2"  marker-end="url(#arrow)"/>
+    <rect x="315.5" y="494" width="49" height="22" rx="11" fill="#FCFAF7" stroke="#C8B9AC"/>
+    <text x="340" y="509" font-size="11.5" text-anchor="middle" fill="#74452E" font-weight="600" font-family="'Inter',system-ui,sans-serif">1 : N</text>
+    <text x="340" y="531" font-size="10.5" text-anchor="middle" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">classifies</text>
+  </g>
+  
+  <g>
+    <path d="M300 150 L300 108 L1110 108 L1110 90" fill="none" stroke="#C8B9AC" stroke-width="2"  marker-end="url(#arrow)"/>
+    <rect x="680.5" y="97" width="49" height="22" rx="11" fill="#FCFAF7" stroke="#C8B9AC"/>
+    <text x="705" y="112" font-size="11.5" text-anchor="middle" fill="#74452E" font-weight="600" font-family="'Inter',system-ui,sans-serif">1 : N</text>
+    <text x="705" y="134" font-size="10.5" text-anchor="middle" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">places an order</text>
+  </g>
+  
+  <g>
+    <path d="M1110 434 L1110 497 L1110 497 L1110 560" fill="none" stroke="#C8B9AC" stroke-width="2"  marker-end="url(#arrow)"/>
+    <rect x="1075.6" y="486" width="68.8" height="22" rx="11" fill="#FCFAF7" stroke="#C8B9AC"/>
+    <text x="1110" y="501" font-size="11.5" text-anchor="middle" fill="#74452E" font-weight="600" font-family="'Inter',system-ui,sans-serif">1 : 1..N</text>
+    <text x="1110" y="523" font-size="10.5" text-anchor="middle" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">embeds</text>
+  </g>
+  
+  <g>
+    <path d="M950 700 L880 700 L880 700 L770 700" fill="none" stroke="#C8B9AC" stroke-width="2"  marker-end="url(#arrow)"/>
+    <rect x="855.5" y="689" width="49" height="22" rx="11" fill="#FCFAF7" stroke="#C8B9AC"/>
+    <text x="880" y="704" font-size="11.5" text-anchor="middle" fill="#74452E" font-weight="600" font-family="'Inter',system-ui,sans-serif">N : 1</text>
+    <text x="880" y="726" font-size="10.5" text-anchor="middle" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">snapshots</text>
+  </g>
+  
+  <g>
+    <path d="M770 900 L830 900 L830 300 L950 300" fill="none" stroke="#C8B9AC" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+    <rect x="805.5" y="589" width="49" height="22" rx="11" fill="#FCFAF7" stroke="#C8B9AC"/>
+    <text x="830" y="604" font-size="11.5" text-anchor="middle" fill="#74452E" font-weight="600" font-family="'Inter',system-ui,sans-serif">N : 1</text>
+    <text x="830" y="626" font-size="10.5" text-anchor="middle" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">proof of purchase</text>
+  </g>
+  
+  <g>
+    <path d="M620 722 L620 761 L620 761 L620 800" fill="none" stroke="#C8B9AC" stroke-width="2"  marker-end="url(#arrow)"/>
+    <rect x="595.5" y="750" width="49" height="22" rx="11" fill="#FCFAF7" stroke="#C8B9AC"/>
+    <text x="620" y="765" font-size="11.5" text-anchor="middle" fill="#74452E" font-weight="600" font-family="'Inter',system-ui,sans-serif">1 : N</text>
+    <text x="620" y="787" font-size="10.5" text-anchor="middle" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">receives</text>
+  </g>
+  
+  <g>
+    <path d="M360 420 L415 420 L415 860 L470 860" fill="none" stroke="#C8B9AC" stroke-width="2"  marker-end="url(#arrow)"/>
+    <rect x="390.5" y="629" width="49" height="22" rx="11" fill="#FCFAF7" stroke="#C8B9AC"/>
+    <text x="415" y="644" font-size="11.5" text-anchor="middle" fill="#74452E" font-weight="600" font-family="'Inter',system-ui,sans-serif">1 : N</text>
+    <text x="415" y="666" font-size="10.5" text-anchor="middle" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">writes</text>
+  </g>
+  
+  <g>
+    <path d="M1270 300 L1325 300 L1325 700 L1380 700" fill="none" stroke="#C8B9AC" stroke-width="2"  marker-end="url(#arrow)"/>
+    <rect x="1300.5" y="489" width="49" height="22" rx="11" fill="#FCFAF7" stroke="#C8B9AC"/>
+    <text x="1325" y="504" font-size="11.5" text-anchor="middle" fill="#74452E" font-weight="600" font-family="'Inter',system-ui,sans-serif">1 : N</text>
+    <text x="1325" y="526" font-size="10.5" text-anchor="middle" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">one row per vendor</text>
+  </g>
+
+  
+  <g>
+    <rect x="60" y="150" width="300" height="240" rx="14" fill="#FFFFFF" stroke="#C8B9AC" stroke-width="1.5"/>
+    <path d="M60 164 a14 14 0 0 1 14 -14 h272 a14 14 0 0 1 14 14 v32 h-300 z" fill="#F4E8E1"/>
+    <rect x="60" y="150" width="5" height="240" rx="2.5" fill="#8F5739"/>
+    <text x="74" y="172" font-size="15" font-weight="700" fill="#74452E" font-family="'Inter',system-ui,sans-serif">USER</text>
+    <text x="74" y="188" font-size="11" fill="#6F655D" font-family="'Inter',system-ui,sans-serif">one account, buyer and seller</text>
+    <line x1="70" y1="222" x2="350" y2="222" stroke="#F3EDE6" stroke-width="1"/><line x1="70" y1="248" x2="350" y2="248" stroke="#F3EDE6" stroke-width="1"/><line x1="70" y1="274" x2="350" y2="274" stroke="#F3EDE6" stroke-width="1"/><line x1="70" y1="300" x2="350" y2="300" stroke="#F3EDE6" stroke-width="1"/><line x1="70" y1="326" x2="350" y2="326" stroke="#F3EDE6" stroke-width="1"/><line x1="70" y1="352" x2="350" y2="352" stroke="#F3EDE6" stroke-width="1"/>
+    
+    <text x="74" y="213" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">_id</text>
+    <text x="346" y="213" font-size="11.5" text-anchor="end" fill="#8F5739" font-family="'Inter',system-ui,sans-serif" font-weight="600">PK</text>
+    <text x="74" y="239" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">name</text>
+    <text x="346" y="239" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">String</text>
+    <text x="74" y="265" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">email</text>
+    <text x="346" y="265" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif" font-weight="600">UK</text>
+    <text x="74" y="291" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">password</text>
+    <text x="346" y="291" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">bcrypt</text>
+    <text x="74" y="317" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">role</text>
+    <text x="346" y="317" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">buyer|vendor|admin</text>
+    <text x="74" y="343" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">store</text>
+    <text x="346" y="343" font-size="11.5" text-anchor="end" fill="#5F7A5B" font-family="'Inter',system-ui,sans-serif" font-weight="600">FK</text>
+    <text x="74" y="369" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">isActive</text>
+    <text x="346" y="369" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">Boolean</text>
+  </g>
+  
+  <g>
+    <rect x="470" y="120" width="300" height="214" rx="14" fill="#FFFFFF" stroke="#C8B9AC" stroke-width="1.5"/>
+    <path d="M470 134 a14 14 0 0 1 14 -14 h272 a14 14 0 0 1 14 14 v32 h-300 z" fill="#E7EDE6"/>
+    <rect x="470" y="120" width="5" height="214" rx="2.5" fill="#5F7A5B"/>
+    <text x="484" y="142" font-size="15" font-weight="700" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">STORE</text>
+    <text x="484" y="158" font-size="11" fill="#6F655D" font-family="'Inter',system-ui,sans-serif">the vendor storefront</text>
+    <line x1="480" y1="192" x2="760" y2="192" stroke="#F3EDE6" stroke-width="1"/><line x1="480" y1="218" x2="760" y2="218" stroke="#F3EDE6" stroke-width="1"/><line x1="480" y1="244" x2="760" y2="244" stroke="#F3EDE6" stroke-width="1"/><line x1="480" y1="270" x2="760" y2="270" stroke="#F3EDE6" stroke-width="1"/><line x1="480" y1="296" x2="760" y2="296" stroke="#F3EDE6" stroke-width="1"/>
+    
+    <text x="484" y="183" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">_id</text>
+    <text x="756" y="183" font-size="11.5" text-anchor="end" fill="#8F5739" font-family="'Inter',system-ui,sans-serif" font-weight="600">PK</text>
+    <text x="484" y="209" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">owner</text>
+    <text x="756" y="209" font-size="11.5" text-anchor="end" fill="#5F7A5B" font-family="'Inter',system-ui,sans-serif" font-weight="600">FK → User</text>
+    <text x="484" y="235" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">name / slug</text>
+    <text x="756" y="235" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif" font-weight="600">UK</text>
+    <text x="484" y="261" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">description</text>
+    <text x="756" y="261" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">String</text>
+    <text x="484" y="287" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">logo / banner</text>
+    <text x="756" y="287" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">URL</text>
+    <text x="484" y="313" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">isActive</text>
+    <text x="756" y="313" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">Boolean</text>
+  </g>
+  
+  <g>
+    <rect x="60" y="560" width="300" height="162" rx="14" fill="#FFFFFF" stroke="#C8B9AC" stroke-width="1.5"/>
+    <path d="M60 574 a14 14 0 0 1 14 -14 h272 a14 14 0 0 1 14 14 v32 h-300 z" fill="#E7EDE6"/>
+    <rect x="60" y="560" width="5" height="162" rx="2.5" fill="#5F7A5B"/>
+    <text x="74" y="582" font-size="15" font-weight="700" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">CATEGORY</text>
+    <text x="74" y="598" font-size="11" fill="#6F655D" font-family="'Inter',system-ui,sans-serif">extensible taxonomy</text>
+    <line x1="70" y1="632" x2="350" y2="632" stroke="#F3EDE6" stroke-width="1"/><line x1="70" y1="658" x2="350" y2="658" stroke="#F3EDE6" stroke-width="1"/><line x1="70" y1="684" x2="350" y2="684" stroke="#F3EDE6" stroke-width="1"/>
+    
+    <text x="74" y="623" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">_id</text>
+    <text x="346" y="623" font-size="11.5" text-anchor="end" fill="#8F5739" font-family="'Inter',system-ui,sans-serif" font-weight="600">PK</text>
+    <text x="74" y="649" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">name</text>
+    <text x="346" y="649" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">String</text>
+    <text x="74" y="675" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">slug</text>
+    <text x="346" y="675" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif" font-weight="600">UK</text>
+    <text x="74" y="701" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">image</text>
+    <text x="346" y="701" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">URL</text>
+  </g>
+  
+  <g>
+    <rect x="470" y="430" width="300" height="292" rx="14" fill="#FFFFFF" stroke="#C8B9AC" stroke-width="1.5"/>
+    <path d="M470 444 a14 14 0 0 1 14 -14 h272 a14 14 0 0 1 14 14 v32 h-300 z" fill="#F4E8E1"/>
+    <rect x="470" y="430" width="5" height="292" rx="2.5" fill="#8F5739"/>
+    <text x="484" y="452" font-size="15" font-weight="700" fill="#74452E" font-family="'Inter',system-ui,sans-serif">PRODUCT</text>
+    <text x="484" y="468" font-size="11" fill="#6F655D" font-family="'Inter',system-ui,sans-serif">owned by exactly one store</text>
+    <line x1="480" y1="502" x2="760" y2="502" stroke="#F3EDE6" stroke-width="1"/><line x1="480" y1="528" x2="760" y2="528" stroke="#F3EDE6" stroke-width="1"/><line x1="480" y1="554" x2="760" y2="554" stroke="#F3EDE6" stroke-width="1"/><line x1="480" y1="580" x2="760" y2="580" stroke="#F3EDE6" stroke-width="1"/><line x1="480" y1="606" x2="760" y2="606" stroke="#F3EDE6" stroke-width="1"/><line x1="480" y1="632" x2="760" y2="632" stroke="#F3EDE6" stroke-width="1"/><line x1="480" y1="658" x2="760" y2="658" stroke="#F3EDE6" stroke-width="1"/><line x1="480" y1="684" x2="760" y2="684" stroke="#F3EDE6" stroke-width="1"/>
+    
+    <text x="484" y="493" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">_id</text>
+    <text x="756" y="493" font-size="11.5" text-anchor="end" fill="#8F5739" font-family="'Inter',system-ui,sans-serif" font-weight="600">PK</text>
+    <text x="484" y="519" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">name / slug</text>
+    <text x="756" y="519" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif" font-weight="600">UK</text>
+    <text x="484" y="545" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">price</text>
+    <text x="756" y="545" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">Number</text>
+    <text x="484" y="571" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">category</text>
+    <text x="756" y="571" font-size="11.5" text-anchor="end" fill="#5F7A5B" font-family="'Inter',system-ui,sans-serif" font-weight="600">FK → slug</text>
+    <text x="484" y="597" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">vendor</text>
+    <text x="756" y="597" font-size="11.5" text-anchor="end" fill="#5F7A5B" font-family="'Inter',system-ui,sans-serif" font-weight="600">FK → Store</text>
+    <text x="484" y="623" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">images[]</text>
+    <text x="756" y="623" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">URL[]</text>
+    <text x="484" y="649" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">stock</text>
+    <text x="756" y="649" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">Number</text>
+    <text x="484" y="675" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">ratingAverage</text>
+    <text x="756" y="675" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">Number</text>
+    <text x="484" y="701" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">isArchived</text>
+    <text x="756" y="701" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">soft delete</text>
+  </g>
+  
+  <g>
+    <rect x="950" y="90" width="320" height="344" rx="14" fill="#FFFFFF" stroke="#C8B9AC" stroke-width="1.5"/>
+    <path d="M950 104 a14 14 0 0 1 14 -14 h292 a14 14 0 0 1 14 14 v32 h-320 z" fill="#F4E8E1"/>
+    <rect x="950" y="90" width="5" height="344" rx="2.5" fill="#8F5739"/>
+    <text x="964" y="112" font-size="15" font-weight="700" fill="#74452E" font-family="'Inter',system-ui,sans-serif">ORDER</text>
+    <text x="964" y="128" font-size="11" fill="#6F655D" font-family="'Inter',system-ui,sans-serif">one buyer, many vendors</text>
+    <line x1="960" y1="162" x2="1260" y2="162" stroke="#F3EDE6" stroke-width="1"/><line x1="960" y1="188" x2="1260" y2="188" stroke="#F3EDE6" stroke-width="1"/><line x1="960" y1="214" x2="1260" y2="214" stroke="#F3EDE6" stroke-width="1"/><line x1="960" y1="240" x2="1260" y2="240" stroke="#F3EDE6" stroke-width="1"/><line x1="960" y1="266" x2="1260" y2="266" stroke="#F3EDE6" stroke-width="1"/><line x1="960" y1="292" x2="1260" y2="292" stroke="#F3EDE6" stroke-width="1"/><line x1="960" y1="318" x2="1260" y2="318" stroke="#F3EDE6" stroke-width="1"/><line x1="960" y1="344" x2="1260" y2="344" stroke="#F3EDE6" stroke-width="1"/><line x1="960" y1="370" x2="1260" y2="370" stroke="#F3EDE6" stroke-width="1"/><line x1="960" y1="396" x2="1260" y2="396" stroke="#F3EDE6" stroke-width="1"/>
+    
+    <text x="964" y="153" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">_id</text>
+    <text x="1256" y="153" font-size="11.5" text-anchor="end" fill="#8F5739" font-family="'Inter',system-ui,sans-serif" font-weight="600">PK</text>
+    <text x="964" y="179" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">orderNumber</text>
+    <text x="1256" y="179" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif" font-weight="600">UK</text>
+    <text x="964" y="205" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">buyer</text>
+    <text x="1256" y="205" font-size="11.5" text-anchor="end" fill="#5F7A5B" font-family="'Inter',system-ui,sans-serif" font-weight="600">FK → User</text>
+    <text x="964" y="231" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">vendors[]</text>
+    <text x="1256" y="231" font-size="11.5" text-anchor="end" fill="#5F7A5B" font-family="'Inter',system-ui,sans-serif" font-weight="600">FK → Store[]</text>
+    <text x="964" y="257" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">shippingAddress</text>
+    <text x="1256" y="257" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">Object</text>
+    <text x="964" y="283" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">subtotal / total</text>
+    <text x="1256" y="283" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">Number</text>
+    <text x="964" y="309" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">platformFee</text>
+    <text x="1256" y="309" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">Number</text>
+    <text x="964" y="335" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">vendorEarnings</text>
+    <text x="1256" y="335" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">Number</text>
+    <text x="964" y="361" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">paymentStatus</text>
+    <text x="1256" y="361" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">pending|paid</text>
+    <text x="964" y="387" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">stripePaymentIntentId</text>
+    <text x="1256" y="387" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">String</text>
+    <text x="964" y="413" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">orderStatus</text>
+    <text x="1256" y="413" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">processing…</text>
+  </g>
+  
+  <g>
+    <rect x="950" y="560" width="320" height="318" rx="14" fill="#FFFFFF" stroke="#C8B9AC" stroke-width="1.5"/>
+    <path d="M950 574 a14 14 0 0 1 14 -14 h292 a14 14 0 0 1 14 14 v32 h-320 z" fill="#F4E8E1"/>
+    <rect x="950" y="560" width="5" height="318" rx="2.5" fill="#8F5739"/>
+    <text x="964" y="582" font-size="15" font-weight="700" fill="#74452E" font-family="'Inter',system-ui,sans-serif">ORDER ITEM</text>
+    <text x="964" y="598" font-size="11" fill="#6F655D" font-family="'Inter',system-ui,sans-serif">embedded array — price snapshot</text>
+    <line x1="960" y1="632" x2="1260" y2="632" stroke="#F3EDE6" stroke-width="1"/><line x1="960" y1="658" x2="1260" y2="658" stroke="#F3EDE6" stroke-width="1"/><line x1="960" y1="684" x2="1260" y2="684" stroke="#F3EDE6" stroke-width="1"/><line x1="960" y1="710" x2="1260" y2="710" stroke="#F3EDE6" stroke-width="1"/><line x1="960" y1="736" x2="1260" y2="736" stroke="#F3EDE6" stroke-width="1"/><line x1="960" y1="762" x2="1260" y2="762" stroke="#F3EDE6" stroke-width="1"/><line x1="960" y1="788" x2="1260" y2="788" stroke="#F3EDE6" stroke-width="1"/><line x1="960" y1="814" x2="1260" y2="814" stroke="#F3EDE6" stroke-width="1"/><line x1="960" y1="840" x2="1260" y2="840" stroke="#F3EDE6" stroke-width="1"/>
+    
+    <text x="964" y="623" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">product</text>
+    <text x="1256" y="623" font-size="11.5" text-anchor="end" fill="#5F7A5B" font-family="'Inter',system-ui,sans-serif" font-weight="600">FK → Product</text>
+    <text x="964" y="649" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">vendor</text>
+    <text x="1256" y="649" font-size="11.5" text-anchor="end" fill="#5F7A5B" font-family="'Inter',system-ui,sans-serif" font-weight="600">FK → Store</text>
+    <text x="964" y="675" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">productNameSnapshot</text>
+    <text x="1256" y="675" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">String</text>
+    <text x="964" y="701" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">imageSnapshot</text>
+    <text x="1256" y="701" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">URL</text>
+    <text x="964" y="727" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">priceSnapshot</text>
+    <text x="1256" y="727" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">price when sold</text>
+    <text x="964" y="753" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">quantity</text>
+    <text x="1256" y="753" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">Number</text>
+    <text x="964" y="779" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">subtotal</text>
+    <text x="1256" y="779" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">Number</text>
+    <text x="964" y="805" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">platformFee</text>
+    <text x="1256" y="805" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">5%</text>
+    <text x="964" y="831" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">vendorEarnings</text>
+    <text x="1256" y="831" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">95%</text>
+    <text x="964" y="857" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">fulfillmentStatus</text>
+    <text x="1256" y="857" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">shipped…</text>
+  </g>
+  
+  <g>
+    <rect x="470" y="800" width="300" height="214" rx="14" fill="#FFFFFF" stroke="#C8B9AC" stroke-width="1.5"/>
+    <path d="M470 814 a14 14 0 0 1 14 -14 h272 a14 14 0 0 1 14 14 v32 h-300 z" fill="#F4E8E1"/>
+    <rect x="470" y="800" width="5" height="214" rx="2.5" fill="#8F5739"/>
+    <text x="484" y="822" font-size="15" font-weight="700" fill="#74452E" font-family="'Inter',system-ui,sans-serif">REVIEW</text>
+    <text x="484" y="838" font-size="11" fill="#6F655D" font-family="'Inter',system-ui,sans-serif">verified purchases only</text>
+    <line x1="480" y1="872" x2="760" y2="872" stroke="#F3EDE6" stroke-width="1"/><line x1="480" y1="898" x2="760" y2="898" stroke="#F3EDE6" stroke-width="1"/><line x1="480" y1="924" x2="760" y2="924" stroke="#F3EDE6" stroke-width="1"/><line x1="480" y1="950" x2="760" y2="950" stroke="#F3EDE6" stroke-width="1"/><line x1="480" y1="976" x2="760" y2="976" stroke="#F3EDE6" stroke-width="1"/>
+    
+    <text x="484" y="863" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">_id</text>
+    <text x="756" y="863" font-size="11.5" text-anchor="end" fill="#8F5739" font-family="'Inter',system-ui,sans-serif" font-weight="600">PK</text>
+    <text x="484" y="889" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">product</text>
+    <text x="756" y="889" font-size="11.5" text-anchor="end" fill="#5F7A5B" font-family="'Inter',system-ui,sans-serif" font-weight="600">FK → Product</text>
+    <text x="484" y="915" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">user</text>
+    <text x="756" y="915" font-size="11.5" text-anchor="end" fill="#5F7A5B" font-family="'Inter',system-ui,sans-serif" font-weight="600">FK → User</text>
+    <text x="484" y="941" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">order</text>
+    <text x="756" y="941" font-size="11.5" text-anchor="end" fill="#5F7A5B" font-family="'Inter',system-ui,sans-serif" font-weight="600">FK → Order</text>
+    <text x="484" y="967" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">rating</text>
+    <text x="756" y="967" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">1–5</text>
+    <text x="484" y="993" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">comment</text>
+    <text x="756" y="993" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">String</text>
+  </g>
+  
+  <g>
+    <rect x="1380" y="620" width="250" height="240" rx="14" fill="#FFFFFF" stroke="#C8B9AC" stroke-width="1.5"/>
+    <path d="M1380 634 a14 14 0 0 1 14 -14 h222 a14 14 0 0 1 14 14 v32 h-250 z" fill="#E7EDE6"/>
+    <rect x="1380" y="620" width="5" height="240" rx="2.5" fill="#5F7A5B"/>
+    <text x="1394" y="642" font-size="15" font-weight="700" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">PAYOUT</text>
+    <text x="1394" y="658" font-size="11" fill="#6F655D" font-family="'Inter',system-ui,sans-serif">vendor earnings ledger</text>
+    <line x1="1390" y1="692" x2="1620" y2="692" stroke="#F3EDE6" stroke-width="1"/><line x1="1390" y1="718" x2="1620" y2="718" stroke="#F3EDE6" stroke-width="1"/><line x1="1390" y1="744" x2="1620" y2="744" stroke="#F3EDE6" stroke-width="1"/><line x1="1390" y1="770" x2="1620" y2="770" stroke="#F3EDE6" stroke-width="1"/><line x1="1390" y1="796" x2="1620" y2="796" stroke="#F3EDE6" stroke-width="1"/><line x1="1390" y1="822" x2="1620" y2="822" stroke="#F3EDE6" stroke-width="1"/>
+    
+    <text x="1394" y="683" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">_id</text>
+    <text x="1616" y="683" font-size="11.5" text-anchor="end" fill="#8F5739" font-family="'Inter',system-ui,sans-serif" font-weight="600">PK</text>
+    <text x="1394" y="709" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">order</text>
+    <text x="1616" y="709" font-size="11.5" text-anchor="end" fill="#5F7A5B" font-family="'Inter',system-ui,sans-serif" font-weight="600">FK</text>
+    <text x="1394" y="735" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">vendor</text>
+    <text x="1616" y="735" font-size="11.5" text-anchor="end" fill="#5F7A5B" font-family="'Inter',system-ui,sans-serif" font-weight="600">FK → Store</text>
+    <text x="1394" y="761" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">grossSales</text>
+    <text x="1616" y="761" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">Number</text>
+    <text x="1394" y="787" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">platformFee</text>
+    <text x="1616" y="787" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">Number</text>
+    <text x="1394" y="813" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">netEarnings</text>
+    <text x="1616" y="813" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">Number</text>
+    <text x="1394" y="839" font-size="13" fill="#1F1B18" font-family="'Inter',system-ui,sans-serif">status</text>
+    <text x="1616" y="839" font-size="11.5" text-anchor="end" fill="#9A8F86" font-family="'Inter',system-ui,sans-serif">pending|paid</text>
+  </g>
+
+  <g transform="translate(60, 1100)">
+    <rect x="0" y="0" width="820" height="150" rx="14" fill="#FBF6F3" stroke="#C8B9AC"/>
+    <text x="20" y="28" font-size="14" font-weight="700" fill="#74452E">How the money splits</text>
+    <text x="20" y="56" font-size="13" fill="#1F1B18">item.subtotal        = priceSnapshot &#215; quantity</text>
+    <text x="20" y="80" font-size="13" fill="#1F1B18">item.platformFee     = subtotal &#215; 0.05          &#8594; $100 sale &#8594; $5 platform</text>
+    <text x="20" y="104" font-size="13" fill="#1F1B18">item.vendorEarnings  = subtotal &#8722; platformFee   &#8594; $95 to the maker</text>
+    <text x="20" y="132" font-size="11.5" fill="#6F655D">Split per line item, so one order spanning several shops pays each maker correctly. Recorded in PAYOUT.</text>
+  </g>
+
+  <g transform="translate(950, 1100)">
+    <rect x="0" y="0" width="680" height="150" rx="14" fill="#FFFFFF" stroke="#C8B9AC"/>
+    <text x="20" y="28" font-size="14" font-weight="700" fill="#1F1B18">Reading the diagram</text>
+    <circle cx="28" cy="52" r="6" fill="#8F5739"/>
+    <text x="44" y="57" font-size="12.5" fill="#6F655D">Tables the brief names: User, Product, Order (with items), Review</text>
+    <circle cx="28" cy="80" r="6" fill="#5F7A5B"/>
+    <text x="44" y="85" font-size="12.5" fill="#6F655D">Supporting tables: Store, Category, Payout</text>
+    <line x1="16" y1="108" x2="40" y2="108" stroke="#C8B9AC" stroke-width="2" stroke-dasharray="6 5"/>
+    <text x="44" y="113" font-size="12.5" fill="#6F655D">Dashed: the link that makes a review a verified purchase</text>
+    <text x="20" y="136" font-size="11.5" fill="#9A8F86">PK primary key &#183; FK foreign key &#183; UK unique</text>
+  </g>
+</svg>

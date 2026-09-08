@@ -8,10 +8,34 @@ configurable **5% commission**; the remaining 95% is recorded as a vendor payout
 Built as a full-stack MERN project: React + Vite + Redux Toolkit on the front,
 Express + MongoDB on the back, Stripe for payments and Cloudinary for imagery.
 
+![Artisan's Corner home page](docs/screenshots/01-home.png)
+
+---
+
+## The three deliverables
+
+| The brief asks for | Where it is |
+| --- | --- |
+| **1. GitHub repository** — controllers, models, routes and middleware kept apart; no API keys committed | This repo. See [folder structure](#folder-structure); `.env` is git-ignored and [`.env.example`](.env.example) documents every variable. A [check in the audit](#the-audit) fails the build if a secret ever reaches the client bundle. |
+| **2. Live application** — a working deployed link, with demo credentials for a vendor and a buyer | Not yet deployed. [`DEPLOYMENT.md`](DEPLOYMENT.md) is the exact 30-minute sequence (Atlas → Cloudinary → Stripe → Render → Vercel), and [demo credentials](#demo-credentials) are below. Locally: `npm run dev:memory`. |
+| **3. Database schema diagram** — an image showing how Users, Products, Orders and Reviews connect | [`docs/database-schema.png`](docs/database-schema.png), shown [below](#database-schema). Regenerate with `npm run docs:schema`. |
+
+### Try it in two commands
+
+```bash
+npm run install:all
+npm run dev:memory      # seeded in-memory MongoDB - no database to install
+```
+
+Then open <http://localhost:5273> and sign in with a
+[demo account](#demo-credentials) — the login page has one-click buttons for
+all three roles.
+
 ---
 
 ## Contents
 
+- [The three deliverables](#the-three-deliverables)
 - [Features](#features)
 - [Tech stack](#tech-stack)
 - [Architecture](#architecture)
@@ -214,6 +238,8 @@ Individual commands:
 | `npm run dev:client` | Vite dev server only |
 | `npm run seed` | Wipe and reseed the database |
 | `npm run seed:art` | Regenerate the seed artwork SVGs |
+| `npm run docs:schema` | Redraw the database schema diagram |
+| `npm run docs:screenshots` | Recapture the README screenshots |
 | `npm --prefix server run seed:destroy` | Empty the database |
 | `npm test` | Backend + frontend test suites |
 | `npm run audit` | 189-check quality-bar audit against a running app |
@@ -415,7 +441,10 @@ Every response uses the same envelope:
 
 ## Database schema
 
-Full ER diagram and collection notes:
+![Database schema — how Users, Products, Orders and Reviews connect](docs/database-schema.png)
+
+Regenerate with `npm run docs:schema` (writes both the SVG and the PNG).
+Field-level notes and the indexes are in
 [`docs/database-schema.md`](docs/database-schema.md).
 
 ```
@@ -534,6 +563,9 @@ misreporting as failures.
 
 ## Deployment
 
+**Step-by-step walkthrough: [`DEPLOYMENT.md`](DEPLOYMENT.md)** — Atlas,
+Cloudinary, Stripe, Render and Vercel, with the checks to run afterwards.
+
 The client and API deploy independently.
 
 ### API - Render / Railway / Fly.io
@@ -581,18 +613,55 @@ server reads `CLIENT_URL` / `SERVER_URL`.
 
 ## Screenshots
 
-Add screenshots here when submitting:
+Captured from the running application with `npm run docs:screenshots`.
 
-| Screen | File |
+### The marketplace
+
+| Home | Shop with filters |
 | --- | --- |
-| Marketplace home | `docs/screenshots/home.png` |
-| Shop with filters | `docs/screenshots/shop.png` |
-| Product detail + reviews | `docs/screenshots/product.png` |
-| Cart and checkout | `docs/screenshots/checkout.png` |
-| Vendor dashboard | `docs/screenshots/vendor-dashboard.png` |
-| Vendor analytics | `docs/screenshots/vendor-analytics.png` |
-| Admin revenue | `docs/screenshots/admin-revenue.png` |
-| Database schema diagram | `docs/screenshots/schema.png` |
+| ![Home](docs/screenshots/01-home.png) | ![Shop](docs/screenshots/02-shop.png) |
+
+| Product page | Verified reviews |
+| --- | --- |
+| ![Product](docs/screenshots/03-product.png) | ![Reviews](docs/screenshots/04-reviews.png) |
+
+### Cart, checkout and orders
+
+| Cart | Checkout — shipping step |
+| --- | --- |
+| ![Cart](docs/screenshots/05-cart.png) | ![Checkout](docs/screenshots/06-checkout-shipping.png) |
+
+| My orders | Order tracking |
+| --- | --- |
+| ![Orders](docs/screenshots/07-orders.png) | ![Order tracking](docs/screenshots/08-order-tracking.png) |
+
+### Vendor dashboard
+
+| Overview | Products |
+| --- | --- |
+| ![Vendor overview](docs/screenshots/09-vendor-overview.png) | ![Vendor products](docs/screenshots/10-vendor-products.png) |
+
+| Analytics | Earnings, after the 5% fee |
+| --- | --- |
+| ![Vendor analytics](docs/screenshots/11-vendor-analytics.png) | ![Vendor earnings](docs/screenshots/12-vendor-earnings.png) |
+
+Vendor order queue, showing only this shop's lines and the address to ship to:
+
+![Vendor orders](docs/screenshots/13-vendor-orders.png)
+
+### Admin dashboard
+
+| Marketplace overview | Commission and payouts |
+| --- | --- |
+| ![Admin overview](docs/screenshots/14-admin-overview.png) | ![Admin revenue](docs/screenshots/15-admin-revenue.png) |
+
+![Admin users](docs/screenshots/16-admin-users.png)
+
+### On a phone
+
+| Home | Shop | Seller dashboard |
+| --- | --- | --- |
+| ![Mobile home](docs/screenshots/17-mobile-home.png) | ![Mobile shop](docs/screenshots/18-mobile-shop.png) | ![Mobile dashboard](docs/screenshots/19-mobile-vendor-dashboard.png) |
 
 ---
 

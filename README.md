@@ -239,6 +239,7 @@ Individual commands:
 | `npm run seed` | Wipe and reseed the database |
 | `npm run check:services` | Verify your real MongoDB, Cloudinary and Stripe credentials |
 | `npm run seed:art` | Regenerate the seed artwork SVGs |
+| `npm run seed:photos` | Swap in real product photographs from `photos/` |
 | `npm run docs:schema` | Redraw the database schema diagram |
 | `npm run docs:screenshots` | Recapture the README screenshots |
 | `npm --prefix server run seed:destroy` | Empty the database |
@@ -383,6 +384,16 @@ Seed imagery is generated locally by `npm run seed:art` into
 `client/public/seed-art` - small SVGs in the marketplace palette with a motif
 per craft. They are deterministic, need no network, and match the product they
 illustrate. Real vendors upload photographs through Cloudinary.
+
+### Using real photographs instead
+
+The generated art is a placeholder. To swap in real photos, drop files into
+`photos/` named after the product slug and run `npm run seed:photos` — it prints
+every slug still waiting for one. Products without a photo keep their
+illustration, so you can add them a few at a time. See
+[`photos/README.md`](photos/README.md) for naming, sizing and which image
+sources are actually licensed for this (Unsplash, Pexels, Pixabay — not
+Pinterest or Google Images).
 
 ---
 

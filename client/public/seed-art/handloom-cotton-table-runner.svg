@@ -7,9 +7,9 @@
   </defs>
   <rect width="1200" height="900" fill="url(#g)"/>
   <circle cx="-529" cy="-9" r="170" fill="none" stroke="#74452E" stroke-width="2" opacity="0.07"/><circle cx="-292" cy="-466" r="260" fill="none" stroke="#74452E" stroke-width="2" opacity="0.07"/><circle cx="-62" cy="-206" r="350" fill="none" stroke="#74452E" stroke-width="2" opacity="0.07"/>
-  <g transform="rotate(2 600 450)">
-    <path d="M470 400 h260 l-60 -120 h-140 z" fill="#74452E" opacity="0.85"/>
-    <path d="M600 400 v190" stroke="#74452E" stroke-width="16"/>
-    <path d="M500 640 q100 -70 200 0 z" fill="#C28C6E" opacity="0.85"/>
-    <circle cx="600" cy="255" r="20" fill="#C28C6E" opacity="0.8"/></g>
+  <g transform="translate(600 450) scale(1) rotate(2) translate(-600 -450)">
+    <path d="M330 340 h540 v40 h-540 z" fill="#C28C6E"/>
+    <path d="M360 380 h480 v220 h-480 z" fill="#74452E" opacity="0.85"/>
+    <path d="M390 420 h420" stroke="#F1EDE6" stroke-width="10" opacity="0.5" stroke-linecap="round"/><path d="M390 466 h420" stroke="#F1EDE6" stroke-width="10" opacity="0.42" stroke-linecap="round"/><path d="M390 512 h420" stroke="#F1EDE6" stroke-width="10" opacity="0.33999999999999997" stroke-linecap="round"/><path d="M390 558 h420" stroke="#F1EDE6" stroke-width="10" opacity="0.26" stroke-linecap="round"/>
+    <path d="M360 600 l30 40 l30 -40 l30 40 l30 -40 l30 40 l30 -40 l30 40 l30 -40 l30 40 l30 -40 l30 40 l30 -40 l30 40 l30 -40" fill="none" stroke="#74452E" stroke-width="9" opacity="0.6"/></g>
 </svg>

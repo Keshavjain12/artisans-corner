@@ -8,13 +8,11 @@
   <rect width="1600" height="600" fill="url(#g)"/>
   <circle cx="178" cy="-22" r="170" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="-3" cy="-302" r="260" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="-126" cy="-402" r="350" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/>
   <g transform="translate(500 -120) scale(0.85)" opacity="0.55">
-    <circle cx="600" cy="470" r="150" fill="none" stroke="#8F5739" stroke-width="22" opacity="0.85"/>
-    <circle cx="600" cy="470" r="96" fill="none" stroke="#A96F4C" stroke-width="12" opacity="0.8"/>
-    <path d="M600 250 l38 62 l-38 62 l-38 -62 z" fill="#8F5739" opacity="0.9"/>
-    <circle cx="600" cy="470" r="30" fill="#A96F4C" opacity="0.55"/></g>
+    <circle cx="600" cy="500" r="145" fill="none" stroke="#8F5739" stroke-width="34" opacity="0.85"/>
+    <circle cx="600" cy="500" r="145" fill="none" stroke="#A96F4C" stroke-width="10" opacity="0.7"/>
+    <path d="M600 270 l52 78 l-52 72 l-52 -72 z" fill="#A96F4C"/></g>
   <g transform="translate(-260 -140) scale(0.55)" opacity="0.3">
-    <circle cx="600" cy="470" r="150" fill="none" stroke="#8F5739" stroke-width="22" opacity="0.85"/>
-    <circle cx="600" cy="470" r="96" fill="none" stroke="#A96F4C" stroke-width="12" opacity="0.8"/>
-    <path d="M600 250 l38 62 l-38 62 l-38 -62 z" fill="#8F5739" opacity="0.9"/>
-    <circle cx="600" cy="470" r="30" fill="#A96F4C" opacity="0.55"/></g>
+    <circle cx="600" cy="500" r="145" fill="none" stroke="#8F5739" stroke-width="34" opacity="0.85"/>
+    <circle cx="600" cy="500" r="145" fill="none" stroke="#A96F4C" stroke-width="10" opacity="0.7"/>
+    <path d="M600 270 l52 78 l-52 72 l-52 -72 z" fill="#A96F4C"/></g>
 </svg>

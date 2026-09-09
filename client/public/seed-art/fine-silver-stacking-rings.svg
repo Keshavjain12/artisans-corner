@@ -7,9 +7,8 @@
   </defs>
   <rect width="1200" height="900" fill="url(#g)"/>
   <circle cx="-206" cy="-506" r="170" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/><circle cx="-551" cy="-456" r="260" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/><circle cx="106" cy="-164" r="350" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/>
-  <g transform="rotate(-1 600 450)">
-    <circle cx="600" cy="470" r="150" fill="none" stroke="#4B6248" stroke-width="22" opacity="0.85"/>
-    <circle cx="600" cy="470" r="96" fill="none" stroke="#5F7A5B" stroke-width="12" opacity="0.8"/>
-    <path d="M600 250 l38 62 l-38 62 l-38 -62 z" fill="#4B6248" opacity="0.9"/>
-    <circle cx="600" cy="470" r="30" fill="#5F7A5B" opacity="0.55"/></g>
+  <g transform="translate(600 450) scale(1) rotate(-1) translate(-600 -450)">
+    <ellipse cx="600" cy="380" rx="150" ry="42" fill="none" stroke="#4B6248" stroke-width="20" opacity="0.85"/>
+    <ellipse cx="600" cy="470" rx="150" ry="42" fill="none" stroke="#5F7A5B" stroke-width="20" opacity="0.9"/>
+    <ellipse cx="600" cy="560" rx="150" ry="42" fill="none" stroke="#4B6248" stroke-width="20" opacity="0.6"/></g>
 </svg>

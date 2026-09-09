@@ -7,9 +7,9 @@
   </defs>
   <rect width="1200" height="900" fill="url(#g)"/>
   <circle cx="506" cy="766" r="170" fill="none" stroke="#4A2D20" stroke-width="2" opacity="0.07"/><circle cx="738" cy="449" r="260" fill="none" stroke="#4A2D20" stroke-width="2" opacity="0.07"/><circle cx="867" cy="346" r="350" fill="none" stroke="#4A2D20" stroke-width="2" opacity="0.07"/>
-  <g transform="rotate(0 600 450)">
-    <g fill="none" stroke-linecap="round">
-      <circle cx="600" cy="460" r="60" stroke="#4A2D20" stroke-width="16" opacity="0.85"/><circle cx="600" cy="460" r="102" stroke="#A96F4C" stroke-width="10" opacity="0.75"/><circle cx="600" cy="460" r="144" stroke="#4A2D20" stroke-width="16" opacity="0.6499999999999999"/><circle cx="600" cy="460" r="186" stroke="#A96F4C" stroke-width="10" opacity="0.5499999999999999"/><circle cx="600" cy="460" r="228" stroke="#4A2D20" stroke-width="16" opacity="0.44999999999999996"/>
-    </g>
-    <path d="M600 460 l170 -120" stroke="#4A2D20" stroke-width="12" opacity="0.5" stroke-linecap="round"/></g>
+  <g transform="translate(600 450) scale(1) rotate(0) translate(-600 -450)">
+    <path d="M470 400 h260 l-60 -120 h-140 z" fill="#4A2D20" opacity="0.85"/>
+    <path d="M600 400 v190" stroke="#4A2D20" stroke-width="16"/>
+    <path d="M500 640 q100 -70 200 0 z" fill="#A96F4C" opacity="0.85"/>
+    <circle cx="600" cy="255" r="20" fill="#A96F4C" opacity="0.8"/></g>
 </svg>

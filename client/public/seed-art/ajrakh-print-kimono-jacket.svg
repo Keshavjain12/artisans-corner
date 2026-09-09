@@ -7,8 +7,8 @@
   </defs>
   <rect width="1200" height="900" fill="url(#g)"/>
   <circle cx="183" cy="-497" r="170" fill="none" stroke="#3A4C38" stroke-width="2" opacity="0.07"/><circle cx="-403" cy="-2" r="260" fill="none" stroke="#3A4C38" stroke-width="2" opacity="0.07"/><circle cx="-76" cy="71" r="350" fill="none" stroke="#3A4C38" stroke-width="2" opacity="0.07"/>
-  <g transform="rotate(-2 600 450)">
-    <g opacity="0.85">
-      <path d="M400 250 q100 -34 200 0 q100 34 200 0" fill="none" stroke="#3A4C38" stroke-width="16" stroke-linecap="round"/><path d="M400 308 q100 -34 200 0 q100 34 200 0" fill="none" stroke="#8F5739" stroke-width="10" stroke-linecap="round"/><path d="M400 366 q100 -34 200 0 q100 34 200 0" fill="none" stroke="#3A4C38" stroke-width="16" stroke-linecap="round"/><path d="M400 424 q100 -34 200 0 q100 34 200 0" fill="none" stroke="#8F5739" stroke-width="10" stroke-linecap="round"/><path d="M400 482 q100 -34 200 0 q100 34 200 0" fill="none" stroke="#3A4C38" stroke-width="16" stroke-linecap="round"/><path d="M400 540 q100 -34 200 0 q100 34 200 0" fill="none" stroke="#8F5739" stroke-width="10" stroke-linecap="round"/><path d="M400 598 q100 -34 200 0 q100 34 200 0" fill="none" stroke="#3A4C38" stroke-width="16" stroke-linecap="round"/>
-    </g></g>
+  <g transform="translate(600 450) scale(1) rotate(-2) translate(-600 -450)">
+    <path d="M470 300 l130 -40 l130 40 l90 70 l-56 70 l-44 -32 v250 h-240 v-250 l-44 32 l-56 -70 z" fill="#3A4C38" opacity="0.85"/>
+    <path d="M600 260 v398" stroke="#F4EEE9" stroke-width="12" opacity="0.55"/>
+    <path d="M540 300 q60 60 120 0" fill="none" stroke="#8F5739" stroke-width="14"/></g>
 </svg>

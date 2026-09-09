@@ -1,4 +1,7 @@
 /** Realistic demo catalogue for the seeded marketplace. */
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 export const DEMO_PASSWORDS = {
   admin: 'DemoAdmin123!',
@@ -88,11 +91,34 @@ export const artSlug = (value) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
+/**
+ * Real photographs win when they exist. Drop files into photos/ and run
+ * `npm run seed:photos` to build this manifest; anything without one keeps its
+ * generated illustration, so photos can be added a few at a time.
+ */
+const photoManifest = (() => {
+  try {
+    const here = path.dirname(fileURLToPath(import.meta.url));
+    const file = path.resolve(here, '..', '..', 'client', 'public', 'product-photos', 'manifest.json');
+    return JSON.parse(fs.readFileSync(file, 'utf8'));
+  } catch {
+    return {};
+  }
+})();
+
 /** The two images every seeded product gets, derived from its name. */
-export const productArt = (name) => [
-  { url: `/seed-art/${artSlug(name)}.svg`, publicId: '', alt: name },
-  { url: `/seed-art/${artSlug(name)}-2.svg`, publicId: '', alt: `${name}, second view` },
-];
+export const productArt = (name) => {
+  const slug = artSlug(name);
+  const photo = photoManifest[slug] || {};
+  return [
+    { url: photo.main || `/seed-art/${slug}.svg`, publicId: '', alt: name },
+    {
+      url: photo.second || photo.main || `/seed-art/${slug}-2.svg`,
+      publicId: '',
+      alt: `${name}, second view`,
+    },
+  ];
+};
 
 export const storeArt = (key) => ({
   logo: `/seed-art/store-${key}-logo.svg`,

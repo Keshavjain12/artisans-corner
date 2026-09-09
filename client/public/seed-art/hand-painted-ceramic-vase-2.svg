@@ -1,16 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Hand-Painted Ceramic Vase second">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Hand-Painted Ceramic Vase">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#EFE9E4"/>
-      <stop offset="100%" stop-color="#D9CDBF"/>
+      <stop offset="0%" stop-color="#F7EFE8"/>
+      <stop offset="100%" stop-color="#E3D3C4"/>
     </linearGradient>
   </defs>
   <rect width="1200" height="900" fill="url(#g)"/>
-  <circle cx="468" cy="328" r="170" fill="none" stroke="#4A2D20" stroke-width="2" opacity="0.07"/><circle cx="533" cy="586" r="260" fill="none" stroke="#4A2D20" stroke-width="2" opacity="0.07"/><circle cx="541" cy="685" r="350" fill="none" stroke="#4A2D20" stroke-width="2" opacity="0.07"/>
-  <g transform="rotate(2 600 450)">
-    <path d="M470 330 q-30 130 40 250 q90 90 180 0 q70 -120 40 -250 q-130 40 -260 0 z"
-      fill="#4A2D20" opacity="0.82"/>
-    <path d="M470 330 q130 -70 260 0" fill="none" stroke="#4A2D20" stroke-width="18" stroke-linecap="round"/>
-    <path d="M520 430 q80 30 160 0" fill="none" stroke="#EFE9E4" stroke-width="10" opacity="0.55"/>
-    <path d="M515 505 q85 32 170 0" fill="none" stroke="#EFE9E4" stroke-width="10" opacity="0.4"/></g>
+  <circle cx="-400" cy="80" r="170" fill="none" stroke="#5C3726" stroke-width="2" opacity="0.07"/><circle cx="-275" cy="-378" r="260" fill="none" stroke="#5C3726" stroke-width="2" opacity="0.07"/><circle cx="-560" cy="-530" r="350" fill="none" stroke="#5C3726" stroke-width="2" opacity="0.07"/>
+  <g transform="translate(600 450) scale(0.86) rotate(3.2) translate(-600 -450)">
+    <path d="M470 330 q-30 130 40 250 q90 90 180 0 q70 -120 40 -250 q-130 40 -260 0 z" fill="#5C3726" opacity="0.82"/>
+    <path d="M470 330 q130 -70 260 0" fill="none" stroke="#5C3726" stroke-width="18" stroke-linecap="round"/>
+    <path d="M520 430 q80 30 160 0" fill="none" stroke="#F7EFE8" stroke-width="10" opacity="0.55"/>
+    <path d="M515 505 q85 32 170 0" fill="none" stroke="#F7EFE8" stroke-width="10" opacity="0.4"/></g>
 </svg>

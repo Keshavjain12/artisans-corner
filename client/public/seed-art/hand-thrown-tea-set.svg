@@ -7,10 +7,11 @@
   </defs>
   <rect width="1200" height="900" fill="url(#g)"/>
   <circle cx="704" cy="484" r="170" fill="none" stroke="#4A2D20" stroke-width="2" opacity="0.07"/><circle cx="563" cy="761" r="260" fill="none" stroke="#4A2D20" stroke-width="2" opacity="0.07"/><circle cx="645" cy="531" r="350" fill="none" stroke="#4A2D20" stroke-width="2" opacity="0.07"/>
-  <g transform="rotate(-2 600 450)">
-    <path d="M430 470 q170 190 340 0 z" fill="#4A2D20" opacity="0.82"/>
-    <ellipse cx="600" cy="470" rx="170" ry="40" fill="#A96F4C" opacity="0.9"/>
-    <ellipse cx="600" cy="470" rx="120" ry="27" fill="#EFE9E4" opacity="0.75"/>
-    <path d="M600 610 v55" stroke="#4A2D20" stroke-width="16" stroke-linecap="round"/>
-    <path d="M520 665 h160" stroke="#4A2D20" stroke-width="16" stroke-linecap="round"/></g>
+  <g transform="translate(600 450) scale(1) rotate(-2) translate(-600 -450)">
+    <path d="M440 420 q0 190 170 190 q170 0 170 -190 z" fill="#4A2D20" opacity="0.85"/>
+    <ellipse cx="610" cy="420" rx="170" ry="40" fill="#A96F4C"/>
+    <path d="M780 450 q80 20 70 90" fill="none" stroke="#4A2D20" stroke-width="22" stroke-linecap="round"/>
+    <path d="M440 450 q-80 10 -90 -50" fill="none" stroke="#4A2D20" stroke-width="22" stroke-linecap="round"/>
+    <circle cx="610" cy="360" r="26" fill="#4A2D20" opacity="0.9"/>
+    <path d="M540 355 h140" stroke="#4A2D20" stroke-width="14" stroke-linecap="round" opacity="0.6"/></g>
 </svg>

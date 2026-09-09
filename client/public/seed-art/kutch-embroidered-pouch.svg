@@ -7,9 +7,9 @@
   </defs>
   <rect width="1200" height="900" fill="url(#g)"/>
   <circle cx="944" cy="304" r="170" fill="none" stroke="#4A2D20" stroke-width="2" opacity="0.07"/><circle cx="693" cy="626" r="260" fill="none" stroke="#4A2D20" stroke-width="2" opacity="0.07"/><circle cx="661" cy="275" r="350" fill="none" stroke="#4A2D20" stroke-width="2" opacity="0.07"/>
-  <g transform="rotate(-3 600 450)">
-    <rect x="440" y="380" width="320" height="290" rx="26" fill="#4A2D20" opacity="0.82"/>
-    <path d="M520 380 v-40 q80 -70 160 0 v40" fill="none" stroke="#4A2D20" stroke-width="20" stroke-linecap="round"/>
-    <path d="M500 470 h200" stroke="#EFE9E4" stroke-width="14" opacity="0.5" stroke-linecap="round"/>
-    <path d="M500 530 h140" stroke="#EFE9E4" stroke-width="14" opacity="0.35" stroke-linecap="round"/></g>
+  <g transform="translate(600 450) scale(1) rotate(-3) translate(-600 -450)">
+    <path d="M420 400 h360 q28 0 24 28 l-26 210 q-4 32 -36 32 h-284 q-32 0 -36 -32 l-26 -210 q-4 -28 24 -28 z" fill="#4A2D20" opacity="0.85"/>
+    <rect x="410" y="372" width="380" height="42" rx="16" fill="#A96F4C"/>
+    <circle cx="600" cy="393" r="13" fill="#EFE9E4"/>
+    <circle cx="500" cy="530" r="20" fill="#A96F4C" opacity="0.55"/><circle cx="600" cy="530" r="20" fill="#A96F4C" opacity="0.55"/><circle cx="700" cy="530" r="20" fill="#A96F4C" opacity="0.55"/></g>
 </svg>

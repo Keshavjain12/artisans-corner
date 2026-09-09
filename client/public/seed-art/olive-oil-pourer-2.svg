@@ -1,16 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Olive Oil Pourer second">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Olive Oil Pourer">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#F6EBE3"/>
-      <stop offset="100%" stop-color="#E7CFC1"/>
+      <stop offset="0%" stop-color="#F1EDE6"/>
+      <stop offset="100%" stop-color="#DFD5C6"/>
     </linearGradient>
   </defs>
   <rect width="1200" height="900" fill="url(#g)"/>
-  <circle cx="-384" cy="-304" r="170" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="127" cy="-237" r="260" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="-310" cy="-68" r="350" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/>
-  <g transform="rotate(1 600 450)">
-    <path d="M430 470 q170 190 340 0 z" fill="#8F5739" opacity="0.82"/>
-    <ellipse cx="600" cy="470" rx="170" ry="40" fill="#A96F4C" opacity="0.9"/>
-    <ellipse cx="600" cy="470" rx="120" ry="27" fill="#F6EBE3" opacity="0.75"/>
-    <path d="M600 610 v55" stroke="#8F5739" stroke-width="16" stroke-linecap="round"/>
-    <path d="M520 665 h160" stroke="#8F5739" stroke-width="16" stroke-linecap="round"/></g>
+  <circle cx="-508" cy="-48" r="170" fill="none" stroke="#74452E" stroke-width="2" opacity="0.07"/><circle cx="-589" cy="-15" r="260" fill="none" stroke="#74452E" stroke-width="2" opacity="0.07"/><circle cx="-199" cy="-260" r="350" fill="none" stroke="#74452E" stroke-width="2" opacity="0.07"/>
+  <g transform="translate(600 450) scale(0.86) rotate(3.2) translate(-600 -450)">
+    <path d="M555 250 h90 v110 q80 60 80 160 v130 q0 40 -40 40 h-170 q-40 0 -40 -40 v-130 q0 -100 80 -160 z" fill="#74452E" opacity="0.85"/>
+    <rect x="548" y="215" width="104" height="45" rx="14" fill="#C28C6E"/>
+    <rect x="510" y="470" width="180" height="90" rx="10" fill="#F1EDE6" opacity="0.55"/></g>
 </svg>

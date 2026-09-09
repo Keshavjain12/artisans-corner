@@ -7,8 +7,8 @@
   </defs>
   <rect width="1200" height="900" fill="url(#g)"/>
   <circle cx="831" cy="611" r="170" fill="none" stroke="#3A4C38" stroke-width="2" opacity="0.07"/><circle cx="878" cy="439" r="260" fill="none" stroke="#3A4C38" stroke-width="2" opacity="0.07"/><circle cx="484" cy="511" r="350" fill="none" stroke="#3A4C38" stroke-width="2" opacity="0.07"/>
-  <g transform="rotate(1 600 450)">
-    <rect x="440" y="380" width="320" height="290" rx="26" fill="#3A4C38" opacity="0.82"/>
+  <g transform="translate(600 450) scale(1) rotate(1) translate(-600 -450)">
+    <rect x="440" y="380" width="320" height="290" rx="26" fill="#3A4C38" opacity="0.85"/>
     <path d="M520 380 v-40 q80 -70 160 0 v40" fill="none" stroke="#3A4C38" stroke-width="20" stroke-linecap="round"/>
     <path d="M500 470 h200" stroke="#F4EEE9" stroke-width="14" opacity="0.5" stroke-linecap="round"/>
     <path d="M500 530 h140" stroke="#F4EEE9" stroke-width="14" opacity="0.35" stroke-linecap="round"/></g>

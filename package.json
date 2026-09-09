@@ -23,7 +23,8 @@
     "seed:art": "node scripts/generate-seed-art.mjs",
     "docs:schema": "node scripts/generate-schema-diagram.mjs",
     "docs:screenshots": "node scripts/capture-screenshots.mjs",
-    "check:services": "npm --prefix server run check:services"
+    "check:services": "npm --prefix server run check:services",
+    "seed:photos": "node scripts/import-photos.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",

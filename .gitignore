@@ -9,6 +9,10 @@ node_modules/
 .env.*.local
 *.pem
 
+# photo inbox (source files; the app serves client/public/product-photos)
+photos/*
+!photos/README.md
+
 # playwright
 test-results/
 playwright-report/

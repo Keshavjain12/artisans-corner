@@ -7,9 +7,8 @@
   </defs>
   <rect width="1200" height="900" fill="url(#g)"/>
   <circle cx="-169" cy="-289" r="170" fill="none" stroke="#5C3726" stroke-width="2" opacity="0.07"/><circle cx="-147" cy="-154" r="260" fill="none" stroke="#5C3726" stroke-width="2" opacity="0.07"/><circle cx="-544" cy="-186" r="350" fill="none" stroke="#5C3726" stroke-width="2" opacity="0.07"/>
-  <g transform="rotate(3 600 450)">
-    <circle cx="600" cy="470" r="150" fill="none" stroke="#5C3726" stroke-width="22" opacity="0.85"/>
-    <circle cx="600" cy="470" r="96" fill="none" stroke="#D6AF99" stroke-width="12" opacity="0.8"/>
-    <path d="M600 250 l38 62 l-38 62 l-38 -62 z" fill="#5C3726" opacity="0.9"/>
-    <circle cx="600" cy="470" r="30" fill="#D6AF99" opacity="0.55"/></g>
+  <g transform="translate(600 450) scale(1) rotate(3) translate(-600 -450)">
+    <circle cx="600" cy="500" r="145" fill="none" stroke="#5C3726" stroke-width="34" opacity="0.85"/>
+    <circle cx="600" cy="500" r="145" fill="none" stroke="#D6AF99" stroke-width="10" opacity="0.7"/>
+    <path d="M600 270 l52 78 l-52 72 l-52 -72 z" fill="#D6AF99"/></g>
 </svg>

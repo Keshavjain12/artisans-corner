@@ -7,10 +7,8 @@
   </defs>
   <rect width="1200" height="900" fill="url(#g)"/>
   <circle cx="-219" cy="41" r="170" fill="none" stroke="#5C3726" stroke-width="2" opacity="0.07"/><circle cx="-353" cy="-257" r="260" fill="none" stroke="#5C3726" stroke-width="2" opacity="0.07"/><circle cx="-470" cy="-28" r="350" fill="none" stroke="#5C3726" stroke-width="2" opacity="0.07"/>
-  <g transform="rotate(-2 600 450)">
-    <path d="M430 470 q170 190 340 0 z" fill="#5C3726" opacity="0.82"/>
-    <ellipse cx="600" cy="470" rx="170" ry="40" fill="#D6AF99" opacity="0.9"/>
-    <ellipse cx="600" cy="470" rx="120" ry="27" fill="#F7EFE8" opacity="0.75"/>
-    <path d="M600 610 v55" stroke="#5C3726" stroke-width="16" stroke-linecap="round"/>
-    <path d="M520 665 h160" stroke="#5C3726" stroke-width="16" stroke-linecap="round"/></g>
+  <g transform="translate(600 450) scale(1) rotate(-2) translate(-600 -450)">
+    <path d="M400 440 q200 250 400 0 z" fill="#5C3726" opacity="0.85"/>
+    <ellipse cx="600" cy="440" rx="200" ry="48" fill="#D6AF99"/>
+    <ellipse cx="600" cy="440" rx="146" ry="33" fill="#F7EFE8" opacity="0.75"/></g>
 </svg>

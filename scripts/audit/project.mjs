@@ -95,7 +95,7 @@ const artRefs = [
 ];
 const missingArt = artRefs.filter((url) => !fs.existsSync(path.join('client/public', url)));
 check(
-  'every seeded image exists (re-run npm run seed:art after renaming a product)',
+  'every seeded image exists (re-run npm run seed:art or seed:photos after renaming)',
   missingArt.length === 0,
   missingArt.join(', ')
 );
@@ -112,8 +112,13 @@ check('every seed SVG is well-formed XML', malformed.length === 0, malformed.joi
 
 check(
   'seed imagery needs no external host',
-  artRefs.every((url) => url.startsWith('/seed-art/')),
-  artRefs.find((url) => !url.startsWith('/seed-art/')) || ''
+  artRefs.every((url) => url.startsWith('/seed-art/') || url.startsWith('/product-photos/')),
+  artRefs.find((url) => !url.startsWith('/seed-art/') && !url.startsWith('/product-photos/')) || ''
+);
+
+const photoCount = artRefs.filter((url) => url.startsWith('/product-photos/')).length;
+console.log(
+  `        (${photoCount} real photographs, ${artRefs.length - photoCount} generated illustrations)`
 );
 
 console.log('\n=== SECRETS ===');

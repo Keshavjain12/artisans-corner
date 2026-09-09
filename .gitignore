@@ -12,6 +12,7 @@ node_modules/
 # photo inbox (source files; the app serves client/public/product-photos)
 photos/*
 !photos/README.md
+!photos/NEEDED.md
 
 # playwright
 test-results/

@@ -31,6 +31,16 @@ mongodb+srv://<user>:<password>@<cluster>.mongodb.net/artisans-corner?retryWrite
 Without these the server falls back to writing uploads to local disk, which does
 not survive a redeploy on most hosts — so set them before going live.
 
+With all three services configured, confirm the credentials really work before
+you deploy anything:
+
+```bash
+npm run check:services
+```
+
+It uploads a test image to Cloudinary and fetches the URL back, opens and
+cancels a Stripe PaymentIntent, and connects to Mongo — then cleans up.
+
 ## 3. Stripe — payments (test mode)
 
 1. Create an account at <https://stripe.com> and stay in **test mode**.

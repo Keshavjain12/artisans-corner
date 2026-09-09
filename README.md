@@ -237,12 +237,13 @@ Individual commands:
 | `npm run dev:server` | API only, with `node --watch` |
 | `npm run dev:client` | Vite dev server only |
 | `npm run seed` | Wipe and reseed the database |
+| `npm run check:services` | Verify your real MongoDB, Cloudinary and Stripe credentials |
 | `npm run seed:art` | Regenerate the seed artwork SVGs |
 | `npm run docs:schema` | Redraw the database schema diagram |
 | `npm run docs:screenshots` | Recapture the README screenshots |
 | `npm --prefix server run seed:destroy` | Empty the database |
 | `npm test` | Backend + frontend test suites |
-| `npm run audit` | 189-check quality-bar audit against a running app |
+| `npm run audit` | 192-check quality-bar audit against a running app |
 | `npm run audit:ci` | Same audit, but boots and tears down its own server |
 | `npm run test:e2e` | 26 browser tests through real Chrome (desktop + phone) |
 | `npm run verify` | Everything: lint, tests, audit and browser suite |
@@ -317,6 +318,16 @@ folders, are limited to 5MB, validated by magic bytes as well as MIME type, and
 transformed server-side (max 1600px, `quality: auto:good`, WebP). Only the
 secure URL and `public_id` are stored in MongoDB - **no image binary ever goes
 into the database**, and the API secret never reaches the browser.
+
+Verify the credentials really work before deploying:
+
+```bash
+npm run check:services
+```
+
+That uploads a 1x1 image, fetches the returned URL to confirm it is genuinely
+being served, deletes it again, and does the equivalent for MongoDB and Stripe.
+A green run is proof the keys work, not merely that they are present.
 
 If Cloudinary is not configured the server writes uploads to `server/uploads/`
 and serves them from `/uploads`. That is a local development convenience only;
@@ -466,14 +477,14 @@ a product never rewrites order history.
 ```bash
 npm run verify        # everything below, in order
 
-npm test              # 51 backend + 36 frontend
+npm test              # 62 backend + 36 frontend
 npm run test:server   # API and business logic, in-memory MongoDB
 npm run test:client   # components, cart and route guards, jsdom + Vitest
 npm run test:e2e      # 26 browser tests in real Chrome, desktop and phone
-npm run audit:ci      # 189 checks against a disposable server
+npm run audit:ci      # 192 checks against a disposable server
 ```
 
-**113 automated tests and 189 audit checks**, none of which need a database,
+**124 automated tests and 192 audit checks**, none of which need a database,
 a Stripe account or a Cloudinary account to run.
 
 The backend suite runs against an in-memory MongoDB (`mongodb-memory-server`),
@@ -521,6 +532,7 @@ misreporting as failures.
 | `checkout.test.js` | Server-side pricing, 5% commission split, client-sent prices ignored, shipping threshold, stock ceiling, inactive products, auth required |
 | `order-review.test.js` | Order creation, stock decrement, payout recording, idempotent confirmation, price snapshots surviving a price change, cross-buyer order access denied, verified-purchase reviews, duplicate reviews, rating range |
 | `money.test.js` | Commission maths, rounding invariants, Stripe minor-unit conversion |
+| `cloudinary.test.js` | The brief's image rule: a real multipart upload is streamed to Cloudinary, only the returned URL and public id are written to MongoDB (asserted against the raw document — no bytes, no base64), the cloud copy is deleted with the product, a file merely claiming to be an image never reaches Cloudinary, and the API secret never leaves the server |
 | `stripe.test.js` | The real Stripe branch: the amount sent to Stripe is the server's total in minor units, the intent is re-read rather than trusted, declines and `processing` are handled, and webhook signatures are verified against the genuine `stripe` library - a forged signature, a tampered payload and an unsigned request are all rejected |
 | `form-primitives.test.jsx` (client) | `Input`/`Textarea`/`Select` forward their ref to react-hook-form, so typed values submit instead of every field reporting itself empty |
 | `cartSlice.test.js` (client) | Cart contents, inventory clamping, subtotal rounding, and survival of a refresh including corrupt storage |
@@ -670,6 +682,10 @@ Vendor order queue, showing only this shop's lines and the address to ship to:
 - **Payouts are recorded, not transferred.** The ledger is complete and correct,
   but no money moves to a vendor's bank. A production build would use Stripe
   Connect with destination charges or transfers.
+- **Cloudinary and Stripe have never run against real credentials here.** Both
+  branches are covered by tests with the vendor SDK mocked - what is unproven is
+  only the account itself. `npm run check:services` closes that in one command
+  once you have keys.
 - **Stripe Elements itself is the one piece never exercised automatically.**
   `stripe.test.js` covers the server side of the card path, including genuine
   webhook signature verification, with the Stripe *client* mocked so no network

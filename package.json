@@ -22,7 +22,8 @@
     "verify": "npm run lint && npm test && npm run audit:ci && npm run test:e2e",
     "seed:art": "node scripts/generate-seed-art.mjs",
     "docs:schema": "node scripts/generate-schema-diagram.mjs",
-    "docs:screenshots": "node scripts/capture-screenshots.mjs"
+    "docs:screenshots": "node scripts/capture-screenshots.mjs",
+    "check:services": "npm --prefix server run check:services"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",

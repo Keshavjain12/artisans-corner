@@ -77,7 +77,7 @@ check('every variable the server reads is documented', undocumentedEnv.length ==
 
 /* ---- ports quoted in the docs match the code ---------------------------- */
 const viteConfig = fs.readFileSync('frontend/vite.config.js', 'utf8');
-check('README client port matches vite.config.js', viteConfig.includes('port: 5273') && readme.includes('5273'));
+check('README client port matches vite.config.js', viteConfig.includes('|| 5273') && readme.includes('5273'));
 check('README API port matches env.js', envJs.includes('5055') && readme.includes('5055'));
 check('no stale 5173/5000 references in the README', !/localhost:5173|localhost:5000/.test(readme));
 

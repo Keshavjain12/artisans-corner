@@ -1,6 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const PORT = 5273;
+/* The suite runs on its own pair of ports, not the development pair. Anyone
+   with `npm run dev` open has a real database on 5055, and a suite that reused
+   that server would register accounts and place orders in it. */
+const API_PORT = 5155;
+const PORT = 5373;
 const BASE_URL = process.env.E2E_BASE_URL || `http://localhost:${PORT}`;
 
 /**
@@ -43,11 +47,20 @@ export default defineConfig({
 
   webServer: {
     command: 'npm run dev:memory',
+    env: {
+      PORT: String(API_PORT),
+      API_PORT: String(API_PORT),
+      CLIENT_PORT: String(PORT),
+      CLIENT_URL: `http://localhost:${PORT}`,
+      SERVER_URL: `http://localhost:${API_PORT}`,
+    },
     /* Gate on the API, not the Vite port: Vite is ready in under a second
        while the API is still seeding, so waiting on the client would start the
        run against an empty database. */
-    url: 'http://localhost:5055/api/health',
-    reuseExistingServer: !process.env.CI,
+    url: `http://localhost:${API_PORT}/api/health`,
+    /* Never reused: a leftover server means testing yesterday's code against
+       yesterday's data, which has happened and is hard to spot. */
+    reuseExistingServer: false,
     timeout: 240_000,
     stdout: 'ignore',
     stderr: 'pipe',

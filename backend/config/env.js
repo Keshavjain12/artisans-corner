@@ -28,6 +28,9 @@ const env = {
     .map((url) => url.trim().replace(/\/$/, ''))
     .filter(Boolean),
   serverUrl: (process.env.SERVER_URL || 'http://localhost:5055').replace(/\/$/, ''),
+  /* True only for the in-memory development server, whose data is thrown away
+     when the process stops. */
+  ephemeralDb: process.env.EPHEMERAL_DB === 'true',
 
   commissionRate: num(process.env.PLATFORM_COMMISSION_RATE, 0.05),
   taxRate: num(process.env.TAX_RATE, 0),

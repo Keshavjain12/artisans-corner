@@ -240,6 +240,18 @@ npm run dev
 
 Open <http://localhost:5273>.
 
+On Windows, MongoDB itself installs in two commands from an Administrator
+PowerShell, and runs as a service from then on:
+
+```powershell
+winget install --id MongoDB.Server --exact   # the database, as a Windows service
+winget install --id MongoDB.Shell  --exact   # mongosh, for looking inside it
+Get-Service MongoDB                          # expect Status: Running
+```
+
+The default `MONGO_URI` in `.env.example` already points at it, so nothing else
+changes.
+
 ### No MongoDB installed?
 
 ```bash
@@ -555,6 +567,13 @@ API and asserts the behaviour end to end:
 | `project` | Every route is documented, README credentials match the seed, `.env.example` is complete, ports agree with the code, no secret appears in the built bundle, mobile nav / responsive grids / focus rings / empty states are present |
 | `api` | Registration and login rules, JWT and role authorisation, catalogue search-filter-sort-paginate, server-side pricing and commission, order lifecycle, verified reviews, vendor analytics, admin moderation and revenue |
 | `flows` | Real multipart image upload (including a file only pretending to be an image), multi-vendor baskets and their per-shop payouts, payment failure paths, cancellation and restock, paused shops and sold-out stock |
+
+The audit registers accounts, publishes shops and pays for orders, so it refuses
+to run against a server whose database is persistent - `/api/health` reports
+which kind it is - and says to use `npm run audit:ci` instead. That protects real
+local data from its own test fixtures. For the same reason the browser suite
+starts its own pair of ports (API 5155, client 5373) rather than reusing
+whatever is on the development pair.
 
 It exits non-zero on the first regression, so it works in CI. `npm run audit:ci`
 boots a disposable server, audits it and shuts it down, which makes it safe to

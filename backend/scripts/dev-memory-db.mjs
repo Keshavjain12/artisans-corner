@@ -22,6 +22,9 @@ const memory = await MongoMemoryServer.create();
 
 // Must also be set before any module reads config/env.js.
 process.env.MONGO_URI = memory.getUri('artisans-corner');
+/* Lets /api/health say the database is disposable, which the audit checks
+   before it starts creating accounts and orders. */
+process.env.EPHEMERAL_DB = 'true';
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 process.env.ALLOW_MOCK_PAYMENTS = process.env.ALLOW_MOCK_PAYMENTS || 'true';
 

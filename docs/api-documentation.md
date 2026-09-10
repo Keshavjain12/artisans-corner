@@ -126,7 +126,7 @@ sku, tags[], images[{url, publicId, alt}], isActive`.
 Images are validated by MIME type **and** magic bytes, capped at 5MB, streamed
 to Cloudinary and normalised (max 1600px, `quality: auto:good`, WebP). Only the
 resulting URL is stored. With no Cloudinary credentials the server falls back to
-`server/uploads` on local disk - a development convenience only.
+`backend/uploads` on local disk - a development convenience only.
 
 ## Payments
 

@@ -3,7 +3,7 @@
  *
  *   npm run check:services        (from the repo root)
  *
- * Run this the moment you paste real keys into server/.env, and again on the
+ * Run this the moment you paste real keys into backend/.env, and again on the
  * deployed API with its own environment. It does the smallest real operation
  * against each service and cleans up after itself, so a green run is proof the
  * credentials work - not just that they are present.

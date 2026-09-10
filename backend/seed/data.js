@@ -1,7 +1,5 @@
 /** Realistic demo catalogue for the seeded marketplace. */
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { productPhoto } from '../config/photoManifest.js';
 
 export const DEMO_PASSWORDS = {
   admin: 'DemoAdmin123!',
@@ -91,20 +89,11 @@ export const artSlug = (value) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
-/**
+/*
  * Real photographs win when they exist. Drop files into photos/ and run
- * `npm run seed:photos` to build this manifest; anything without one keeps its
- * generated illustration, so photos can be added a few at a time.
+ * `npm run seed:photos`; anything without one keeps its generated
+ * illustration, so photos can be added a few at a time.
  */
-const photoManifest = (() => {
-  try {
-    const here = path.dirname(fileURLToPath(import.meta.url));
-    const file = path.resolve(here, '..', '..', 'client', 'public', 'product-photos', 'manifest.json');
-    return JSON.parse(fs.readFileSync(file, 'utf8'));
-  } catch {
-    return {};
-  }
-})();
 
 /**
  * The images a seeded product gets.
@@ -117,7 +106,7 @@ const photoManifest = (() => {
  */
 export const productArt = (name) => {
   const slug = artSlug(name);
-  const photo = photoManifest[slug];
+  const photo = productPhoto(slug);
 
   if (photo?.main) {
     const images = [{ url: photo.main, publicId: '', alt: name }];

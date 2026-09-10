@@ -18,7 +18,7 @@ const PORT = Number(process.env.AUDIT_PORT || 5099);
 const API = `http://localhost:${PORT}/api`;
 
 const server = spawn(process.execPath, ['scripts/dev-memory-db.mjs'], {
-  cwd: path.join(repoRoot, 'server'),
+  cwd: path.join(repoRoot, 'backend'),
   env: {
     ...process.env,
     PORT: String(PORT),

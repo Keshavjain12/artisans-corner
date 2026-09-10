@@ -9,7 +9,7 @@ node_modules/
 .env.*.local
 *.pem
 
-# photo inbox (source files; the app serves client/public/product-photos)
+# photo inbox (source files; the app serves frontend/public/product-photos)
 photos/*
 !photos/README.md
 !photos/NEEDED.md
@@ -23,12 +23,12 @@ blob-report/
 # builds
 dist/
 build/
-client/dist/
+frontend/dist/
 coverage/
 
 # local uploads (dev fallback storage)
-server/uploads/*
-!server/uploads/.gitkeep
+backend/uploads/*
+!backend/uploads/.gitkeep
 
 # logs
 logs/

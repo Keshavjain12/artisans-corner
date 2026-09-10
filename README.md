@@ -154,38 +154,61 @@ small and avoids stale caches.
 
 ```
 artisans-corner/
-├── client/
-│   ├── public/favicon.svg
+│
+├── frontend/                    React + Vite single-page app
+│   ├── public/
+│   │   ├── seed-art/            generated placeholder illustrations
+│   │   ├── product-photos/      imported photographs + manifest.json
+│   │   └── favicon.svg
 │   └── src/
-│       ├── components/      ProductCard, ReviewSection, ImageUploader, charts, ui primitives...
-│       ├── hooks/           useAsync, useDebounce, useDocumentTitle
-│       ├── layouts/         MainLayout, SellerLayout, AdminLayout
-│       ├── pages/           marketplace pages + seller/ and admin/ dashboards
-│       ├── routes/          AppRoutes (lazy loaded), ProtectedRoute
-│       ├── services/        axios instance + one module per API area
-│       ├── store/           Redux Toolkit slices (auth, cart)
-│       ├── utils/           formatting, constants, cn
-│       ├── App.jsx  main.jsx  index.css
-│       ├── tailwind.config.js  vite.config.js
-├── server/
-│   ├── config/              env, db, cloudinary, stripe, categories
-│   ├── controllers/         auth, product, store, order, review, payment, admin, upload, analytics
-│   ├── middleware/          auth, validate, upload, rateLimit, error
-│   ├── models/              User, Store, Category, Product, Order, Review, Payout
-│   ├── routes/              one router per resource + index
-│   ├── services/            pricing, order, analytics, upload
-│   ├── utils/               ApiError, apiResponse, asyncHandler, money, slugify, pagination, token
-│   ├── validators/          Zod schemas
-│   ├── seed/                seed.js + demo catalogue
-│   ├── tests/               Jest + Supertest suites
-│   ├── app.js  server.js
-├── scripts/audit/           executable quality-bar audit (npm run audit)
+│       ├── components/          ProductCard, ReviewSection, ImageUploader, charts, ui primitives
+│       ├── hooks/               useAsync, useDebounce, useDocumentTitle
+│       ├── layouts/             MainLayout, SellerLayout, AdminLayout
+│       ├── pages/               marketplace pages, plus seller/ and admin/ dashboards
+│       ├── routes/              AppRoutes (lazy loaded), ProtectedRoute
+│       ├── services/            axios instance + one module per API area
+│       ├── store/               Redux Toolkit slices (auth, cart)
+│       ├── utils/               formatting, constants, cn
+│       └── App.jsx  main.jsx  index.css
+│
+├── backend/                     Express + Mongoose REST API
+│   ├── config/                  env, db, cloudinary, stripe, categories, photoManifest
+│   ├── controllers/             auth, product, store, order, review, payment, admin, upload, analytics
+│   ├── middleware/              auth, validate, upload, rateLimit, error
+│   ├── models/                  User, Store, Category, Product, Order, Review, Payout
+│   ├── routes/                  one router per resource + index
+│   ├── services/                pricing, order, analytics, upload
+│   ├── validators/              Zod schemas
+│   ├── utils/                   ApiError, apiResponse, asyncHandler, money, slugify, pagination, token
+│   ├── seed/                    seed.js + the demo catalogue
+│   ├── scripts/                 dev-memory-db, check-services
+│   ├── tests/                   Jest + Supertest suites
+│   └── app.js  server.js
+│
+├── e2e/                         Playwright browser suite (desktop + phone)
+├── scripts/
+│   ├── audit/                   the executable quality bar (npm run audit)
+│   ├── generate-seed-art.mjs    placeholder illustrations
+│   ├── import-photos.mjs        real photographs -> normalised WebP
+│   ├── generate-schema-diagram.mjs
+│   └── capture-screenshots.mjs
+├── photos/                      photo inbox (not committed; see photos/README.md)
 ├── docs/
-│   ├── database-schema.md   ER diagram + collection notes
-│   └── api-documentation.md every endpoint
+│   ├── database-schema.png      the diagram the brief asks for
+│   ├── database-schema.md       ER notes, indexes, money maths
+│   ├── api-documentation.md     every endpoint
+│   └── screenshots/             what the README embeds
+│
+├── DEPLOYMENT.md                how to produce the live link
+├── render.yaml  vercel.json  netlify.toml
 ├── .env.example
 └── README.md
 ```
+
+Two npm workspaces, installed and run independently, so either half can be
+deployed on its own: `frontend` builds to static files for Vercel or Netlify,
+`backend` runs as a Node service on Render. Nothing in `frontend` imports from
+`backend` — they only ever talk over the REST API.
 
 ---
 
@@ -202,10 +225,10 @@ cd artisans-corner
 npm run install:all
 
 # configure the backend
-cp .env.example server/.env      # then edit server/.env
+cp .env.example backend/.env      # then edit backend/.env
 
 # configure the frontend (optional in dev - defaults to the Vite proxy)
-cp client/.env.example client/.env
+cp frontend/.env.example frontend/.env
 
 # seed demo data (6 shops, 30 products, orders, reviews)
 npm run seed
@@ -234,15 +257,15 @@ Individual commands:
 | --- | --- |
 | `npm run dev` | API + client together |
 | `npm run dev:memory` | Same, but against a seeded in-memory MongoDB (no install needed) |
-| `npm run dev:server` | API only, with `node --watch` |
-| `npm run dev:client` | Vite dev server only |
+| `npm run dev:backend` | API only, with `node --watch` |
+| `npm run dev:frontend` | Vite dev server only |
 | `npm run seed` | Wipe and reseed the database |
 | `npm run check:services` | Verify your real MongoDB, Cloudinary and Stripe credentials |
 | `npm run seed:art` | Regenerate the seed artwork SVGs |
 | `npm run seed:photos` | Swap in real product photographs from `photos/` |
 | `npm run docs:schema` | Redraw the database schema diagram |
 | `npm run docs:screenshots` | Recapture the README screenshots |
-| `npm --prefix server run seed:destroy` | Empty the database |
+| `npm --prefix backend run seed:destroy` | Empty the database |
 | `npm test` | Backend + frontend test suites |
 | `npm run audit` | 192-check quality-bar audit against a running app |
 | `npm run audit:ci` | Same audit, but boots and tears down its own server |
@@ -255,7 +278,7 @@ Individual commands:
 
 ## Environment variables
 
-Backend (`server/.env`) - see `.env.example` for the full annotated list:
+Backend (`backend/.env`) - see `.env.example` for the full annotated list:
 
 | Variable | Required | Default | Purpose |
 | --- | --- | --- | --- |
@@ -277,7 +300,7 @@ Backend (`server/.env`) - see `.env.example` for the full annotated list:
 | `STRIPE_WEBHOOK_SECRET` | prod | empty | `whsec_...` |
 | `ALLOW_MOCK_PAYMENTS` | no | `false` | **Dev only** - lets checkout complete without Stripe keys |
 
-Frontend (`client/.env`):
+Frontend (`frontend/.env`):
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
@@ -311,7 +334,7 @@ listed in [`docs/database-schema.md`](docs/database-schema.md) manually.
 
 1. Create a free account at <https://cloudinary.com>.
 2. From the dashboard copy **Cloud name**, **API Key** and **API Secret**.
-3. Put them in `server/.env` as `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`
+3. Put them in `backend/.env` as `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`
    and `CLOUDINARY_API_SECRET`.
 
 Uploads go to the `artisans-corner/products` and `artisans-corner/stores`
@@ -330,7 +353,7 @@ That uploads a 1x1 image, fetches the returned URL to confirm it is genuinely
 being served, deletes it again, and does the equivalent for MongoDB and Stripe.
 A green run is proof the keys work, not merely that they are present.
 
-If Cloudinary is not configured the server writes uploads to `server/uploads/`
+If Cloudinary is not configured the server writes uploads to `backend/uploads/`
 and serves them from `/uploads`. That is a local development convenience only;
 production requires real credentials.
 
@@ -339,7 +362,7 @@ production requires real credentials.
 ## Stripe setup
 
 1. Create an account at <https://stripe.com> and stay in **test mode**.
-2. Copy the test keys into `server/.env`:
+2. Copy the test keys into `backend/.env`:
    `STRIPE_SECRET_KEY=sk_test_...`, `STRIPE_PUBLISHABLE_KEY=pk_test_...`.
 3. Forward webhooks while developing:
 
@@ -378,10 +401,10 @@ Creates 10 categories, 1 admin, 3 buyers, 6 vendor accounts with stores,
 (each one through the real pricing and payout pipeline, with fulfilment statuses
 that age with the order) and verified reviews on delivered items.
 
-`npm --prefix server run seed:destroy` empties every collection.
+`npm --prefix backend run seed:destroy` empties every collection.
 
 Seed imagery is generated locally by `npm run seed:art` into
-`client/public/seed-art` - small SVGs in the marketplace palette with a motif
+`frontend/public/seed-art` - small SVGs in the marketplace palette with a motif
 per craft. They are deterministic, need no network, and match the product they
 illustrate. Real vendors upload photographs through Cloudinary.
 
@@ -489,8 +512,8 @@ a product never rewrites order history.
 npm run verify        # everything below, in order
 
 npm test              # 62 backend + 36 frontend
-npm run test:server   # API and business logic, in-memory MongoDB
-npm run test:client   # components, cart and route guards, jsdom + Vitest
+npm run test:backend   # API and business logic, in-memory MongoDB
+npm run test:frontend   # components, cart and route guards, jsdom + Vitest
 npm run test:e2e      # 26 browser tests in real Chrome, desktop and phone
 npm run audit:ci      # 192 checks against a disposable server
 ```

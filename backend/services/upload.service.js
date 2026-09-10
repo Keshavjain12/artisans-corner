@@ -61,7 +61,7 @@ async function uploadToLocalDisk(file, ext) {
 /**
  * Uploads one validated image and returns the URL to persist.
  * Cloudinary is used whenever it is configured; otherwise the file is written
- * to server/uploads so the app stays usable in local development.
+ * to backend/uploads so the app stays usable in local development.
  */
 export async function uploadImage(file, folder = 'artisans-corner/products') {
   const ext = assertIsImage(file);

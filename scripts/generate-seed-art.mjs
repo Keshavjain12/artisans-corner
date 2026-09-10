@@ -10,7 +10,7 @@
  * in the marketplace palette, with a motif per craft: they load instantly,
  * work offline, and read as considered placeholders rather than broken photos.
  *
- * Output lands in client/public/seed-art, so the files are served at
+ * Output lands in frontend/public/seed-art, so the files are served at
  * /seed-art/<name>.svg by both the Vite dev server and the production build.
  */
 import fs from 'node:fs';
@@ -19,7 +19,7 @@ import { fileURLToPath } from 'node:url';
 import { MOTIFS, motifFor } from './seed-art-motifs.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const OUT_DIR = path.join(repoRoot, 'client', 'public', 'seed-art');
+const OUT_DIR = path.join(repoRoot, 'frontend', 'public', 'seed-art');
 
 /* Warm grounds drawn from the Tailwind theme, paired with an ink for the motif. */
 const PALETTES = [
@@ -134,8 +134,8 @@ export { tile, banner, logo };
 /* ------------------------------------------------------------------ write */
 
 if (process.argv[1] && import.meta.url.endsWith(path.basename(process.argv[1]))) {
-  const { PRODUCTS, STORES } = await import('../server/seed/data.js');
-  const { CATEGORY_SEED } = await import('../server/config/categories.js');
+  const { PRODUCTS, STORES } = await import('../backend/seed/data.js');
+  const { CATEGORY_SEED } = await import('../backend/config/categories.js');
 
   fs.rmSync(OUT_DIR, { recursive: true, force: true });
   fs.mkdirSync(OUT_DIR, { recursive: true });
@@ -180,5 +180,5 @@ if (process.argv[1] && import.meta.url.endsWith(path.basename(process.argv[1])))
     write(`store-${store.key}-logo.svg`, logo({ name: store.name }));
   }
 
-  console.log(`wrote ${count} SVGs to client/public/seed-art`);
+  console.log(`wrote ${count} SVGs to frontend/public/seed-art`);
 }

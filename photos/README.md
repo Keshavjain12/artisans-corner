@@ -47,4 +47,4 @@ if a file is larger. Anything bigger just slows the page down; the cards display
 at roughly 400px.
 
 Files in this folder are not committed to git. The importer copies what it needs
-into `client/public/product-photos/`, which is.
+into `frontend/public/product-photos/`, which is.

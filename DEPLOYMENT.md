@@ -123,7 +123,7 @@ refresh.
 From your machine, pointing at Atlas:
 
 ```bash
-cd server
+cd backend
 MONGO_URI="<the Atlas string>" npm run seed
 ```
 

@@ -31,7 +31,7 @@ import sharp from 'sharp';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const INBOX = path.join(repoRoot, 'photos');
-const OUT = path.join(repoRoot, 'client', 'public', 'product-photos');
+const OUT = path.join(repoRoot, 'frontend', 'public', 'product-photos');
 const MANIFEST = path.join(OUT, 'manifest.json');
 
 const ALLOWED = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif']);
@@ -40,6 +40,29 @@ const ALLOWED = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif']);
    twice the largest slot, so it stays sharp on a retina screen. */
 const EDGE = 1200;
 const QUALITY = 82;
+
+/* Category tiles are 4:3 in the UI, so they get their own crop rather than a
+   squeezed square. */
+const CATEGORY_W = 1200;
+const CATEGORY_H = 900;
+
+/**
+ * The piece that best represents each craft on a category tile. Hand-picked
+ * for how the photograph reads at tile size; any category without an entry
+ * falls back to the first of its products that has a photo.
+ */
+const CATEGORY_FACE = {
+  'home-decor': 'handwoven-cotton-cushion-cover',
+  pottery: 'hand-painted-ceramic-vase',
+  jewelry: 'silver-artisan-necklace',
+  clothing: 'ajrakh-print-kimono-jacket',
+  art: 'harbour-light-linocut-print',
+  woodwork: 'walnut-serving-board',
+  'handmade-gifts': 'hand-bound-sketchbook',
+  ceramics: 'ribbed-stoneware-mug',
+  bags: 'jaipur-block-print-tote',
+  accessories: 'natural-indigo-scarf',
+};
 
 /**
  * What to type into Unsplash or Pexels for each piece, so the checklist is
@@ -79,7 +102,7 @@ const SEARCH_TERMS = {
   'hand-bound-sketchbook': 'hand bound sketchbook',
 };
 
-const { PRODUCTS, artSlug } = await import('../server/seed/data.js');
+const { PRODUCTS, artSlug } = await import('../backend/seed/data.js');
 const slugs = new Set(PRODUCTS.map((p) => artSlug(p.name)));
 
 /** Words only, sorted - so "silver hoop earrings" matches "hoop-earrings-silver". */
@@ -136,8 +159,12 @@ const files = fs
   .readdirSync(INBOX)
   .filter((f) => ALLOWED.has(path.extname(f).toLowerCase()));
 
-const manifest = {};
+const products = {};
+const categories = {};
 const warnings = [];
+
+/** slug -> the original file it came from, for deriving the category crop. */
+const sourceFor = new Map();
 
 const processed = [];
 
@@ -148,7 +175,10 @@ for (const file of files) {
   const isSecondView = /-2$/.test(base);
   if (isSecondView) base = base.replace(/-2$/, '');
 
-  const slug = resolveSlug(base);
+  /* photos/category-pottery.jpg overrides the representative piece. */
+  const slug = /^category-[a-z-]+$/.test(base.toLowerCase().replace(/\s+/g, '-'))
+    ? base.toLowerCase().replace(/\s+/g, '-')
+    : resolveSlug(base);
   if (!slug) {
     warnings.push(`  "${file}" matches no product - skipped`);
     continue;
@@ -190,15 +220,50 @@ for (const file of files) {
     soft: shortEdge < EDGE,
   });
 
-  manifest[slug] ||= {};
-  manifest[slug][isSecondView ? 'second' : 'main'] = `/product-photos/${target}`;
+  if (!isSecondView) sourceFor.set(slug, source);
+  if (slug.startsWith('category-')) continue;
+
+  products[slug] ||= {};
+  products[slug][isSecondView ? 'second' : 'main'] = `/product-photos/${target}`;
+}
+
+/* ------------------------------------------------------- category tiles --- */
+
+const { CATEGORY_SEED } = await import('../backend/config/categories.js');
+
+for (const category of CATEGORY_SEED) {
+  /* An explicit photos/category-<slug>.jpg wins; otherwise use the chosen
+     representative piece, or the first product in the category that has one. */
+  const explicit = sourceFor.get(`category-${category.slug}`);
+  const face = CATEGORY_FACE[category.slug];
+  const fallback = PRODUCTS.filter((product) => product.category === category.slug)
+    .map((product) => artSlug(product.name))
+    .find((slug) => sourceFor.has(slug));
+
+  const source =
+    explicit || (face && sourceFor.get(face)) || (fallback && sourceFor.get(fallback));
+  if (!source) continue;
+
+  const target = `category-${category.slug}.webp`;
+  /* eslint-disable no-await-in-loop */
+  await sharp(source)
+    .rotate()
+    .resize(CATEGORY_W, CATEGORY_H, { fit: 'cover', position: 'centre' })
+    .webp({ quality: QUALITY, effort: 5 })
+    .toFile(path.join(OUT, target));
+  /* eslint-enable no-await-in-loop */
+
+  categories[category.slug] = `/product-photos/${target}`;
 }
 
 /* Nothing else should linger in the served folder - a stale file from an
    earlier run would be dead weight in the repo. */
 const keep = new Set([
   'manifest.json',
-  ...Object.values(manifest).flatMap((entry) => Object.values(entry).map((url) => path.basename(url))),
+  ...Object.values(products).flatMap((entry) =>
+    Object.values(entry).map((url) => path.basename(url))
+  ),
+  ...Object.values(categories).map((url) => path.basename(url)),
 ]);
 for (const existing of fs.readdirSync(OUT)) {
   if (!keep.has(existing)) {
@@ -207,7 +272,7 @@ for (const existing of fs.readdirSync(OUT)) {
   }
 }
 
-fs.writeFileSync(MANIFEST, `${JSON.stringify(manifest, null, 2)}\n`);
+fs.writeFileSync(MANIFEST, `${JSON.stringify({ products, categories }, null, 2)}\n`);
 
 /* ------------------------------------------------------------------ report */
 
@@ -217,7 +282,7 @@ const missing = PRODUCTS.map((product) => ({
   slug: artSlug(product.name),
   name: product.name,
   category: product.category,
-})).filter((entry) => !manifest[entry.slug]);
+})).filter((entry) => !products[entry.slug]);
 
 const skipped = warnings.filter((w) => w.includes('skipped')).length;
 
@@ -240,7 +305,10 @@ if (processed.length) {
 }
 
 console.log(`\nImported ${files.length - skipped} file(s).`);
-console.log(`${Object.keys(manifest).length} of ${slugs.size} products now have a real photograph.\n`);
+console.log(`${Object.keys(products).length} of ${slugs.size} products now have a real photograph.`);
+console.log(
+  `${Object.keys(categories).length} of ${CATEGORY_SEED.length} category tiles cropped to ${CATEGORY_W}x${CATEGORY_H}.\n`
+);
 
 if (warnings.length) {
   console.log('Warnings:');

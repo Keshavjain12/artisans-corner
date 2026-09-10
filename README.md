@@ -70,7 +70,8 @@ all three roles.
   line to the right studio
 - Four-step checkout (review, shipping, payment, confirmation) with Stripe
 - Order history, an order timeline, per-item tracking numbers and cancellation
-- Verified reviews: only a buyer with a paid order for that product can review it
+- Verified reviews: only a buyer with a paid order for that product can review it,
+  once per purchase, and they can come back and edit what they wrote
 
 ### Vendors
 - "Become a Seller" upgrades the existing account - no second login
@@ -267,7 +268,7 @@ Individual commands:
 | `npm run docs:screenshots` | Recapture the README screenshots |
 | `npm --prefix backend run seed:destroy` | Empty the database |
 | `npm test` | Backend + frontend test suites |
-| `npm run audit` | 192-check quality-bar audit against a running app |
+| `npm run audit` | 196-check quality-bar audit against a running app |
 | `npm run audit:ci` | Same audit, but boots and tears down its own server |
 | `npm run test:e2e` | 26 browser tests through real Chrome (desktop + phone) |
 | `npm run verify` | Everything: lint, tests, audit and browser suite |
@@ -511,14 +512,14 @@ a product never rewrites order history.
 ```bash
 npm run verify        # everything below, in order
 
-npm test              # 62 backend + 36 frontend
+npm test              # 63 backend + 41 frontend
 npm run test:backend   # API and business logic, in-memory MongoDB
 npm run test:frontend   # components, cart and route guards, jsdom + Vitest
-npm run test:e2e      # 26 browser tests in real Chrome, desktop and phone
-npm run audit:ci      # 192 checks against a disposable server
+npm run test:e2e      # 35 browser tests in real Chrome, desktop and phone
+npm run audit:ci      # 196 checks against a disposable server
 ```
 
-**124 automated tests and 192 audit checks**, none of which need a database,
+**139 automated tests and 196 audit checks**, none of which need a database,
 a Stripe account or a Cloudinary account to run.
 
 The backend suite runs against an in-memory MongoDB (`mongodb-memory-server`),
@@ -536,6 +537,9 @@ application itself. It covers what only a browser can:
 - the cart surviving a refresh, and quantity stopping at available stock
 - a vendor listing a product with a real image upload, and finding it in the shop
 - both dashboards, with charts and money on screen
+- writing a verified review, editing it, and never being told a piece was not
+  bought when it was
+- every image on the busiest pages actually loading, with alt text
 - five phone-sized checks: the nav collapsing to a menu, the grid reflowing to
   two columns, dashboard tables scrolling instead of the page, and no horizontal
   overflow anywhere

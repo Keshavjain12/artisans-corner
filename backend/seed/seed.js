@@ -210,29 +210,60 @@ async function seedOrdersAndReviews(buyers) {
   }
   console.log(`[seed] ${orders.length} paid orders with commission + payout records`);
 
-  let reviewCount = 0;
+  /* Every delivered line a buyer could review, deduped: one review per buyer
+     per product is all the API allows. */
   const seen = new Set();
+  const eligible = [];
   for (const { order, status } of orders) {
     if (status !== 'delivered') continue;
     for (const item of order.items) {
       const key = `${order.buyer}-${item.product}`;
-      if (seen.has(key) || Math.random() > 0.75) continue;
+      if (seen.has(key)) continue;
       seen.add(key);
-      const template = pick(REVIEW_POOL);
-       
-      await Review.create({
-        product: item.product,
-        user: order.buyer,
-        order: order._id,
-        rating: template.rating,
-        title: template.title,
-        comment: template.comment,
-      });
-      await Review.recalculateProductRating(item.product);
-       
-      reviewCount += 1;
+      eligible.push({ order, item });
     }
   }
+
+  const writeReview = async ({ order, item }) => {
+    const template = pick(REVIEW_POOL);
+    await Review.create({
+      product: item.product,
+      user: order.buyer,
+      order: order._id,
+      rating: template.rating,
+      title: template.title,
+      comment: template.comment,
+    });
+
+    /* Flag the line item exactly as the API does when a buyer reviews for
+       real. Without this the order page keeps offering "Write a review" for a
+       piece that has already been reviewed, and the API then refuses it. */
+    await Order.updateOne(
+      { _id: order._id, 'items.product': item.product },
+      { $set: { 'items.$[line].reviewed': true } },
+      { arrayFilters: [{ 'line.product': item.product }] }
+    );
+
+    await Review.recalculateProductRating(item.product);
+  };
+
+  /* The demo buyer is the account a reviewer of this project signs in as, so
+     their history is not left to chance: one piece already reviewed, and one
+     still waiting to be. Everyone else is sprinkled randomly. */
+  const demoBuyer = String(buyers[0]._id);
+  const demoLines = eligible.filter((entry) => String(entry.order.buyer) === demoBuyer);
+  const alwaysReview = demoLines.length > 1 ? demoLines[0] : null;
+  /* Held back so the "Write a review" path always has something to offer. */
+  const heldBack = demoLines.length > 1 ? demoLines[demoLines.length - 1] : null;
+
+  let reviewCount = 0;
+  for (const entry of eligible) {
+    if (entry === heldBack) continue;
+    if (entry !== alwaysReview && Math.random() > 0.75) continue;
+    await writeReview(entry);
+    reviewCount += 1;
+  }
+
   console.log(`[seed] ${reviewCount} verified reviews`);
 }
 

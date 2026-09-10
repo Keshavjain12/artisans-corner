@@ -300,6 +300,24 @@ check('review can be edited', editReview.body?.data?.ratingAverage === 5);
 
 const productReviews = await call(`/products/${reviewable._id}/reviews`);
 check('reviews listed on the product', productReviews.body.data.reviews.length === 1);
+check('anonymous viewer has no review of their own', productReviews.body.data.viewerReview === null);
+
+const asReviewer = await call(`/products/${reviewable._id}/reviews`, { token: reviewer.token });
+check(
+  'the reviewer is told the review is theirs',
+  String(asReviewer.body.data.viewerReview?._id) === String(posted.body.data.review._id)
+);
+
+const reviewedOrders = await call('/orders/my-orders', { token: reviewer.token });
+check(
+  'reviewing flags the order line',
+  reviewedOrders.body.data.some((order) => order.items.some((item) => item.reviewed))
+);
+const stillPending = await call('/reviews/pending', { token: reviewer.token });
+check(
+  'a reviewed piece is no longer offered for review',
+  !stillPending.body.data.some((entry) => String(entry.productId) === String(reviewable._id))
+);
 check('rating distribution returned', productReviews.body.data.distribution.length === 5);
 
 /* ----------------------------------------------------------- DASHBOARD */

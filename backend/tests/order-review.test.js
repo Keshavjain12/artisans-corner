@@ -158,6 +158,65 @@ describe('verified reviews', () => {
     expect(duplicate.status).toBe(409);
   });
 
+  it('tells a reviewer their review is theirs, and lets them edit it', async () => {
+    const vendor = await registerVendor('Second Thoughts Studio');
+    const product = await createProduct(vendor.token, { price: 40, stock: 5 });
+    const buyer = await registerBuyer();
+    const stranger = await registerBuyer();
+    await purchase(buyer.token, product._id, 1);
+
+    const created = await api()
+      .post('/api/reviews')
+      .set('Authorization', `Bearer ${buyer.token}`)
+      .send({ productId: product._id, rating: 3, comment: 'Lovely glaze, a little smaller than I hoped.' });
+    expect(created.status).toBe(201);
+
+    /* The order line is flagged, so nothing keeps prompting for a review. */
+    const orders = await api()
+      .get('/api/orders/my-orders')
+      .set('Authorization', `Bearer ${buyer.token}`);
+    expect(orders.body.data[0].items[0].reviewed).toBe(true);
+
+    const pending = await api()
+      .get('/api/reviews/pending')
+      .set('Authorization', `Bearer ${buyer.token}`);
+    expect(pending.body.data).toHaveLength(0);
+
+    /* With nothing left to review, the only thing that stops the page calling a
+       verified buyer a stranger is the viewer's own review coming back. */
+    const mine = await api()
+      .get(`/api/products/${product._id}/reviews`)
+      .set('Authorization', `Bearer ${buyer.token}`);
+    expect(mine.body.data.viewerReview.comment).toContain('Lovely glaze');
+
+    const theirs = await api()
+      .get(`/api/products/${product._id}/reviews`)
+      .set('Authorization', `Bearer ${stranger.token}`);
+    expect(theirs.body.data.viewerReview).toBeNull();
+
+    const anonymous = await api().get(`/api/products/${product._id}/reviews`);
+    expect(anonymous.body.data.viewerReview).toBeNull();
+
+    const edited = await api()
+      .put(`/api/reviews/${mine.body.data.viewerReview._id}`)
+      .set('Authorization', `Bearer ${buyer.token}`)
+      .send({ rating: 5, comment: 'It has grown on me - the size suits the shelf perfectly.' });
+    expect(edited.status).toBe(200);
+    expect(edited.body.data.ratingAverage).toBe(5);
+
+    const after = await api()
+      .get(`/api/products/${product._id}/reviews`)
+      .set('Authorization', `Bearer ${buyer.token}`);
+    expect(after.body.data.viewerReview.rating).toBe(5);
+    expect(after.body.data.reviews).toHaveLength(1);
+
+    const notMine = await api()
+      .put(`/api/reviews/${mine.body.data.viewerReview._id}`)
+      .set('Authorization', `Bearer ${stranger.token}`)
+      .send({ rating: 1, comment: 'Editing a review that belongs to somebody else.' });
+    expect(notMine.status).toBe(403);
+  });
+
   it('validates the rating range', async () => {
     const vendor = await registerVendor('Rating Studio');
     const product = await createProduct(vendor.token, { price: 40, stock: 5 });

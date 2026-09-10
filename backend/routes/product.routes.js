@@ -45,7 +45,7 @@ router.delete('/:id', authenticateUser, requireStore, writeLimiter, deleteProduc
 router.post('/:id/restore', authenticateUser, requireStore, restoreProduct);
 
 router.get('/', validate(listProductsQuerySchema, 'query'), listProducts);
-router.get('/:id/reviews', listProductReviews);
+router.get('/:id/reviews', optionalAuth, listProductReviews);
 router.get('/:idOrSlug', optionalAuth, getProduct);
 
 export default router;

@@ -67,7 +67,7 @@ export const listProductReviews = asyncHandler(async (req, res) => {
   const { page, limit, skip } = getPagination(req.query, { defaultLimit: 8, maxLimit: 50 });
   const filter = { product: req.params.id, isVisible: true };
 
-  const [reviews, total, breakdown] = await Promise.all([
+  const [reviews, total, breakdown, viewerReview] = await Promise.all([
     Review.find(filter)
       .populate('user', 'name avatar')
       .sort({ createdAt: -1 })
@@ -79,6 +79,12 @@ export const listProductReviews = asyncHandler(async (req, res) => {
       { $match: { product: new mongoose.Types.ObjectId(String(req.params.id)), isVisible: true } },
       { $group: { _id: '$rating', count: { $sum: 1 } } },
     ]),
+    /* The viewer's own review, looked up rather than searched for in the page
+       above: on a piece with many reviews theirs may be pages away, and the UI
+       needs to know it exists to avoid telling a buyer they never bought it. */
+    req.user
+      ? Review.findOne({ ...filter, user: req.user._id }).populate('user', 'name avatar').lean()
+      : null,
   ]);
 
   const distribution = [5, 4, 3, 2, 1].map((star) => ({
@@ -88,7 +94,7 @@ export const listProductReviews = asyncHandler(async (req, res) => {
 
   return sendSuccess(res, {
     message: 'Reviews',
-    data: { reviews, distribution },
+    data: { reviews, distribution, viewerReview: viewerReview || null },
     meta: buildMeta({ page, limit, total }),
   });
 });

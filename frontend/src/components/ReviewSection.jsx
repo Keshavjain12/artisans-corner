@@ -23,10 +23,13 @@ export function ReviewSection({ product, onRatingChange }) {
   const [title, setTitle] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [editing, setEditing] = useState(false);
 
+  /* Re-fetched when the viewer changes: the response carries their own review,
+     which decides whether the write form or the edit link is shown. */
   const reviews = useAsync(
     () => catalogService.getProductReviews(product._id, { limit: 20 }),
-    [product._id]
+    [product._id, user?.id]
   );
   const pending = useAsync(
     () => (user ? reviewService.pending() : Promise.resolve({ data: [] })),
@@ -37,16 +40,31 @@ export function ReviewSection({ product, onRatingChange }) {
     (entry) => String(entry.productId) === String(product._id)
   );
   const list = reviews.data?.data?.reviews || [];
+  /* Someone who has already reviewed this piece is a verified buyer too - the
+     pending list no longer offers it, so without this they would be told they
+     had never bought it. */
+  const myReview = reviews.data?.data?.viewerReview || null;
   const distribution = reviews.data?.data?.distribution || [];
   const totalReviews = reviews.data?.meta?.total || list.length;
+
+  const startEditing = () => {
+    setRating(myReview.rating);
+    setTitle(myReview.title || '');
+    setComment(myReview.comment);
+    setError('');
+    setEditing(true);
+  };
 
   const submit = async (event) => {
     event.preventDefault();
     setError('');
     setSubmitting(true);
     try {
-      const res = await reviewService.create({ productId: product._id, rating, title, comment });
-      toast.success('Thanks for reviewing this piece');
+      const res = editing
+        ? await reviewService.update(myReview._id, { rating, title, comment })
+        : await reviewService.create({ productId: product._id, rating, title, comment });
+      toast.success(editing ? 'Your review has been updated' : 'Thanks for reviewing this piece');
+      setEditing(false);
       setComment('');
       setTitle('');
       setRating(5);
@@ -96,7 +114,9 @@ export function ReviewSection({ product, onRatingChange }) {
 
   const form = (
     <form onSubmit={submit} className="card mb-8 space-y-4 p-5">
-      <h3 className="text-base font-semibold text-ink">Write your review</h3>
+      <h3 className="text-base font-semibold text-ink">
+        {editing ? 'Edit your review' : 'Write your review'}
+      </h3>
       <div>
         <span className="label">Your rating</span>
         <StarRating value={rating} onChange={setRating} idPrefix="review-rating" />
@@ -128,9 +148,16 @@ export function ReviewSection({ product, onRatingChange }) {
           />
         )}
       </Field>
-      <Button type="submit" loading={submitting}>
-        Post review
-      </Button>
+      <div className="flex flex-wrap gap-3">
+        <Button type="submit" loading={submitting}>
+          {editing ? 'Save changes' : 'Post review'}
+        </Button>
+        {editing && (
+          <Button type="button" variant="secondary" onClick={() => setEditing(false)}>
+            Cancel
+          </Button>
+        )}
+      </div>
     </form>
   );
 
@@ -144,9 +171,22 @@ export function ReviewSection({ product, onRatingChange }) {
         {summary}
 
         <div>
-          {user && canReview && form}
+          {user && (canReview || editing) && form}
 
-          {user && !canReview && (
+          {user && myReview && !editing && (
+            <div className="mb-8 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-moss-100 px-4 py-3 text-sm text-moss-700">
+              <span>You reviewed this piece on {formatDate(myReview.createdAt)}.</span>
+              <button
+                type="button"
+                onClick={startEditing}
+                className="link-underline font-medium text-moss-700"
+              >
+                Edit your review
+              </button>
+            </div>
+          )}
+
+          {user && !canReview && !myReview && !editing && (
             <p className="mb-8 rounded-xl bg-clay-50 px-4 py-3 text-sm text-ink-muted">
               Only verified buyers can review this piece - the option appears here once your order
               for it has been paid.

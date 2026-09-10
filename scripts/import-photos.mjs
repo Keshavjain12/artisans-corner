@@ -8,6 +8,15 @@
  *   3. npm run seed:photos
  *   4. npm run seed        (or restart npm run dev:memory)
  *
+ * Files can be named after the product slug OR after the search term printed
+ * by a previous run - whichever is easier - and matching ignores case,
+ * punctuation and word order.
+ *
+ * Every image is normalised to an identical 1200x1200 WebP: centre-cropped to
+ * a square, because every product image slot in the UI is square, so the
+ * browser never has to crop anything away and no product looks stretched or
+ * off-centre next to another.
+ *
  * Anything without a photo keeps its generated illustration, so you can add
  * them a few at a time. Every run rewrites photos/NEEDED.md with what is left.
  *
@@ -18,6 +27,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import sharp from 'sharp';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const INBOX = path.join(repoRoot, 'photos');
@@ -25,7 +35,11 @@ const OUT = path.join(repoRoot, 'client', 'public', 'product-photos');
 const MANIFEST = path.join(OUT, 'manifest.json');
 
 const ALLOWED = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif']);
-const MAX_BYTES = 2 * 1024 * 1024;
+
+/* Square, because every product image slot in the UI is square. 1200px is
+   twice the largest slot, so it stays sharp on a retina screen. */
+const EDGE = 1200;
+const QUALITY = 82;
 
 /**
  * What to type into Unsplash or Pexels for each piece, so the checklist is
@@ -68,6 +82,49 @@ const SEARCH_TERMS = {
 const { PRODUCTS, artSlug } = await import('../server/seed/data.js');
 const slugs = new Set(PRODUCTS.map((p) => artSlug(p.name)));
 
+/** Words only, sorted - so "silver hoop earrings" matches "hoop-earrings-silver". */
+const fingerprint = (value) =>
+  String(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+    .split(' ')
+    .filter(Boolean)
+    .sort()
+    .join(' ');
+
+/* A filename may be the slug, the product name, or the search term we
+   suggested. All three resolve to the same product. */
+const lookup = new Map();
+for (const product of PRODUCTS) {
+  const slug = artSlug(product.name);
+  lookup.set(fingerprint(slug), slug);
+  lookup.set(fingerprint(product.name), slug);
+  const term = SEARCH_TERMS[slug];
+  if (term) lookup.set(fingerprint(term), slug);
+}
+
+/** Falls back to the best word-overlap match, so a near-miss still lands. */
+function resolveSlug(base) {
+  const exact = lookup.get(fingerprint(base));
+  if (exact) return exact;
+
+  const words = new Set(fingerprint(base).split(' '));
+  let best = null;
+  let bestScore = 0;
+  for (const [key, slug] of lookup) {
+    const keyWords = key.split(' ');
+    const shared = keyWords.filter((w) => words.has(w)).length;
+    const score = shared / Math.max(keyWords.length, words.size);
+    if (score > bestScore) {
+      bestScore = score;
+      best = slug;
+    }
+  }
+  // Two thirds of the words in common is a confident match; below that, refuse.
+  return bestScore >= 0.6 ? best : null;
+}
+
 if (!fs.existsSync(INBOX)) {
   fs.mkdirSync(INBOX, { recursive: true });
   console.log(`\nCreated ${path.relative(repoRoot, INBOX)}/ - drop your photos in there.\n`);
@@ -82,29 +139,72 @@ const files = fs
 const manifest = {};
 const warnings = [];
 
+const processed = [];
+
 for (const file of files) {
   const ext = path.extname(file).toLowerCase();
-  const base = path.basename(file, ext);
-  const isSecondView = base.endsWith('-2');
-  const slug = isSecondView ? base.slice(0, -2) : base;
+  let base = path.basename(file, ext);
 
-  if (!slugs.has(slug)) {
-    warnings.push(`  "${file}" does not match any product slug - skipped`);
+  const isSecondView = /-2$/.test(base);
+  if (isSecondView) base = base.replace(/-2$/, '');
+
+  const slug = resolveSlug(base);
+  if (!slug) {
+    warnings.push(`  "${file}" matches no product - skipped`);
     continue;
   }
 
-  const size = fs.statSync(path.join(INBOX, file)).size;
-  if (size > MAX_BYTES) {
+  const source = path.join(INBOX, file);
+  const target = `${slug}${isSecondView ? '-2' : ''}.webp`;
+  const sourceBytes = fs.statSync(source).size;
+
+  /* eslint-disable no-await-in-loop */
+  const meta = await sharp(source).metadata();
+
+  /* Centre-crop to a square and resize to one exact size, so every card in the
+     grid presents the subject at the same scale. `fit: cover` with
+     `position: centre` is what the browser would do anyway - doing it here
+     means we ship 1200x1200 instead of a 7MB original. */
+  const info = await sharp(source)
+    .rotate() // honour the EXIF orientation before cropping
+    .resize(EDGE, EDGE, { fit: 'cover', position: 'centre', withoutEnlargement: false })
+    .webp({ quality: QUALITY, effort: 5 })
+    .toFile(path.join(OUT, target));
+  /* eslint-enable no-await-in-loop */
+
+  /* Upscaling past the source resolution looks soft on a retina screen, so
+     say which files would benefit from a bigger download. */
+  const shortEdge = Math.min(meta.width || 0, meta.height || 0);
+  if (shortEdge < EDGE) {
     warnings.push(
-      `  "${file}" is ${(size / 1024 / 1024).toFixed(1)}MB - resize to under 2MB so pages stay fast`
+      `  "${file}" is only ${shortEdge}px on its short edge - upscaled to ${EDGE}px, so it will look soft. Re-download a larger version if you can.`
     );
   }
 
-  const target = `${slug}${isSecondView ? '-2' : ''}${ext}`;
-  fs.copyFileSync(path.join(INBOX, file), path.join(OUT, target));
+  processed.push({
+    file,
+    slug,
+    from: `${meta.width}x${meta.height}`,
+    fromBytes: sourceBytes,
+    toBytes: info.size,
+    soft: shortEdge < EDGE,
+  });
 
   manifest[slug] ||= {};
   manifest[slug][isSecondView ? 'second' : 'main'] = `/product-photos/${target}`;
+}
+
+/* Nothing else should linger in the served folder - a stale file from an
+   earlier run would be dead weight in the repo. */
+const keep = new Set([
+  'manifest.json',
+  ...Object.values(manifest).flatMap((entry) => Object.values(entry).map((url) => path.basename(url))),
+]);
+for (const existing of fs.readdirSync(OUT)) {
+  if (!keep.has(existing)) {
+    fs.unlinkSync(path.join(OUT, existing));
+    warnings.push(`  removed stale ${existing}`);
+  }
 }
 
 fs.writeFileSync(MANIFEST, `${JSON.stringify(manifest, null, 2)}\n`);
@@ -120,6 +220,24 @@ const missing = PRODUCTS.map((product) => ({
 })).filter((entry) => !manifest[entry.slug]);
 
 const skipped = warnings.filter((w) => w.includes('skipped')).length;
+
+if (processed.length) {
+  const totalFrom = processed.reduce((sum, r) => sum + r.fromBytes, 0);
+  const totalTo = processed.reduce((sum, r) => sum + r.toBytes, 0);
+
+  console.log(`\nNormalised ${processed.length} image(s) to ${EDGE}x${EDGE} WebP:\n`);
+  processed
+    .sort((a, b) => a.slug.localeCompare(b.slug))
+    .forEach((r) => {
+      const from = `${(r.fromBytes / 1024).toFixed(0)}KB`;
+      const to = `${(r.toBytes / 1024).toFixed(0)}KB`;
+      console.log(`  ${r.slug.padEnd(34)} ${r.from.padStart(11)} ${from.padStart(8)}  ->  ${EDGE}x${EDGE} ${to.padStart(7)}`);
+    });
+  console.log(
+    `\n  total ${(totalFrom / 1024 / 1024).toFixed(1)}MB -> ${(totalTo / 1024 / 1024).toFixed(1)}MB` +
+      ` (${Math.round((1 - totalTo / totalFrom) * 100)}% smaller)`
+  );
+}
 
 console.log(`\nImported ${files.length - skipped} file(s).`);
 console.log(`${Object.keys(manifest).length} of ${slugs.size} products now have a real photograph.\n`);

@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Walnut Serving Board">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Walnut Serving Board">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#F4EEE9"/>
       <stop offset="100%" stop-color="#E0D2C8"/>
     </linearGradient>
   </defs>
-  <rect width="1200" height="900" fill="url(#g)"/>
-  <circle cx="-123" cy="-263" r="170" fill="none" stroke="#3A4C38" stroke-width="2" opacity="0.07"/><circle cx="159" cy="-441" r="260" fill="none" stroke="#3A4C38" stroke-width="2" opacity="0.07"/><circle cx="-506" cy="43" r="350" fill="none" stroke="#3A4C38" stroke-width="2" opacity="0.07"/>
-  <g transform="translate(600 450) scale(1) rotate(-2) translate(-600 -450)">
+  <rect width="1200" height="1200" fill="url(#g)"/>
+  <g transform="translate(0 150)"><circle cx="-123" cy="-263" r="170" fill="none" stroke="#3A4C38" stroke-width="2" opacity="0.07"/><circle cx="159" cy="-441" r="260" fill="none" stroke="#3A4C38" stroke-width="2" opacity="0.07"/><circle cx="-506" cy="43" r="350" fill="none" stroke="#3A4C38" stroke-width="2" opacity="0.07"/></g>
+  <g transform="translate(600 600) scale(1) rotate(-2) translate(-600 -450)">
     <path d="M370 350 h380 q70 0 70 110 t-70 110 h-380 q-26 0 -26 -110 t26 -110 z" fill="#3A4C38" opacity="0.85"/>
     <circle cx="770" cy="405" r="20" fill="#F4EEE9" opacity="0.8"/>
     <path d="M400 400 q160 14 320 0" fill="none" stroke="#F4EEE9" stroke-width="8" opacity="0.4"/><path d="M400 440 q160 14 320 0" fill="none" stroke="#F4EEE9" stroke-width="8" opacity="0.4"/><path d="M400 480 q160 14 320 0" fill="none" stroke="#F4EEE9" stroke-width="8" opacity="0.4"/>

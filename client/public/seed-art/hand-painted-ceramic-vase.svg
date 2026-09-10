@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Hand-Painted Ceramic Vase">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Hand-Painted Ceramic Vase">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#F6EBE3"/>
       <stop offset="100%" stop-color="#E7CFC1"/>
     </linearGradient>
   </defs>
-  <rect width="1200" height="900" fill="url(#g)"/>
-  <circle cx="-400" cy="80" r="170" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="-275" cy="-378" r="260" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="-560" cy="-530" r="350" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/>
-  <g transform="translate(600 450) scale(1) rotate(-2) translate(-600 -450)">
+  <rect width="1200" height="1200" fill="url(#g)"/>
+  <g transform="translate(0 150)"><circle cx="-400" cy="80" r="170" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="-275" cy="-378" r="260" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="-560" cy="-530" r="350" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/></g>
+  <g transform="translate(600 600) scale(1) rotate(-2) translate(-600 -450)">
     <path d="M470 330 q-30 130 40 250 q90 90 180 0 q70 -120 40 -250 q-130 40 -260 0 z" fill="#8F5739" opacity="0.82"/>
     <path d="M470 330 q130 -70 260 0" fill="none" stroke="#8F5739" stroke-width="18" stroke-linecap="round"/>
     <path d="M520 430 q80 30 160 0" fill="none" stroke="#F6EBE3" stroke-width="10" opacity="0.55"/>

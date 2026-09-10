@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Original Gouache Coastal Study">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Original Gouache Coastal Study">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#EDF0EC"/>
       <stop offset="100%" stop-color="#D6DFD3"/>
     </linearGradient>
   </defs>
-  <rect width="1200" height="900" fill="url(#g)"/>
-  <circle cx="-401" cy="-161" r="170" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/><circle cx="-76" cy="102" r="260" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/><circle cx="-335" cy="-294" r="350" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/>
-  <g transform="translate(600 450) scale(0.86) rotate(3.2) translate(-600 -450)">
+  <rect width="1200" height="1200" fill="url(#g)"/>
+  <g transform="translate(0 150)"><circle cx="-401" cy="-161" r="170" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/><circle cx="-76" cy="102" r="260" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/><circle cx="-335" cy="-294" r="350" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/></g>
+  <g transform="translate(600 600) scale(0.86) rotate(3.2) translate(-600 -450)">
     <path d="M370 620 q90 -300 230 -300 q140 0 230 300" fill="none" stroke="#4B6248" stroke-width="34" stroke-linecap="round" opacity="0.85"/>
     <circle cx="470" cy="330" r="42" fill="#5F7A5B" opacity="0.85"/>
     <path d="M700 640 q60 -140 120 -200" fill="none" stroke="#5F7A5B" stroke-width="18" stroke-linecap="round" opacity="0.7"/></g>

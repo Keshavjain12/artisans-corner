@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Letterpress Greeting Card Set">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Letterpress Greeting Card Set">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#EFE9E4"/>
       <stop offset="100%" stop-color="#D9CDBF"/>
     </linearGradient>
   </defs>
-  <rect width="1200" height="900" fill="url(#g)"/>
-  <circle cx="766" cy="526" r="170" fill="none" stroke="#4A2D20" stroke-width="2" opacity="0.07"/><circle cx="570" cy="145" r="260" fill="none" stroke="#4A2D20" stroke-width="2" opacity="0.07"/><circle cx="446" cy="121" r="350" fill="none" stroke="#4A2D20" stroke-width="2" opacity="0.07"/>
-  <g transform="translate(600 450) scale(1) rotate(-2) translate(-600 -450)">
+  <rect width="1200" height="1200" fill="url(#g)"/>
+  <g transform="translate(0 150)"><circle cx="766" cy="526" r="170" fill="none" stroke="#4A2D20" stroke-width="2" opacity="0.07"/><circle cx="570" cy="145" r="260" fill="none" stroke="#4A2D20" stroke-width="2" opacity="0.07"/><circle cx="446" cy="121" r="350" fill="none" stroke="#4A2D20" stroke-width="2" opacity="0.07"/></g>
+  <g transform="translate(600 600) scale(1) rotate(-2) translate(-600 -450)">
     <rect x="380" y="330" width="300" height="220" rx="14" fill="#4A2D20" opacity="0.6" transform="rotate(-8 530 440)"/>
     <rect x="440" y="360" width="300" height="220" rx="14" fill="#A96F4C" transform="rotate(4 590 470)"/>
     <rect x="500" y="390" width="300" height="220" rx="14" fill="#4A2D20" opacity="0.88"/>

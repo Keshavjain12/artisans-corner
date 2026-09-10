@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Silver Artisan Necklace">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Silver Artisan Necklace">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#F6EBE3"/>
       <stop offset="100%" stop-color="#E7CFC1"/>
     </linearGradient>
   </defs>
-  <rect width="1200" height="900" fill="url(#g)"/>
-  <circle cx="791" cy="531" r="170" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="773" cy="186" r="260" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="471" cy="247" r="350" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/>
-  <g transform="translate(600 450) scale(0.86) rotate(-4.800000000000001) translate(-600 -450)">
+  <rect width="1200" height="1200" fill="url(#g)"/>
+  <g transform="translate(0 150)"><circle cx="791" cy="531" r="170" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="773" cy="186" r="260" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="471" cy="247" r="350" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/></g>
+  <g transform="translate(600 600) scale(0.86) rotate(-4.800000000000001) translate(-600 -450)">
     <path d="M380 280 q220 300 440 0" fill="none" stroke="#8F5739" stroke-width="14" stroke-linecap="round" opacity="0.85"/>
     <path d="M600 505 l46 78 l-46 78 l-46 -78 z" fill="#A96F4C"/>
     <circle cx="600" cy="505" r="18" fill="#8F5739" opacity="0.9"/>

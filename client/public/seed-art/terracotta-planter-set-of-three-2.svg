@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Terracotta Planter Set of Three">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Terracotta Planter Set of Three">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#F1EDE6"/>
       <stop offset="100%" stop-color="#DFD5C6"/>
     </linearGradient>
   </defs>
-  <rect width="1200" height="900" fill="url(#g)"/>
-  <circle cx="830" cy="310" r="170" fill="none" stroke="#74452E" stroke-width="2" opacity="0.07"/><circle cx="878" cy="379" r="260" fill="none" stroke="#74452E" stroke-width="2" opacity="0.07"/><circle cx="384" cy="466" r="350" fill="none" stroke="#74452E" stroke-width="2" opacity="0.07"/>
-  <g transform="translate(600 450) scale(0.86) rotate(3.2) translate(-600 -450)">
+  <rect width="1200" height="1200" fill="url(#g)"/>
+  <g transform="translate(0 150)"><circle cx="830" cy="310" r="170" fill="none" stroke="#74452E" stroke-width="2" opacity="0.07"/><circle cx="878" cy="379" r="260" fill="none" stroke="#74452E" stroke-width="2" opacity="0.07"/><circle cx="384" cy="466" r="350" fill="none" stroke="#74452E" stroke-width="2" opacity="0.07"/></g>
+  <g transform="translate(600 600) scale(0.86) rotate(3.2) translate(-600 -450)">
     <path d="M490 470 h220 l-26 190 q-4 30 -34 30 h-100 q-30 0 -34 -30 z" fill="#74452E" opacity="0.88"/>
     <rect x="476" y="440" width="248" height="42" rx="12" fill="#C28C6E"/>
     <path d="M600 440 q-10 -120 -90 -160 q60 100 60 160" fill="#C28C6E" opacity="0.9"/>

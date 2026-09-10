@@ -106,17 +106,30 @@ const photoManifest = (() => {
   }
 })();
 
-/** The two images every seeded product gets, derived from its name. */
+/**
+ * The images a seeded product gets.
+ *
+ * With a real photograph and no second view, the product carries a single
+ * image: repeating the same picture would give the gallery two identical
+ * thumbnails, which looks like a mistake rather than a choice. The generated
+ * illustrations always come as a pair, since the second is a genuinely
+ * different view of the same piece.
+ */
 export const productArt = (name) => {
   const slug = artSlug(name);
-  const photo = photoManifest[slug] || {};
+  const photo = photoManifest[slug];
+
+  if (photo?.main) {
+    const images = [{ url: photo.main, publicId: '', alt: name }];
+    if (photo.second) {
+      images.push({ url: photo.second, publicId: '', alt: `${name}, second view` });
+    }
+    return images;
+  }
+
   return [
-    { url: photo.main || `/seed-art/${slug}.svg`, publicId: '', alt: name },
-    {
-      url: photo.second || photo.main || `/seed-art/${slug}-2.svg`,
-      publicId: '',
-      alt: `${name}, second view`,
-    },
+    { url: `/seed-art/${slug}.svg`, publicId: '', alt: name },
+    { url: `/seed-art/${slug}-2.svg`, publicId: '', alt: `${name}, second view` },
   ];
 };
 

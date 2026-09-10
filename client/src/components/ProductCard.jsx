@@ -28,7 +28,7 @@ function ProductCardBase({ product, className }) {
     >
       <Link
         to={`/product/${product.slug}`}
-        className="relative block aspect-[4/5] overflow-hidden bg-sand"
+        className="relative block aspect-square overflow-hidden bg-sand"
       >
         {product.images?.[0]?.url ? (
           <img

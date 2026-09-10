@@ -58,7 +58,15 @@ const texture = (c, seed) =>
     return `<circle cx="${cx}" cy="${cy}" r="${170 + i * 90}" fill="none" stroke="${c.ink}" stroke-width="2" opacity="0.07"/>`;
   }).join('');
 
-function tile({ name, category, width = 1200, height = 900, paletteShift = 0, view = 1 }) {
+/**
+ * Product tiles are square, because every product image slot in the UI is
+ * square - the card, the detail view and its thumbnails. Matching the asset to
+ * the container means object-cover never has to crop anything away.
+ *
+ * Motifs are drawn for a 1200x900 box, so the group is nudged down to sit in
+ * the middle of the taller canvas.
+ */
+function tile({ name, category, size = 1200, paletteShift = 0, view = 1 }) {
   const seed = hash(name);
   const c = PALETTES[(seed + paletteShift) % PALETTES.length];
   const motif = MOTIFS[motifFor(name, category)];
@@ -66,16 +74,16 @@ function tile({ name, category, width = 1200, height = 900, paletteShift = 0, vi
   const rotation = ((seed % 7) - 3) * (view === 2 ? -1.6 : 1);
   const scale = view === 2 ? 0.86 : 1;
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="${width}" height="${height}" role="img" aria-label="${esc(name)}">
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="${size}" height="${size}" role="img" aria-label="${esc(name)}">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="${c.from}"/>
       <stop offset="100%" stop-color="${c.to}"/>
     </linearGradient>
   </defs>
-  <rect width="1200" height="900" fill="url(#g)"/>
-  ${texture(c, seed)}
-  <g transform="translate(600 450) scale(${scale}) rotate(${rotation}) translate(-600 -450)">${motif(c)}</g>
+  <rect width="1200" height="1200" fill="url(#g)"/>
+  <g transform="translate(0 150)">${texture(c, seed)}</g>
+  <g transform="translate(600 600) scale(${scale}) rotate(${rotation}) translate(-600 -450)">${motif(c)}</g>
 </svg>
 `;
 }

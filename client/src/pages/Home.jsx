@@ -100,7 +100,7 @@ export default function Home() {
                 <img
                   src={product.images?.[0]?.url}
                   alt={product.name}
-                  className="aspect-[4/5] w-full object-cover"
+                  className="aspect-square w-full object-cover"
                   loading={index < 2 ? 'eager' : 'lazy'}
                 />
                 <div className="p-3">
@@ -116,7 +116,7 @@ export default function Home() {
               Array.from({ length: 4 }).map((_, index) => (
                 <div
                   key={index}
-                  className={`skeleton aspect-[4/5] rounded-2xl ${index % 2 === 1 ? 'mt-8' : ''}`}
+                  className={`skeleton aspect-square rounded-2xl ${index % 2 === 1 ? 'mt-8' : ''}`}
                 />
               ))}
           </div>

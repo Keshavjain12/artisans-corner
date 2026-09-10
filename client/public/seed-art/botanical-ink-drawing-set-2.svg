@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Botanical Ink Drawing Set">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Botanical Ink Drawing Set">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#F6EBE3"/>
       <stop offset="100%" stop-color="#E7CFC1"/>
     </linearGradient>
   </defs>
-  <rect width="1200" height="900" fill="url(#g)"/>
-  <circle cx="487" cy="567" r="170" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="535" cy="147" r="260" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="641" cy="410" r="350" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/>
-  <g transform="translate(600 450) scale(0.86) rotate(3.2) translate(-600 -450)">
+  <rect width="1200" height="1200" fill="url(#g)"/>
+  <g transform="translate(0 150)"><circle cx="487" cy="567" r="170" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="535" cy="147" r="260" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="641" cy="410" r="350" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/></g>
+  <g transform="translate(600 600) scale(0.86) rotate(3.2) translate(-600 -450)">
     <path d="M600 640 q-30 -170 -120 -240 q100 30 120 150 q20 -140 130 -180 q-95 90 -110 270 z" fill="#8F5739" opacity="0.85"/>
     <path d="M600 660 v-40" stroke="#8F5739" stroke-width="14" stroke-linecap="round"/>
     <circle cx="480" cy="400" r="26" fill="#A96F4C" opacity="0.8"/>

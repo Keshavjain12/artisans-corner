@@ -64,6 +64,18 @@ test.describe('vendor dashboard', () => {
     // And a shopper can find it.
     await page.goto(`/shop?q=${encodeURIComponent(name)}`);
     await expect(page.getByRole('heading', { name })).toBeVisible();
+
+    /* Delete it again, so a test run leaves the marketplace exactly as it found
+       it. This also exercises the delete path: the piece has never been
+       ordered, so it is removed outright and its uploaded image with it. */
+    await page.goto('/dashboard/seller/products');
+    const row = page.locator('tr', { hasText: name });
+    await row.getByRole('button', { name: `Delete ${name}` }).click();
+    await page.getByRole('button', { name: 'Delete product' }).click();
+    await expect(page.locator('tr', { hasText: name })).toHaveCount(0);
+
+    await page.goto(`/shop?q=${encodeURIComponent(name)}`);
+    await expect(page.getByRole('heading', { name })).toBeHidden();
   });
 
   test('a product form refuses to publish without the required details', async ({ page }) => {

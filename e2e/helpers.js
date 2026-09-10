@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { expect } from '@playwright/test';
 
 export const DEMO = {
@@ -22,8 +24,24 @@ export async function signIn(page, { email, password }) {
 /** A unique-enough suffix so repeated runs do not collide on unique fields. */
 export const unique = () => Math.random().toString(36).slice(2, 8);
 
-/** A real 1x1 PNG for exercising the upload path. */
-export const PNG_BYTES = Buffer.from(
-  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
-  'base64'
-);
+/**
+ * A real 800x800 PNG for exercising the upload path.
+ *
+ * This used to be a 1x1 pixel, which the upload accepted quite happily - but
+ * while the test ran, the product it created showed a single colour stretched
+ * across a card in the live shop. A test should not make the application look
+ * broken, even for the seconds it exists.
+ *
+ * Kept as a committed fixture rather than generated here: Playwright's loader
+ * allows neither top-level await nor import.meta in a helper module, and a
+ * fixture on disk is one fewer moving part. Regenerate it with
+ * scripts/generate-test-fixture.mjs.
+ *
+ * Playwright runs from the directory holding playwright.config.js, so the
+ * fixture resolves from there.
+ */
+const FIXTURE = path.join(process.cwd(), 'e2e', 'fixtures', 'test-upload.png');
+if (!fs.existsSync(FIXTURE)) {
+  throw new Error(`Missing ${FIXTURE} - run: node scripts/generate-test-fixture.mjs`);
+}
+export const PNG_BYTES = fs.readFileSync(FIXTURE);

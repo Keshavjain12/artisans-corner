@@ -195,16 +195,22 @@ for (const file of files) {
      grid presents the subject at the same scale. `fit: cover` with
      `position: centre` is what the browser would do anyway - doing it here
      means we ship 1200x1200 instead of a 7MB original. */
-  const info = await sharp(source)
+  const shortEdge = Math.min(meta.width || 0, meta.height || 0);
+
+  let pipeline = sharp(source)
     .rotate() // honour the EXIF orientation before cropping
-    .resize(EDGE, EDGE, { fit: 'cover', position: 'centre', withoutEnlargement: false })
-    .webp({ quality: QUALITY, effort: 5 })
-    .toFile(path.join(OUT, target));
+    .resize(EDGE, EDGE, { fit: 'cover', position: 'centre', withoutEnlargement: false });
+
+  /* An enlarged image goes soft. A light unsharp mask will not invent detail,
+     but it does stop the result looking mushy - worth it only when we actually
+     had to enlarge. */
+  if (shortEdge < EDGE) pipeline = pipeline.sharpen({ sigma: 0.7 });
+
+  const info = await pipeline.webp({ quality: QUALITY, effort: 6 }).toFile(path.join(OUT, target));
   /* eslint-enable no-await-in-loop */
 
   /* Upscaling past the source resolution looks soft on a retina screen, so
      say which files would benefit from a bigger download. */
-  const shortEdge = Math.min(meta.width || 0, meta.height || 0);
   if (shortEdge < EDGE) {
     warnings.push(
       `  "${file}" is only ${shortEdge}px on its short edge - upscaled to ${EDGE}px, so it will look soft. Re-download a larger version if you can.`

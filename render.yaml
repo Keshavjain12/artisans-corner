@@ -12,14 +12,16 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      # Stripe onboarding is invite-only in India, so this deployment runs as a
-      # labelled demo: both flags are required, and production refuses to boot
-      # with simulated payments otherwise. Once Stripe keys exist, set both to
-      # false and fill in the three STRIPE_ values below.
+      # Real Stripe (test mode): both false, with the three STRIPE_ values set
+      # below. These must match the dashboard - a blueprint sync that turned
+      # them back on alongside Stripe keys would stop the API booting, because
+      # production refuses simulated payments once Stripe is configured. For a
+      # labelled demo with no Stripe account, set both to "true" and leave the
+      # STRIPE_ values empty.
       - key: DEMO_DEPLOYMENT
-        value: "true"
+        value: "false"
       - key: ALLOW_MOCK_PAYMENTS
-        value: "true"
+        value: "false"
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRES_IN

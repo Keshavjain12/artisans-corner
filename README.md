@@ -22,10 +22,9 @@ The sign-in page has one-click buttons for all three. API health:
 <https://artisans-corner-api-hf7e.onrender.com/api/health>
 
 > The API runs on Render's free tier, which sleeps after about 15 minutes idle:
-> **the first visit can take 30–50 seconds** while it wakes. Checkout uses a
-> clearly labelled simulated payment - Stripe onboarding is invite-only in
-> India - while orders, stock, the 5% commission and vendor payouts are all
-> real. See [`docs/stripe-integration.md`](docs/stripe-integration.md).
+> **the first visit can take 30–50 seconds** while it wakes. Checkout is real
+> Stripe in test mode - pay with `4242 4242 4242 4242`, any future expiry, any
+> CVC. No real money moves. See [`docs/stripe-integration.md`](docs/stripe-integration.md).
 
 ![Artisan's Corner home page](docs/screenshots/01-home.png)
 
@@ -37,7 +36,7 @@ The sign-in page has one-click buttons for all three. API health:
 | --- | --- |
 | **1. GitHub repository** — controllers, models, routes and middleware kept apart; no API keys committed | This repo. See [folder structure](#folder-structure); `.env` is git-ignored and [`.env.example`](.env.example) documents every variable. A [check in the audit](#the-audit) fails the build if a secret ever reaches the client bundle. |
 | **2. Live application** — a working deployed link, with demo credentials for a vendor and a buyer | **Live at <https://artisans-corner-keshav.vercel.app>** — site on Vercel, API on Render, data on MongoDB Atlas, images on Cloudinary. [Demo credentials](#live-demo) are above. `npm run smoke` checks the deployment end to end without writing to it; [`DEPLOYMENT.md`](DEPLOYMENT.md) is how it was built. |
-| **Payments** — Stripe in test mode | Integrated and tested, but **unkeyed**: Stripe onboarding is invite-only in India and requires company registration documents. See [`docs/stripe-integration.md`](docs/stripe-integration.md) for the code path, the 17 passing tests, and the one-minute switch-on. |
+| **Payments** — Stripe in test mode | **Live.** PaymentIntents, Stripe's card form and signature-verified webhooks against a real Stripe sandbox. Verified end to end on the deployed site: a test-card payment succeeded in Stripe, the webhook was delivered and acknowledged, and the order recorded the charge and the 5% split. See [`docs/stripe-integration.md`](docs/stripe-integration.md). |
 | **3. Database schema diagram** — an image showing how Users, Products, Orders and Reviews connect | [`docs/database-schema.png`](docs/database-schema.png), shown [below](#database-schema). Regenerate with `npm run docs:schema`. |
 
 ### Try it in two commands
@@ -302,6 +301,7 @@ Individual commands:
 | `npm test` | Backend + frontend test suites |
 | `npm run audit` | 202-check quality-bar audit against a running app |
 | `npm run smoke` | Read-only check of a deployed API and site - safe against the live database |
+| `npm run stripe:checkout` | Pays with Stripe's test card in real Chrome against a running site (creates a test-mode order) |
 | `npm run audit:ci` | Same audit, but boots and tears down its own server |
 | `npm run test:e2e` | 26 browser tests through real Chrome (desktop + phone) |
 | `npm run verify` | Everything: lint, tests, audit and browser suite |
@@ -395,14 +395,11 @@ production requires real credentials.
 
 ## Stripe setup
 
-> **Read this first if you are reviewing the payment work:**
-> [`docs/stripe-integration.md`](docs/stripe-integration.md) — the full payment
-> path file by file, the 17 tests that prove it (including genuine webhook
-> signature verification), and why this repository ships without keys. Stripe
-> does not accept sign-ups from India without an invitation, and the invitation
-> process requires company PAN / GSTIN / CIN documents that a student project
-> cannot produce. The integration is complete; three environment variables and a
-> restart switch it onto the real card form, with no code change.
+> **Reviewing the payment work?** [`docs/stripe-integration.md`](docs/stripe-integration.md)
+> walks the payment path file by file, lists the 17 tests behind it (including
+> genuine webhook signature verification), and records the end-to-end
+> verification against a real Stripe sandbox - locally and on the live site.
+> `npm run stripe:checkout` repeats that payment in real Chrome on demand.
 
 1. Create an account at <https://stripe.com> and stay in **test mode**.
 2. Copy the test keys into `backend/.env`:
@@ -428,8 +425,9 @@ Any future expiry, any CVC, any postcode.
 **Without Stripe keys:** set `ALLOW_MOCK_PAYMENTS=true` and checkout runs in
 simulated payment mode - the card form is replaced by a clearly labelled button,
 but the order, inventory movement, commission split and vendor payout are all
-created for real. This exists so the project is demo-able out of the box; it is
-rejected in production.
+created for real. This exists so the project is demo-able out of the box. In
+production it is refused unless `DEMO_DEPLOYMENT=true` is also set - the site
+then says so in a banner - and refused outright once Stripe keys exist.
 
 ---
 
@@ -772,27 +770,15 @@ Vendor order queue, showing only this shop's lines and the address to ship to:
 - **Payouts are recorded, not transferred.** The ledger is complete and correct,
   but no money moves to a vendor's bank. A production build would use Stripe
   Connect with destination charges or transfers.
-- **Cloudinary is configured and proven; Stripe is code-complete but has no
-  account.** Cloudinary runs against a real account here: `npm run check:services`
-  passes, and a vendor upload lands at `res.cloudinary.com`, is served, saves onto
-  a product and reads back through the public API. Stripe is the gap, and not for
-  want of trying - **Stripe onboarding is invite-only in India**, so no account
-  can be created to hold the keys. The integration itself is complete and tested
-  (PaymentIntents, genuine webhook signature verification, idempotent order
-  finalisation); with `STRIPE_SECRET_KEY` set it switches to the real card form
-  with no code change, and without it the checkout runs a clearly labelled
-  simulated provider while the commission split, payout ledger and inventory
-  movement all happen for real.
-  In production that fallback is refused unless `DEMO_DEPLOYMENT=true` *and*
-  `ALLOW_MOCK_PAYMENTS=true` are both set, and the site then carries a banner
-  saying payments are simulated - so a demo can be deployed, but never by
-  accident.
-- **Stripe Elements itself is the one piece never exercised automatically.**
-  `stripe.test.js` covers the server side of the card path, including genuine
-  webhook signature verification, with the Stripe *client* mocked so no network
-  call is made. What that cannot cover is Stripe's own iframe: entering a test
-  card and watching 3D Secure appear still wants one manual pass with real test
-  keys.
+- **Stripe runs in test mode only.** The live site takes payments through a
+  real Stripe sandbox - card form, PaymentIntents, signature-verified webhooks -
+  but the account is never activated for live charges, so no real money can
+  move. Cloudinary likewise runs against a real account.
+- **Stripe's card form is checked by a script, not the test suites.** The
+  automated suites deliberately run with Stripe keys blanked so they can never
+  reach a real account. Stripe's own iframe is covered instead by
+  `npm run stripe:checkout`, which pays with `4242 4242 4242 4242` in real Chrome
+  against a running site; it has passed locally and on the live deployment.
 - **Refunds are not automated.** Cancelling an order restocks the items and
   reverses the payout rows, but the Stripe refund would have to be issued from
   the dashboard. If an item sells out between the payment intent and capture,

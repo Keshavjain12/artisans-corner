@@ -25,7 +25,8 @@
     "docs:screenshots": "node scripts/capture-screenshots.mjs",
     "check:services": "npm --prefix backend run check:services",
     "seed:photos": "node scripts/import-photos.mjs",
-    "smoke": "node scripts/smoke.mjs"
+    "smoke": "node scripts/smoke.mjs",
+    "stripe:checkout": "node scripts/stripe-checkout.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",

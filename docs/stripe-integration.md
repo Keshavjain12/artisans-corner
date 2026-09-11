@@ -1,34 +1,38 @@
-# Stripe integration — what is built, and why there are no keys
+# Stripe integration
 
-The brief asks for Stripe in test mode. The integration is **complete and
-tested**. What is missing is not code: it is a Stripe *account*, which Stripe
-will not issue to this developer. This page shows the whole payment path, the
-tests that prove each part of it, and the exact step that turns it on.
+The brief asks for Stripe in test mode, using the PaymentIntent flow. That is
+what runs — locally and on the live deployment — against a real Stripe
+sandbox. This page walks the payment path file by file, lists the tests behind
+it, and records the end-to-end verification against Stripe itself.
 
 ---
 
-## Why there are no keys
+## Verified against real Stripe
 
-Stripe does not accept open sign-ups in India. Selecting India on the sign-up
-form returns:
+Both runs used Stripe's test card `4242 4242 4242 4242` in real Chrome, typed
+into Stripe's own card form, and were then checked on both sides — in Stripe,
+and in this application's database.
 
-> Stripe is available by invite only in India. Please request an invitation to
-> onboard in India.
+| | Local (`npm run dev`) | Live (<https://artisans-corner-keshav.vercel.app>) |
+| --- | --- | --- |
+| Stripe card form loaded in its iframe | yes | yes |
+| Order confirmed, cart emptied | `AC-MTXD5R54-7TIJ` | `AC-MTXDF4VR-0A2L` |
+| PaymentIntent status in Stripe | `succeeded`, $47.00 USD | `succeeded`, $33.00 USD |
+| Order recorded as paid, with charge id | yes | yes |
+| Commission split recorded | $2.10 platform / $39.90 vendor | $1.40 platform / $26.60 vendor |
+| `payment_intent.succeeded` webhook | not configured locally | delivered, acknowledged with 2xx |
 
-Requesting that invitation leads to an onboarding questionnaire that asks for:
+The split is 5% of the merchandise subtotal; shipping is not commissioned.
 
-> Do you have business registration documents? Please attach a copy of your
-> company PAN, GSTIN or CIN documentation.
-> **Note: if you do not have this yet, Stripe may not be able to support your
-> business at this time.**
+Reproduce it against any running site with Stripe keys:
 
-This project is a student's academic submission, not a registered company, so
-it cannot satisfy that requirement — and fabricating registration documents for
-a payments company is not an option. No account means no API keys, including
-test keys, which are only issued from inside an account.
+```bash
+npm run stripe:checkout                                           # local
+SITE=https://artisans-corner-keshav.vercel.app npm run stripe:checkout   # live
+```
 
-**Anyone holding Stripe test keys can switch this application onto the real
-card form in under a minute.** See [Turning it on](#turning-it-on).
+It signs in as the demo buyer and makes a real **test-mode** payment, so it
+creates a paid order in whichever database that site uses. No money moves.
 
 ---
 
@@ -37,10 +41,10 @@ card form in under a minute.** See [Turning it on](#turning-it-on).
 | Step | Where | What happens |
 | --- | --- | --- |
 | 1. Price the basket | [`services/pricing.service.js`](../backend/services/pricing.service.js) | The browser sends only `{productId, quantity}`. Every price, the 5% commission and the shipping rule are computed on the server. |
-| 2. Create the intent | [`controllers/payment.controller.js:38`](../backend/controllers/payment.controller.js#L38) | `stripe.paymentIntents.create()` for the server-computed total in minor units, with the order id in `metadata` so a webhook can find it later. The response carries the **client secret and publishable key only**. |
+| 2. Create the intent | [`controllers/payment.controller.js`](../backend/controllers/payment.controller.js) — `createPaymentIntent` | `stripe.paymentIntents.create()` for the server-computed total in minor units, with the order id in `metadata` so a webhook can find it later. The response carries the **client secret and publishable key only**. |
 | 3. Collect the card | [`components/StripeCheckout.jsx`](../frontend/src/components/StripeCheckout.jsx) | Stripe's own `<Elements>` + `<PaymentElement>`. Card details are entered in Stripe's iframe and never touch this application or its server. |
-| 4. Confirm | [`controllers/payment.controller.js:132`](../backend/controllers/payment.controller.js#L132) | The server **re-reads the intent from Stripe** rather than trusting the browser's word that payment succeeded, then finalises the order. |
-| 5. Webhook | [`controllers/payment.controller.js:175`](../backend/controllers/payment.controller.js#L175) | `stripe.webhooks.constructEvent()` verifies the signature against the raw body — mounted before the JSON parser in [`app.js:48`](../backend/app.js#L48) precisely so the bytes Stripe signed are the bytes verified. |
+| 4. Confirm | `confirmPayment` in the same controller | The server **re-reads the intent from Stripe** rather than trusting the browser's word that payment succeeded, then finalises the order and the client clears the cart. |
+| 5. Webhook | `handleWebhook` in the same controller | `stripe.webhooks.constructEvent()` verifies the signature against the raw body — mounted before the JSON parser in [`app.js`](../backend/app.js) precisely so the bytes Stripe signed are the bytes verified. |
 | 6. Finalise once | [`services/order.service.js`](../backend/services/order.service.js) | `finalizePaidOrder` is idempotent: the webhook and the browser confirmation can both arrive, in either order, and stock is decremented and payouts recorded exactly once. |
 
 The secret key is loaded in one file, [`config/stripe.js`](../backend/config/stripe.js),
@@ -51,10 +55,10 @@ ever appears in the built client bundle.
 
 ## What the tests prove
 
-`backend/tests/stripe.test.js` — 17 tests. The Stripe *client* is mocked so no
-network call is made, but **webhook signatures are verified with the real
+`backend/tests/stripe.test.js` — 17 tests. The Stripe *client* is mocked so the
+suite never calls Stripe, but **webhook signatures are verified with the real
 `stripe` library**, using its own `generateTestHeaderString` to sign the
-fixtures. The signature checks are therefore genuine, not simulated.
+fixtures, so the signature checks are genuine.
 
 ```
 npm --prefix backend test -- tests/stripe.test.js
@@ -82,29 +86,29 @@ npm --prefix backend test -- tests/stripe.test.js
 Tests: 17 passed, 17 total
 ```
 
-Note the tenth: **`rejects simulated payments when Stripe is configured`**. The
-development fallback cannot be used as a way around Stripe once keys exist.
+The automated suites deliberately run with every Stripe key blanked, so no test
+run can ever reach a real account. Stripe's own card form is covered instead by
+`npm run stripe:checkout` above.
 
 ---
 
-## Turning it on
+## Configuration
 
-Three values in `backend/.env`, from any Stripe account's test mode:
+From any Stripe account's **test mode** (sandbox):
 
 ```
 STRIPE_SECRET_KEY=sk_test_...
 STRIPE_PUBLISHABLE_KEY=pk_test_...
-STRIPE_WEBHOOK_SECRET=whsec_...      # optional, see below
+STRIPE_WEBHOOK_SECRET=whsec_...
 ```
 
-Restart, then:
+Locally the webhook secret is optional: confirmation re-reads the intent from
+Stripe, so orders complete without it. On the deployment it comes from a webhook
+destination pointing at `https://<api>/api/payments/webhook` with the events
+`payment_intent.succeeded` and `payment_intent.payment_failed`.
 
-```bash
-npm run check:services      # opens and cancels a real test PaymentIntent
-```
-
-`GET /api/health` flips from `"payments":"mock"` to `"payments":"stripe"`, and
-checkout step 3 renders the real card form. Test cards:
+`npm run check:services` then opens and cancels a real test PaymentIntent, and
+`GET /api/health` reports `"payments":"stripe"`. Test cards:
 
 | Card | Expected |
 | --- | --- |
@@ -112,24 +116,14 @@ checkout step 3 renders the real card form. Test cards:
 | `4000 0025 0000 3155` | 3D Secure challenge, then succeeds |
 | `4000 0000 0000 0002` | Declined — no order is created |
 
-The webhook secret is optional locally: confirmation already re-reads the intent
-from Stripe, so orders complete without it. To exercise the webhook path, run
-`stripe listen --forward-to localhost:5055/api/payments/webhook` and paste the
-`whsec_` it prints.
-
-**No code changes are required at any point.**
-
 ---
 
-## What runs in the meantime
+## Without Stripe keys
 
-With no keys, checkout uses a simulated provider that is labelled as such in the
-UI ("Simulated payment mode") and rejected outright in production
-([`config/env.js`](../backend/config/env.js) refuses to boot without a Stripe
-secret when `NODE_ENV=production`).
-
-Everything around the payment is real: the server-computed total, the 5%
-commission split, the per-vendor payout ledger, the conditional stock
-decrement, the order snapshots and the cancellation/restock path. Only the card
-charge itself is stubbed — which is exactly the part Stripe's test mode would
-also stub, with the difference being whose servers say "succeeded".
+For a machine with no Stripe account, `ALLOW_MOCK_PAYMENTS=true` replaces the
+card form with a clearly labelled simulated payment; the server-computed total,
+commission split, payout ledger, stock movement and order snapshots all still
+happen for real. Production refuses it unless `DEMO_DEPLOYMENT=true` is also
+set — in which case the site shows a banner saying payments are simulated — and
+refuses it outright once Stripe keys are configured, so the two can never be
+mixed.

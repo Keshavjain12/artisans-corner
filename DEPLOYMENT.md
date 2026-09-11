@@ -9,12 +9,12 @@ Nothing is hard-coded to a machine: the client reads `VITE_API_URL`, the server
 reads `CLIENT_URL` / `SERVER_URL`, and the server refuses to boot in production
 if anything it genuinely needs is missing — the log names the variable.
 
-> **About payments.** Stripe onboarding is invite-only in India and asks for
-> company registration documents, so this deployment runs as a **labelled
-> demo**: `DEMO_DEPLOYMENT=true` and `ALLOW_MOCK_PAYMENTS=true`. Production
-> refuses simulated payments unless *both* are set, and the live site then shows
-> a banner saying so. Orders, stock, the 5% commission and vendor payouts are all
-> real. If Stripe keys ever arrive, see [Switching to Stripe](#switching-to-stripe).
+> **About payments.** The live deployment runs real Stripe in **test mode**: set
+> the three `STRIPE_` values and keep `DEMO_DEPLOYMENT` and `ALLOW_MOCK_PAYMENTS`
+> at `false` — see [Switching to Stripe](#switching-to-stripe). Where no Stripe
+> account is available, the same deployment can run as a **labelled demo** with
+> both flags `true`: production refuses simulated payments unless both are set,
+> and the site then shows a banner saying so.
 
 ---
 

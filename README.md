@@ -8,6 +8,25 @@ configurable **5% commission**; the remaining 95% is recorded as a vendor payout
 Built as a full-stack MERN project: React + Vite + Redux Toolkit on the front,
 Express + MongoDB on the back, Stripe for payments and Cloudinary for imagery.
 
+## Live demo
+
+**https://artisans-corner-keshav.vercel.app**
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Buyer | `buyer@artisanscorner.demo` | `DemoBuyer123!` |
+| Vendor | `vendor@artisanscorner.demo` | `DemoVendor123!` |
+| Admin | `admin@artisanscorner.demo` | `DemoAdmin123!` |
+
+The sign-in page has one-click buttons for all three. API health:
+<https://artisans-corner-api-hf7e.onrender.com/api/health>
+
+> The API runs on Render's free tier, which sleeps after about 15 minutes idle:
+> **the first visit can take 30–50 seconds** while it wakes. Checkout uses a
+> clearly labelled simulated payment - Stripe onboarding is invite-only in
+> India - while orders, stock, the 5% commission and vendor payouts are all
+> real. See [`docs/stripe-integration.md`](docs/stripe-integration.md).
+
 ![Artisan's Corner home page](docs/screenshots/01-home.png)
 
 ---
@@ -17,7 +36,7 @@ Express + MongoDB on the back, Stripe for payments and Cloudinary for imagery.
 | The brief asks for | Where it is |
 | --- | --- |
 | **1. GitHub repository** — controllers, models, routes and middleware kept apart; no API keys committed | This repo. See [folder structure](#folder-structure); `.env` is git-ignored and [`.env.example`](.env.example) documents every variable. A [check in the audit](#the-audit) fails the build if a secret ever reaches the client bundle. |
-| **2. Live application** — a working deployed link, with demo credentials for a vendor and a buyer | Deployment-ready and verified in production mode: [`DEPLOYMENT.md`](DEPLOYMENT.md) is the exact 30-minute sequence (Atlas → Render → Vercel), and `npm run smoke` proves a deployed link works without writing to it. Runs as a labelled demo until Stripe keys exist — see [the payments row](#the-three-deliverables). [Demo credentials](#demo-credentials) are below. |
+| **2. Live application** — a working deployed link, with demo credentials for a vendor and a buyer | **Live at <https://artisans-corner-keshav.vercel.app>** — site on Vercel, API on Render, data on MongoDB Atlas, images on Cloudinary. [Demo credentials](#live-demo) are above. `npm run smoke` checks the deployment end to end without writing to it; [`DEPLOYMENT.md`](DEPLOYMENT.md) is how it was built. |
 | **Payments** — Stripe in test mode | Integrated and tested, but **unkeyed**: Stripe onboarding is invite-only in India and requires company registration documents. See [`docs/stripe-integration.md`](docs/stripe-integration.md) for the code path, the 17 passing tests, and the one-minute switch-on. |
 | **3. Database schema diagram** — an image showing how Users, Products, Orders and Reviews connect | [`docs/database-schema.png`](docs/database-schema.png), shown [below](#database-schema). Regenerate with `npm run docs:schema`. |
 

@@ -230,11 +230,30 @@ describe('what never reaches Cloudinary', () => {
     const vendor = await registerVendor('Outage Studio');
     cloud.failNext = true;
 
-    const res = await uploadAs(vendor.token);
+    /* The server logs 5xx faults to the console, which is right in production
+       and pure noise in a passing test run - so capture that log and assert on
+       it, rather than printing a stack trace across otherwise green output. */
+    const logged = jest.spyOn(console, 'error').mockImplementation(() => {});
+    let res;
+    let loggedCalls = 0;
+    try {
+      res = await uploadAs(vendor.token);
+      // Counted before restoring: mockRestore() also forgets the calls.
+      loggedCalls = logged.mock.calls.length;
+    } finally {
+      logged.mockRestore();
+    }
 
     expect(res.status).toBe(502);
     expect(res.body.success).toBe(false);
     expect(res.body.message).toMatch(/upload failed/i);
+    // The fault is logged server-side...
+    expect(loggedCalls).toBeGreaterThan(0);
+    // ...and what the shopper would be shown is a sentence, not a stack.
+    expect(res.body.message).not.toMatch(/upload\.service\.js/);
+    /* The stack rides along as a development aid only: error.js drops it and
+       genericises the message in production - see error-handler.test.js. */
+    expect(res.body.error).toContain('upload.service.js');
   });
 });
 

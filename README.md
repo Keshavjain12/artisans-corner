@@ -524,14 +524,14 @@ a product never rewrites order history.
 ```bash
 npm run verify        # everything below, in order
 
-npm test              # 63 backend + 41 frontend
+npm test              # 69 backend + 41 frontend
 npm run test:backend   # API and business logic, in-memory MongoDB
 npm run test:frontend   # components, cart and route guards, jsdom + Vitest
 npm run test:e2e      # 35 browser tests in real Chrome, desktop and phone
 npm run audit:ci      # 196 checks against a disposable server
 ```
 
-**139 automated tests and 196 audit checks**, none of which need a database,
+**145 automated tests and 196 audit checks**, none of which need a database,
 a Stripe account or a Cloudinary account to run.
 
 The backend suite runs against an in-memory MongoDB (`mongodb-memory-server`),
@@ -587,6 +587,7 @@ misreporting as failures.
 | `auth.test.js` | Registration validation, duplicate email, password never returned, self-assigned `admin` role ignored, login, `/auth/me` guard |
 | `product.test.js` | Vendor-only creation, ownership on edit and delete (vendor A cannot touch vendor B), field validation, category whitelist, search and category filters, deactivated products hidden |
 | `checkout.test.js` | Server-side pricing, 5% commission split, client-sent prices ignored, shipping threshold, stock ceiling, inactive products, auth required |
+| `error-handler.test.js` | The error envelope in production: no stack traces, a server fault reduced to one sentence, 4xx messages and field errors kept, client mistakes not logged as faults |
 | `order-review.test.js` | Order creation, stock decrement, payout recording, idempotent confirmation, price snapshots surviving a price change, cross-buyer order access denied, verified-purchase reviews, duplicate reviews, rating range |
 | `money.test.js` | Commission maths, rounding invariants, Stripe minor-unit conversion |
 | `cloudinary.test.js` | The brief's image rule: a real multipart upload is streamed to Cloudinary, only the returned URL and public id are written to MongoDB (asserted against the raw document — no bytes, no base64), the cloud copy is deleted with the product, a file merely claiming to be an image never reaches Cloudinary, and the API secret never leaves the server |

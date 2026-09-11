@@ -51,6 +51,9 @@ const env = {
   },
 
   allowMockPayments: bool(process.env.ALLOW_MOCK_PAYMENTS, false),
+  /* A public demo without a payment provider. Only meaningful in production,
+     where simulated payments are otherwise refused at boot. */
+  demoDeployment: bool(process.env.DEMO_DEPLOYMENT, false),
 
   upload: {
     maxFileSizeBytes: 5 * 1024 * 1024,
@@ -64,17 +67,43 @@ env.cloudinaryEnabled = Boolean(
 );
 env.stripeEnabled = Boolean(env.stripe.secretKey);
 
+/**
+ * Everything a production deployment is missing, as a list - empty when it is
+ * fit to boot. Pure, so every combination can be tested without restarting.
+ *
+ * Simulated payments stay forbidden in production by default. The one way to
+ * run without Stripe is to say so twice - DEMO_DEPLOYMENT=true *and*
+ * ALLOW_MOCK_PAYMENTS=true - which exists because Stripe onboarding is
+ * invite-only in some countries, and a deployment that cannot boot demonstrates
+ * nothing. The site then says plainly that payments are simulated.
+ */
+export function productionProblems(config = env, raw = process.env) {
+  const problems = [];
+  if (!raw.JWT_SECRET || raw.JWT_SECRET.length < 24) {
+    problems.push('JWT_SECRET must be set to a long random string in production.');
+  }
+  if (!raw.MONGO_URI) problems.push('MONGO_URI must be set in production.');
+  if (!config.cloudinaryEnabled) problems.push('Cloudinary credentials must be set in production.');
+
+  const simulated = config.demoDeployment && config.allowMockPayments;
+  if (!config.stripeEnabled && !simulated) {
+    problems.push(
+      'STRIPE_SECRET_KEY must be set in production (or DEMO_DEPLOYMENT=true with ALLOW_MOCK_PAYMENTS=true for a clearly labelled demo).'
+    );
+  }
+  if (config.allowMockPayments && !config.demoDeployment) {
+    problems.push('ALLOW_MOCK_PAYMENTS must be false in production unless DEMO_DEPLOYMENT=true.');
+  }
+  if (config.stripeEnabled && config.allowMockPayments) {
+    problems.push('Stripe is configured, so turn ALLOW_MOCK_PAYMENTS off.');
+  }
+  return problems;
+}
+
 /** Fails fast when the deployment is missing something it genuinely cannot run without. */
 export function assertProductionConfig() {
   if (!env.isProd) return;
-  const problems = [];
-  if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 24) {
-    problems.push('JWT_SECRET must be set to a long random string in production.');
-  }
-  if (!process.env.MONGO_URI) problems.push('MONGO_URI must be set in production.');
-  if (!env.stripeEnabled) problems.push('STRIPE_SECRET_KEY must be set in production.');
-  if (env.allowMockPayments) problems.push('ALLOW_MOCK_PAYMENTS must be false in production.');
-  if (!env.cloudinaryEnabled) problems.push('Cloudinary credentials must be set in production.');
+  const problems = productionProblems();
   if (problems.length) {
     throw new Error(`Invalid production configuration:\n - ${problems.join('\n - ')}`);
   }

@@ -24,7 +24,8 @@
     "docs:schema": "node scripts/generate-schema-diagram.mjs",
     "docs:screenshots": "node scripts/capture-screenshots.mjs",
     "check:services": "npm --prefix backend run check:services",
-    "seed:photos": "node scripts/import-photos.mjs"
+    "seed:photos": "node scripts/import-photos.mjs",
+    "smoke": "node scripts/smoke.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",

@@ -5,6 +5,9 @@
   "type": "module",
   "description": "Artisan's Corner REST API",
   "main": "server.js",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",

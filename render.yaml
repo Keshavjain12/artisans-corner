@@ -12,8 +12,14 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      # Stripe onboarding is invite-only in India, so this deployment runs as a
+      # labelled demo: both flags are required, and production refuses to boot
+      # with simulated payments otherwise. Once Stripe keys exist, set both to
+      # false and fill in the three STRIPE_ values below.
+      - key: DEMO_DEPLOYMENT
+        value: "true"
       - key: ALLOW_MOCK_PAYMENTS
-        value: false
+        value: "true"
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRES_IN

@@ -1,7 +1,29 @@
-import { Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
+import { paymentService } from '../services/orderService.js';
+import useAsync from '../hooks/useAsync.js';
+
+/**
+ * Shown only on a public demo deployment - never on a local dev run - so that a
+ * visitor who reaches checkout is not surprised by a simulated payment, and an
+ * evaluator knows why before they ask.
+ */
+function DemoBanner() {
+  const config = useAsync(() => paymentService.config(), []);
+  if (!config.data?.data?.demo) return null;
+
+  return (
+    <div className="bg-ink px-4 py-2 text-center text-xs text-cream">
+      Demo deployment: checkout uses a simulated payment because Stripe onboarding is
+      invite-only in India. Orders, stock, the 5% commission and vendor payouts are all real.{' '}
+      <Link to="/shop" className="underline underline-offset-2">
+        Start shopping
+      </Link>
+    </div>
+  );
+}
 
 export function MainLayout() {
   const { pathname } = useLocation();
@@ -20,6 +42,7 @@ export function MainLayout() {
       >
         Skip to content
       </a>
+      <DemoBanner />
       <Navbar />
       <main id="main" className="flex-1">
         <Outlet />

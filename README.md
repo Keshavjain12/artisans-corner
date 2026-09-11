@@ -17,7 +17,7 @@ Express + MongoDB on the back, Stripe for payments and Cloudinary for imagery.
 | The brief asks for | Where it is |
 | --- | --- |
 | **1. GitHub repository** — controllers, models, routes and middleware kept apart; no API keys committed | This repo. See [folder structure](#folder-structure); `.env` is git-ignored and [`.env.example`](.env.example) documents every variable. A [check in the audit](#the-audit) fails the build if a secret ever reaches the client bundle. |
-| **2. Live application** — a working deployed link, with demo credentials for a vendor and a buyer | Not yet deployed. [`DEPLOYMENT.md`](DEPLOYMENT.md) is the exact 30-minute sequence (Atlas → Cloudinary → Stripe → Render → Vercel), and [demo credentials](#demo-credentials) are below. Locally: `npm run dev:memory`. |
+| **2. Live application** — a working deployed link, with demo credentials for a vendor and a buyer | Deployment-ready and verified in production mode: [`DEPLOYMENT.md`](DEPLOYMENT.md) is the exact 30-minute sequence (Atlas → Render → Vercel), and `npm run smoke` proves a deployed link works without writing to it. Runs as a labelled demo until Stripe keys exist — see [the payments row](#the-three-deliverables). [Demo credentials](#demo-credentials) are below. |
 | **Payments** — Stripe in test mode | Integrated and tested, but **unkeyed**: Stripe onboarding is invite-only in India and requires company registration documents. See [`docs/stripe-integration.md`](docs/stripe-integration.md) for the code path, the 17 passing tests, and the one-minute switch-on. |
 | **3. Database schema diagram** — an image showing how Users, Products, Orders and Reviews connect | [`docs/database-schema.png`](docs/database-schema.png), shown [below](#database-schema). Regenerate with `npm run docs:schema`. |
 
@@ -282,6 +282,7 @@ Individual commands:
 | `npm --prefix backend run seed:destroy` | Empty the database |
 | `npm test` | Backend + frontend test suites |
 | `npm run audit` | 202-check quality-bar audit against a running app |
+| `npm run smoke` | Read-only check of a deployed API and site - safe against the live database |
 | `npm run audit:ci` | Same audit, but boots and tears down its own server |
 | `npm run test:e2e` | 26 browser tests through real Chrome (desktop + phone) |
 | `npm run verify` | Everything: lint, tests, audit and browser suite |
@@ -534,14 +535,14 @@ a product never rewrites order history.
 ```bash
 npm run verify        # everything below, in order
 
-npm test              # 73 backend + 41 frontend
+npm test              # 80 backend + 41 frontend
 npm run test:backend   # API and business logic, in-memory MongoDB
 npm run test:frontend   # components, cart and route guards, jsdom + Vitest
 npm run test:e2e      # 37 browser tests in real Chrome, desktop and phone
 npm run audit:ci      # 202 checks against a disposable server
 ```
 
-**151 automated tests and 202 audit checks**, none of which need a database,
+**158 automated tests and 202 audit checks**, none of which need a database,
 a Stripe account or a Cloudinary account to run.
 
 The backend suite runs against an in-memory MongoDB (`mongodb-memory-server`),
@@ -763,6 +764,10 @@ Vendor order queue, showing only this shop's lines and the address to ship to:
   with no code change, and without it the checkout runs a clearly labelled
   simulated provider while the commission split, payout ledger and inventory
   movement all happen for real.
+  In production that fallback is refused unless `DEMO_DEPLOYMENT=true` *and*
+  `ALLOW_MOCK_PAYMENTS=true` are both set, and the site then carries a banner
+  saying payments are simulated - so a demo can be deployed, but never by
+  accident.
 - **Stripe Elements itself is the one piece never exercised automatically.**
   `stripe.test.js` covers the server side of the card path, including genuine
   webhook signature verification, with the Stripe *client* mocked so no network

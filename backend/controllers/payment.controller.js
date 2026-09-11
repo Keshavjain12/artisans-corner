@@ -211,6 +211,8 @@ export const getPaymentConfig = asyncHandler(async (_req, res) =>
     message: 'Payment configuration',
     data: {
       provider: env.stripeEnabled ? 'stripe' : env.allowMockPayments ? 'mock' : 'disabled',
+      // Lets the client label a public demo, rather than every local dev run.
+      demo: env.demoDeployment && !env.stripeEnabled,
       publishableKey: env.stripe.publishableKey,
       currency: env.currency,
       commissionRate: env.commissionRate,

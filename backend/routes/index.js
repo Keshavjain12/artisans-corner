@@ -21,6 +21,7 @@ router.get('/health', (_req, res) =>
       // Kind only, never the name or host: this endpoint is public.
       database: env.ephemeralDb ? 'ephemeral' : 'persistent',
       payments: env.stripeEnabled ? 'stripe' : env.allowMockPayments ? 'mock' : 'disabled',
+      demo: env.demoDeployment,
       imageStorage: env.cloudinaryEnabled ? 'cloudinary' : 'local-disk',
       commissionRate: env.commissionRate,
       time: new Date().toISOString(),

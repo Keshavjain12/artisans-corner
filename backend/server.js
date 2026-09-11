@@ -10,6 +10,9 @@ const server = await (async () => {
   await connectDB();
   return app.listen(env.port, () => {
     console.log(`[server] Artisan's Corner API on ${env.serverUrl} (${env.nodeEnv})`);
+    if (env.isProd && env.demoDeployment) {
+      console.warn('[server] DEMO DEPLOYMENT - payments are simulated and labelled as such.');
+    }
     if (!env.stripeEnabled) {
       console.warn(
         `[server] Stripe is not configured. Checkout runs in ${

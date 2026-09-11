@@ -26,6 +26,15 @@ const server = spawn(process.execPath, ['scripts/dev-memory-db.mjs'], {
     CLIENT_URL: 'http://localhost:5273',
     ALLOW_MOCK_PAYMENTS: 'true',
     NODE_ENV: 'development',
+    /* The audit uploads images and pays for orders. Real credentials in
+       backend/.env must not turn that into traffic against someone's actual
+       Cloudinary library or Stripe account. */
+    CLOUDINARY_CLOUD_NAME: '',
+    CLOUDINARY_API_KEY: '',
+    CLOUDINARY_API_SECRET: '',
+    STRIPE_SECRET_KEY: '',
+    STRIPE_PUBLISHABLE_KEY: '',
+    STRIPE_WEBHOOK_SECRET: '',
   },
   stdio: ['ignore', 'pipe', 'pipe'],
 });

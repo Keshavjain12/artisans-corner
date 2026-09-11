@@ -1,8 +1,33 @@
 import { z } from 'zod';
 import { trimmed } from './common.js';
 
+/**
+ * An image lives in one of two real places in this app: Cloudinary, which gives
+ * an absolute https URL, or this origin - the seed artwork under
+ * /product-photos and the local-disk upload fallback under /uploads, both
+ * root-relative. Demanding an absolute URL made every seeded product
+ * unsaveable: the vendor form resubmits the images it loaded, so editing even
+ * the price of a seeded piece was rejected as an invalid image.
+ *
+ * Anything else is refused, including the scheme-relative "//host" form and
+ * javascript: URLs, which must never reach an <img src>.
+ */
+const ABSOLUTE = /^https?:\/\/[^\s/]+\/\S*$/i;
+/* Leading single slash only - "//host/x.png" is a scheme-relative URL to
+   somebody else's server, not a path on ours - and no ".." traversal. */
+const SAME_ORIGIN = /^\/(?!\/)(?!.*\.\.)[\w\-./]+$/;
+
+const imageUrl = z
+  .string()
+  .trim()
+  .max(2048)
+  .refine(
+    (value) => ABSOLUTE.test(value) || SAME_ORIGIN.test(value),
+    'Each image needs a valid URL'
+  );
+
 const imageSchema = z.object({
-  url: z.string().trim().url('Each image needs a valid URL'),
+  url: imageUrl,
   publicId: z.string().trim().max(200).optional().default(''),
   alt: z.string().trim().max(160).optional().default(''),
 });

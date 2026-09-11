@@ -95,6 +95,78 @@ describe('product authorization', () => {
   });
 });
 
+describe('the images a product may carry', () => {
+  /* The seed writes its artwork as root-relative paths, and the vendor form
+     resubmits whatever images it loaded - so an absolute-URL-only rule made
+     every seeded product unsaveable, price change and all. */
+  it('accepts the paths this app actually produces', async () => {
+    const vendor = await registerVendor('Path Studio');
+
+    for (const url of [
+      'https://res.cloudinary.com/demo/image/upload/v1/products/mug.webp',
+      '/product-photos/ash-wood-coffee-scoop.webp',
+      '/uploads/9f8e7d6c5b4a.webp',
+    ]) {
+      const product = await createProduct(vendor.token, {
+        name: `Piece ${Math.random().toString(36).slice(2, 7)}`,
+        images: [{ url, alt: 'A handmade piece' }],
+      });
+      expect(product.images[0].url).toBe(url);
+    }
+  });
+
+  it('lets a vendor edit a product whose image is a seeded relative path', async () => {
+    const vendor = await registerVendor('Reprice Studio');
+    const product = await createProduct(vendor.token, {
+      images: [{ url: '/product-photos/terracotta-planter-set-of-three.webp', alt: 'Planters' }],
+    });
+
+    // Exactly what the form sends: the price changed, the images untouched.
+    const res = await api()
+      .put(`/api/products/${product._id}`)
+      .set('Authorization', `Bearer ${vendor.token}`)
+      .send({
+        price: 42,
+        images: product.images.map((image) => ({
+          url: image.url,
+          publicId: image.publicId || '',
+          alt: image.alt || '',
+        })),
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.body.data.product.price).toBe(42);
+  });
+
+  it('refuses anything that is not an image on Cloudinary or this origin', async () => {
+    const vendor = await registerVendor('Hostile Studio');
+
+    for (const url of [
+      '//evil.example.com/steal.png',
+      'javascript:alert(document.cookie)',
+      'data:image/png;base64,iVBORw0KGgo=',
+      '/../../etc/passwd',
+      'ftp://host/x.png',
+      'not a url at all',
+    ]) {
+      const res = await api()
+        .post('/api/products')
+        .set('Authorization', `Bearer ${vendor.token}`)
+        .send({
+          name: 'Hostile Vase',
+          description: 'A description long enough to pass the validation checks here.',
+          price: 40,
+          category: 'pottery',
+          stock: 2,
+          images: [{ url }],
+        });
+
+      expect(res.status).toBe(400);
+      expect(JSON.stringify(res.body.errors)).toMatch(/valid URL/);
+    }
+  });
+});
+
 describe('public product listing', () => {
   it('hides products from the marketplace when they are deactivated', async () => {
     const vendor = await registerVendor('Visibility Studio');

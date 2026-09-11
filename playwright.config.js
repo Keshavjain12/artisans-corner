@@ -53,6 +53,19 @@ export default defineConfig({
       CLIENT_PORT: String(PORT),
       CLIENT_URL: `http://localhost:${PORT}`,
       SERVER_URL: `http://localhost:${API_PORT}`,
+      /* Blanked deliberately. The server reads backend/.env, so once real
+         credentials exist there the suite would upload its fixtures into
+         somebody's actual Cloudinary library and pay network latency for every
+         upload assertion. Empty values put uploads back on local disk, which
+         is the path these tests are written against. */
+      CLOUDINARY_CLOUD_NAME: '',
+      CLOUDINARY_API_KEY: '',
+      CLOUDINARY_API_SECRET: '',
+      /* Same reasoning: mock payments, never a real Stripe account. */
+      STRIPE_SECRET_KEY: '',
+      STRIPE_PUBLISHABLE_KEY: '',
+      STRIPE_WEBHOOK_SECRET: '',
+      ALLOW_MOCK_PAYMENTS: 'true',
     },
     /* Gate on the API, not the Vite port: Vite is ready in under a second
        while the API is still seeding, so waiting on the client would start the

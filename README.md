@@ -524,14 +524,14 @@ a product never rewrites order history.
 ```bash
 npm run verify        # everything below, in order
 
-npm test              # 69 backend + 41 frontend
+npm test              # 72 backend + 41 frontend
 npm run test:backend   # API and business logic, in-memory MongoDB
 npm run test:frontend   # components, cart and route guards, jsdom + Vitest
 npm run test:e2e      # 35 browser tests in real Chrome, desktop and phone
 npm run audit:ci      # 196 checks against a disposable server
 ```
 
-**145 automated tests and 196 audit checks**, none of which need a database,
+**148 automated tests and 196 audit checks**, none of which need a database,
 a Stripe account or a Cloudinary account to run.
 
 The backend suite runs against an in-memory MongoDB (`mongodb-memory-server`),
@@ -740,10 +740,17 @@ Vendor order queue, showing only this shop's lines and the address to ship to:
 - **Payouts are recorded, not transferred.** The ledger is complete and correct,
   but no money moves to a vendor's bank. A production build would use Stripe
   Connect with destination charges or transfers.
-- **Cloudinary and Stripe have never run against real credentials here.** Both
-  branches are covered by tests with the vendor SDK mocked - what is unproven is
-  only the account itself. `npm run check:services` closes that in one command
-  once you have keys.
+- **Cloudinary is configured and proven; Stripe is code-complete but has no
+  account.** Cloudinary runs against a real account here: `npm run check:services`
+  passes, and a vendor upload lands at `res.cloudinary.com`, is served, saves onto
+  a product and reads back through the public API. Stripe is the gap, and not for
+  want of trying - **Stripe onboarding is invite-only in India**, so no account
+  can be created to hold the keys. The integration itself is complete and tested
+  (PaymentIntents, genuine webhook signature verification, idempotent order
+  finalisation); with `STRIPE_SECRET_KEY` set it switches to the real card form
+  with no code change, and without it the checkout runs a clearly labelled
+  simulated provider while the commission split, payout ledger and inventory
+  movement all happen for real.
 - **Stripe Elements itself is the one piece never exercised automatically.**
   `stripe.test.js` covers the server side of the card path, including genuine
   webhook signature verification, with the Stripe *client* mocked so no network

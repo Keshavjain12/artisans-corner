@@ -1,3 +1,4 @@
+import Order from '../models/Order.js';
 import Product from '../models/Product.js';
 import Store from '../models/Store.js';
 import Category from '../models/Category.js';
@@ -7,12 +8,7 @@ import sendSuccess from '../utils/apiResponse.js';
 import { buildMeta, getPagination } from '../utils/pagination.js';
 import { uniqueSlug } from '../utils/slugify.js';
 import { destroyImage } from '../services/upload.service.js';
-
-/**
- * Search terms are reduced to a safe alphanumeric phrase before they reach a
- * RegExp, which removes both regex-injection and ReDoS risk in one step.
- */
-const safeSearchTerm = (value) => String(value).replace(/[^a-zA-Z0-9 &'-]+/g, ' ').trim().slice(0, 60);
+import { searchRegex, searchWords, wordRegex } from '../utils/search.js';
 
 const SORTS = {
   featured: { isFeatured: -1, ratingAverage: -1, unitsSold: -1 },
@@ -47,21 +43,19 @@ async function buildProductFilter(query) {
   }
 
   if (query.q) {
-    const term = safeSearchTerm(query.q);
-    if (!term) return filter;
-
-    const words = term.split(' ').filter(Boolean);
+    const words = searchWords(query.q);
+    if (words.length === 0) return filter;
 
     /* Every word must match something, and each word may match any field.
        ANDing the words is what a shopper expects: adding a word should narrow
        the results, not widen them the way an OR would. */
-    const anyWord = new RegExp(words.join('|'), 'i');
+    const anyWord = searchRegex(query.q);
     const candidateStores = await Store.find({ name: anyWord, isActive: true })
       .select('_id name')
       .lean();
 
     filter.$and = words.map((word) => {
-      const rx = new RegExp(word, 'i');
+      const rx = wordRegex(word);
       // Shop names count too, so "Terra vase" finds that studio's vases.
       const storeIds = candidateStores.filter((store) => rx.test(store.name)).map((s) => s._id);
       return {
@@ -188,10 +182,9 @@ export const listMyProducts = asyncHandler(async (req, res) => {
   if (req.query.status === undefined || req.query.status === 'all') filter.isArchived = false;
   if (req.query.category) filter.category = String(req.query.category).toLowerCase();
   if (req.query.q) {
-    const term = safeSearchTerm(req.query.q);
     // Same AND semantics as the public search: more words means fewer results.
-    const words = term.split(' ').filter(Boolean);
-    if (words.length) filter.$and = words.map((word) => ({ name: new RegExp(word, 'i') }));
+    const words = searchWords(req.query.q);
+    if (words.length) filter.$and = words.map((word) => ({ name: wordRegex(word) }));
   }
 
   const [products, total] = await Promise.all([
@@ -249,7 +242,6 @@ export const updateProduct = asyncHandler(async (req, res) => {
  */
 export const deleteProduct = asyncHandler(async (req, res) => {
   const product = await findOwnedProduct(req);
-  const { default: Order } = await import('../models/Order.js');
   const hasOrders = await Order.exists({ 'items.product': product._id });
 
   if (hasOrders) {

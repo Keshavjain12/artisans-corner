@@ -6,6 +6,7 @@ import asyncHandler from '../utils/asyncHandler.js';
 import sendSuccess from '../utils/apiResponse.js';
 import { buildMeta, getPagination } from '../utils/pagination.js';
 import { uniqueSlug } from '../utils/slugify.js';
+import { searchRegex } from '../utils/search.js';
 
 /** "Become a Seller": upgrades the current buyer account and creates its shop. */
 export const onboardVendor = asyncHandler(async (req, res) => {
@@ -73,7 +74,9 @@ export const updateMyStore = asyncHandler(async (req, res) => {
 export const listStores = asyncHandler(async (req, res) => {
   const { page, limit, skip } = getPagination(req.query, { defaultLimit: 12, maxLimit: 48 });
   const filter = { isActive: true };
-  if (req.query.q) filter.name = { $regex: String(req.query.q).slice(0, 60), $options: 'i' };
+  // Sanitised, never interpolated raw: a crafted pattern is a denial of service.
+  const search = searchRegex(req.query.q);
+  if (search) filter.name = search;
 
   const [stores, total] = await Promise.all([
     Store.find(filter).sort({ totalSales: -1, createdAt: -1 }).skip(skip).limit(limit).lean(),
@@ -103,17 +106,15 @@ export const getStoreBySlug = asyncHandler(async (req, res) => {
   const store = await Store.findOne({ slug: req.params.slug, isActive: true }).lean();
   if (!store) throw ApiError.notFound('That shop could not be found');
 
-  const products = await Product.find({
-    vendor: store._id,
-    isActive: true,
-    isArchived: false,
-  })
-    .sort({ createdAt: -1 })
-    .limit(24)
-    .lean();
+  const visible = { vendor: store._id, isActive: true, isArchived: false };
+  const [products, productCount] = await Promise.all([
+    Product.find(visible).sort({ createdAt: -1 }).limit(24).lean(),
+    // Counted, not inferred from the page above, which stops at 24.
+    Product.countDocuments(visible),
+  ]);
 
   return sendSuccess(res, {
     message: store.name,
-    data: { store, products, productCount: products.length },
+    data: { store, products, productCount },
   });
 });

@@ -77,6 +77,7 @@ export default function StoreSettings() {
       toast.success('Store profile updated');
     } catch (error) {
       toast.error(error.message);
+      (error.fieldErrors || []).forEach((issue) => toast.error(`${issue.field}: ${issue.message}`));
     } finally {
       setSaving(false);
     }

@@ -6,9 +6,10 @@ import Footer from '../components/Footer.jsx';
 export function MainLayout() {
   const { pathname } = useLocation();
 
-  // Every navigation should start at the top of the new page.
+  // Every navigation should start at the top of the new page, without the
+  // smooth-scroll animation a fresh page does not need.
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+    window.scrollTo(0, 0);
   }, [pathname]);
 
   return (

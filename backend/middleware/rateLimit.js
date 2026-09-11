@@ -31,15 +31,25 @@ export const authLimiter = rateLimit({
   },
 });
 
-/** Payments and uploads are expensive; keep them modest per user/IP. */
+/**
+ * Signed-in callers are counted individually, falling back to the address for
+ * anonymous ones. Keying purely on IP would make one shared college or office
+ * connection a single bucket, so one busy seller could lock out everybody else
+ * on the same network.
+ */
+const perUserOrIp = (req) => (req.user ? `u:${req.user._id}` : req.ip);
+
+/** Payments and uploads are expensive; keep them modest per user or address. */
 export const sensitiveLimiter = rateLimit({
   ...baseOptions,
   windowMs: 10 * 60 * 1000,
   limit: 60,
+  keyGenerator: perUserOrIp,
 });
 
 export const writeLimiter = rateLimit({
   ...baseOptions,
   windowMs: 10 * 60 * 1000,
   limit: 200,
+  keyGenerator: perUserOrIp,
 });

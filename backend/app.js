@@ -11,6 +11,7 @@ import morgan from 'morgan';
 
 import env from './config/env.js';
 import { handleWebhook } from './controllers/payment.controller.js';
+import ApiError from './utils/ApiError.js';
 import { errorHandler, notFound } from './middleware/error.js';
 import { apiLimiter } from './middleware/rateLimit.js';
 import routes from './routes/index.js';
@@ -29,6 +30,9 @@ export function createApp() {
     helmet({
       // Product images are served to a different origin than the API.
       crossOriginResourcePolicy: { policy: 'cross-origin' },
+      /* This process serves JSON and uploaded images, never HTML that could
+         execute a script, and the client is a separate origin that sets its
+         own policy. A CSP here would restrict nothing that exists. */
       contentSecurityPolicy: false,
     })
   );
@@ -39,7 +43,9 @@ export function createApp() {
       origin(origin, callback) {
         // Same-origin/server-to-server calls arrive without an Origin header.
         if (!origin || allowList.has(origin.replace(/\/$/, ''))) return callback(null, true);
-        return callback(new Error(`Origin ${origin} is not allowed by CORS`));
+        /* An ApiError, not a bare Error: otherwise a browser calling from the
+           wrong origin is reported as a 500 and logged as a server fault. */
+        return callback(ApiError.forbidden('This origin is not allowed to call the API'));
       },
       credentials: true,
     })

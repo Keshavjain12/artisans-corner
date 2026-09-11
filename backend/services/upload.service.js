@@ -19,7 +19,14 @@ const SIGNATURES = [
     test: (b) =>
       b.subarray(0, 4).toString('ascii') === 'RIFF' && b.subarray(8, 12).toString('ascii') === 'WEBP',
   },
-  { ext: 'avif', test: (b) => b.subarray(4, 8).toString('ascii') === 'ftyp' },
+  {
+    /* "ftyp" alone is every ISO base media file - MP4 and MOV included - so the
+       brand has to be read too, or a video passes as an image. */
+    ext: 'avif',
+    test: (b) =>
+      b.subarray(4, 8).toString('ascii') === 'ftyp' &&
+      ['avif', 'avis', 'mif1', 'msf1', 'miaf'].includes(b.subarray(8, 12).toString('ascii')),
+  },
 ];
 
 export function assertIsImage(file) {
@@ -31,6 +38,15 @@ export function assertIsImage(file) {
   if (!match) throw ApiError.badRequest('That file does not look like a real image');
   return match.ext;
 }
+
+/**
+ * Every upload lands in a folder named after the account that made it.
+ *
+ * That is not tidiness: a public id is visible in the image URL of any product,
+ * so without an owner segment to check, the delete endpoint would let one
+ * vendor destroy another vendor's photographs.
+ */
+export const ownedFolder = (folder, ownerId) => `${folder}/${String(ownerId)}`;
 
 async function uploadToCloudinary(file, folder) {
   return new Promise((resolve, reject) => {
@@ -51,9 +67,9 @@ async function uploadToCloudinary(file, folder) {
   });
 }
 
-async function uploadToLocalDisk(file, ext) {
+async function uploadToLocalDisk(file, ext, ownerId) {
   await fs.mkdir(LOCAL_DIR, { recursive: true });
-  const name = `${Date.now()}-${crypto.randomBytes(6).toString('hex')}.${ext}`;
+  const name = `${String(ownerId)}-${Date.now()}-${crypto.randomBytes(6).toString('hex')}.${ext}`;
   await fs.writeFile(path.join(LOCAL_DIR, name), file.buffer);
   return { url: `${env.serverUrl}/uploads/${name}`, publicId: `local:${name}` };
 }
@@ -63,14 +79,28 @@ async function uploadToLocalDisk(file, ext) {
  * Cloudinary is used whenever it is configured; otherwise the file is written
  * to backend/uploads so the app stays usable in local development.
  */
-export async function uploadImage(file, folder = 'artisans-corner/products') {
+export async function uploadImage(file, folder = 'artisans-corner/products', ownerId) {
   const ext = assertIsImage(file);
-  if (env.cloudinaryEnabled) return uploadToCloudinary(file, folder);
-  return uploadToLocalDisk(file, ext);
+  if (env.cloudinaryEnabled) return uploadToCloudinary(file, ownedFolder(folder, ownerId));
+  return uploadToLocalDisk(file, ext, ownerId);
 }
 
-export async function uploadMany(files = [], folder) {
-  return Promise.all(files.map((file) => uploadImage(file, folder)));
+export async function uploadMany(files = [], folder, ownerId) {
+  return Promise.all(files.map((file) => uploadImage(file, folder, ownerId)));
+}
+
+/**
+ * True when this public id was produced by this account's uploads.
+ *
+ * Cloudinary ids carry the owner as a path segment; local ids carry it as a
+ * filename prefix. Admins bypass the check so they can clean up after anyone.
+ */
+export function ownsImage(publicId, ownerId, { isAdmin = false } = {}) {
+  if (isAdmin) return true;
+  if (!publicId || !ownerId) return false;
+  const owner = String(ownerId);
+  if (publicId.startsWith('local:')) return publicId.slice(6).startsWith(`${owner}-`);
+  return publicId.split('/').includes(owner);
 }
 
 /** Best-effort cleanup; a failed delete must never break the request. */
@@ -78,7 +108,13 @@ export async function destroyImage(publicId) {
   if (!publicId) return;
   try {
     if (publicId.startsWith('local:')) {
-      await fs.unlink(path.join(LOCAL_DIR, publicId.slice(6)));
+      /* basename first, then prove the result is still inside the uploads
+         folder: "local:../../config/env.js" is a delete-anything primitive
+         otherwise. */
+      const name = path.basename(publicId.slice(6));
+      const target = path.resolve(LOCAL_DIR, name);
+      if (!target.startsWith(path.resolve(LOCAL_DIR) + path.sep)) return;
+      await fs.unlink(target);
       return;
     }
     if (env.cloudinaryEnabled) await cloudinary.uploader.destroy(publicId);

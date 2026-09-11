@@ -22,7 +22,12 @@ export function QuantityStepper({ value, max = MAX_QTY_PER_LINE, onChange, label
         min={1}
         max={ceiling}
         aria-label={label}
-        onChange={(event) => onChange(Number(event.target.value))}
+        onChange={(event) => {
+          /* An emptied box parses to NaN; treat it as the minimum rather than
+             letting NaN travel into the cart and render as "NaN". */
+          const next = Number.parseInt(event.target.value, 10);
+          onChange(Number.isFinite(next) ? Math.min(Math.max(next, 1), ceiling) : 1);
+        }}
       />
       <button
         type="button"

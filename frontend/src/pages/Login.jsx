@@ -21,7 +21,10 @@ export default function Login() {
   const [params] = useSearchParams();
   const { user, status, error } = useSelector((state) => state.auth);
 
-  const redirectTo = params.get('redirect') || location.state?.from?.pathname || '/';
+  /* Only in-app paths: "?redirect=https://elsewhere" must not survive, and a
+     protocol-relative "//host" is a URL to somebody else's site. */
+  const requested = params.get('redirect') || location.state?.from?.pathname || '/';
+  const redirectTo = /^\/(?!\/)/.test(requested) ? requested : '/';
 
   const {
     register,

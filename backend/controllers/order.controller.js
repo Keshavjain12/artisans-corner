@@ -5,7 +5,11 @@ import asyncHandler from '../utils/asyncHandler.js';
 import sendSuccess from '../utils/apiResponse.js';
 import { round2 } from '../utils/money.js';
 import { buildMeta, getPagination } from '../utils/pagination.js';
-import { deriveOrderStatus, restockOrder } from '../services/order.service.js';
+import {
+  deriveOrderStatus,
+  restockOrder,
+  reverseStoreTotals,
+} from '../services/order.service.js';
 
 /**
  * Vendors only ever see their own lines of a shared order, plus the shipping
@@ -120,7 +124,8 @@ export const updateFulfilmentStatus = asyncHandler(async (req, res) => {
     if (trackingNumber) item.trackingNumber = trackingNumber;
   }
 
-  if (status === 'cancelled') await restockOrder(order);
+  // Only the lines this vendor just cancelled go back on the shelf.
+  if (status === 'cancelled') await restockOrder(order, targets);
 
   order.orderStatus = deriveOrderStatus(order);
   order.statusHistory.push({
@@ -158,9 +163,14 @@ export const cancelOrder = asyncHandler(async (req, res) => {
   });
   order.orderStatus = 'cancelled';
   order.cancelledAt = new Date();
-  order.statusHistory.push({ status: 'cancelled', note: 'Cancelled by buyer', at: new Date() });
+  order.statusHistory.push({
+    status: 'cancelled',
+    note: isAdmin ? 'Cancelled by an admin' : 'Cancelled by buyer',
+    at: new Date(),
+  });
   await order.save();
   await Payout.updateMany({ order: order._id }, { status: 'reversed' });
+  if (order.paymentStatus === 'paid') await reverseStoreTotals(order);
 
   return sendSuccess(res, { message: 'Order cancelled', data: { order } });
 });

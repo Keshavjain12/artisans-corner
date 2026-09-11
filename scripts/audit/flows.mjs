@@ -149,6 +149,67 @@ check('deleted product cannot be bought', ghost.status === 400, ghost.body?.mess
 const webhookNoSig = await call('/payments/webhook', { method: 'POST', body: { type: 'x' } });
 check('webhook without a signature is refused', [400, 503].includes(webhookNoSig.status), `status ${webhookNoSig.status}`);
 
+/* --------------------------------- ONE VENDOR CANCELS A SHARED ORDER */
+section('PARTIAL CANCELLATION IN A SHARED ORDER');
+
+/* The bug this covers: restocking filtered by fulfilment status, and the
+   vendor's own line was marked "cancelled" first - so the cancelled line got
+   nothing back while the *other* shop's line, still being fulfilled, was
+   restocked and had its sales counter wound back. */
+const partA = await registerVendor(`Partial A ${rand()}`);
+const partB = await registerVendor(`Partial B ${rand()}`);
+const prodA = (await makeProduct(partA.token, { price: 30, stock: 10 })).product;
+const prodB = (await makeProduct(partB.token, { price: 50, stock: 10 })).product;
+const partBuyer = await registerBuyer();
+
+const sharedIntent = await call('/payments/create-intent', {
+  method: 'POST',
+  token: partBuyer.token,
+  body: {
+    items: [
+      { productId: prodA._id, quantity: 2 },
+      { productId: prodB._id, quantity: 3 },
+    ],
+    shippingAddress: SHIP,
+  },
+});
+const sharedOrderId = (
+  await call('/payments/confirm', {
+    method: 'POST',
+    token: partBuyer.token,
+    body: { paymentIntentId: sharedIntent.body.data.paymentIntentId },
+  })
+).body.data.order._id;
+
+const stockOf = async (slug) => (await call(`/products/${slug}`)).body.data.product.stock;
+check('both shops had stock taken', (await stockOf(prodA.slug)) === 8 && (await stockOf(prodB.slug)) === 7);
+
+// Shop A cancels only its own line.
+const partialCancel = await call(`/orders/${sharedOrderId}/status`, {
+  method: 'PUT',
+  token: partA.token,
+  body: { status: 'cancelled' },
+});
+check('a vendor can cancel their own line', partialCancel.status === 200, partialCancel.body?.message);
+
+const afterA = await stockOf(prodA.slug);
+const afterB = await stockOf(prodB.slug);
+check('the cancelled line stock comes back', afterA === 10, `stock ${afterA}`);
+check('the other shop stock is untouched', afterB === 7, `stock ${afterB}`);
+
+// Shop B ships, then the buyer tries to cancel what is left.
+await call(`/orders/${sharedOrderId}/status`, {
+  method: 'PUT',
+  token: partB.token,
+  body: { status: 'shipped' },
+});
+const lateBuyerCancel = await call(`/orders/${sharedOrderId}/cancel`, {
+  method: 'POST',
+  token: partBuyer.token,
+});
+check('a buyer cannot cancel once the remaining line has shipped', lateBuyerCancel.status === 400);
+check('a shipped line keeps its stock', (await stockOf(prodB.slug)) === 7);
+
 /* --------------------------------------------- CANCELLATION / RESTOCK */
 section('ORDER CANCELLATION');
 const cancelVendor = await registerVendor(`Cancel Studio ${rand()}`);

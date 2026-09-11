@@ -144,7 +144,14 @@ export async function getVendorAnalytics(storeId, range = '30d') {
 /** Platform-wide analytics for the admin dashboard. */
 export async function getAdminAnalytics(range = '30d') {
   const { from, to } = resolveRange(range);
-  const paidInRange = { paymentStatus: 'paid', createdAt: { $gte: from, $lte: to } };
+  /* Cancelled orders are excluded to agree with the revenue report, which
+     ignores reversed payouts. Two screens quoting different platform revenue
+     is worse than either number. */
+  const paidInRange = {
+    paymentStatus: 'paid',
+    orderStatus: { $ne: 'cancelled' },
+    createdAt: { $gte: from, $lte: to },
+  };
 
   const [totalsRow] = await Order.aggregate([
     { $match: paidInRange },
@@ -220,7 +227,7 @@ export async function getAdminAnalytics(range = '30d') {
       Store.countDocuments({ isActive: true }),
       Product.countDocuments({ isArchived: false }),
       Product.countDocuments({ isArchived: false, isActive: true }),
-      Order.countDocuments({ paymentStatus: 'paid' }),
+      Order.countDocuments({ paymentStatus: 'paid', orderStatus: { $ne: 'cancelled' } }),
     ]);
 
   const ordersInRange = totalsRow?.orders || 0;

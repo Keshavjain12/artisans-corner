@@ -33,8 +33,10 @@ export async function finalizePaidOrder(order, { paymentIntentId, chargeId = '' 
       );
 
       if (!updated) {
-        // Sold out between payment intent creation and capture.
+        /* Sold out between payment intent creation and capture. No stock was
+           taken for this line, so it holds nothing to give back. */
         item.fulfillmentStatus = 'cancelled';
+        item.restocked = true;
         refundDue = round2(refundDue + item.subtotal);
       }
     }
@@ -124,20 +126,66 @@ export async function markOrderFailed(order, reason = 'Payment was not completed
   return order;
 }
 
-/** Returns stock for an order that is cancelled after inventory was applied. */
-export async function restockOrder(order) {
+/**
+ * Gives stock back for the given lines, defaulting to the whole order.
+ *
+ * Driven by the per-line `restocked` flag rather than by fulfilment status.
+ * Status was the wrong signal: a vendor cancelling their line marks it
+ * "cancelled" first, so a status-based filter skipped exactly the line being
+ * cancelled and instead returned another vendor's stock while they were still
+ * fulfilling it.
+ */
+export async function restockOrder(order, lines = order.items) {
   if (!order.inventoryApplied) return;
+
+  const holding = lines.filter((item) => !item.restocked);
+  if (holding.length === 0) return;
+
   await Promise.all(
-    order.items
-      .filter((item) => item.fulfillmentStatus !== 'cancelled')
-      .map((item) =>
-        Product.updateOne(
-          { _id: item.product },
-          { $inc: { stock: item.quantity, unitsSold: -item.quantity } }
-        )
-      )
+    holding.map((item) => Product.updateOne({ _id: item.product }, { $inc: { stock: item.quantity } }))
   );
-  order.inventoryApplied = false;
+
+  /* unitsSold is a lifetime counter that drives "best selling", so it is
+     decremented conditionally - a cancellation must never push it negative. */
+  await Promise.all(
+    holding.map((item) =>
+      Product.updateOne(
+        { _id: item.product, unitsSold: { $gte: item.quantity } },
+        { $inc: { unitsSold: -item.quantity } }
+      )
+    )
+  );
+
+  holding.forEach((item) => {
+    item.restocked = true;
+  });
+
+  // The order only stops holding inventory once every line has been returned.
+  if (order.items.every((item) => item.restocked)) order.inventoryApplied = false;
+}
+
+/**
+ * Reverses the vendor-facing totals a cancelled order contributed.
+ *
+ * recordPayouts increments these when an order is paid, and the shop directory
+ * ranks by totalSales - so without this a cancelled sale would keep promoting
+ * the shop forever.
+ */
+export async function reverseStoreTotals(order) {
+  const byVendor = new Map();
+  for (const item of order.items) {
+    const key = String(item.vendor);
+    byVendor.set(key, round2((byVendor.get(key) || 0) + item.vendorEarnings));
+  }
+
+  await Promise.all(
+    [...byVendor.entries()].map(([vendor, earnings]) =>
+      Store.updateOne(
+        { _id: vendor },
+        { $inc: { totalSales: -earnings, totalOrders: -1 } }
+      )
+    )
+  );
 }
 
 /** Order status is the least-advanced stage across its per-vendor line items. */

@@ -115,7 +115,10 @@ export default function Shop() {
           <label className="sr-only" htmlFor="minPrice">
             Minimum price
           </label>
+          {/* Keyed on the value so clearing the filters clears the box too:
+              an uncontrolled input ignores a changed defaultValue. */}
           <input
+            key={`min-${query.minPrice}`}
             id="minPrice"
             type="number"
             min="0"
@@ -129,6 +132,7 @@ export default function Shop() {
             Maximum price
           </label>
           <input
+            key={`max-${query.maxPrice}`}
             id="maxPrice"
             type="number"
             min="0"

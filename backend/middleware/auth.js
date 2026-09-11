@@ -1,3 +1,4 @@
+import Store from '../models/Store.js';
 import User from '../models/User.js';
 import ApiError from '../utils/ApiError.js';
 import asyncHandler from '../utils/asyncHandler.js';
@@ -61,7 +62,6 @@ export const requireStore = asyncHandler(async (req, _res, next) => {
   if (!['vendor', 'admin'].includes(req.user.role)) {
     throw ApiError.forbidden('Become a seller to access your vendor dashboard');
   }
-  const { default: Store } = await import('../models/Store.js');
   const store = await Store.findOne({ owner: req.user._id });
   if (!store) throw ApiError.forbidden('Finish setting up your store first');
   if (!store.isActive && req.user.role !== 'admin') {

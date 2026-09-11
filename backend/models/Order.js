@@ -38,6 +38,11 @@ const orderItemSchema = new mongoose.Schema(
     fulfillmentStatus: { type: String, enum: FULFILMENT_STATUSES, default: 'processing' },
     trackingNumber: { type: String, default: '' },
     reviewed: { type: Boolean, default: false },
+    /* Whether this line's stock has been given back. False means the line is
+       still holding decremented stock, which is the only safe basis for
+       restocking: a vendor cancelling their own line and a buyer cancelling
+       the whole order must not both return the same units. */
+    restocked: { type: Boolean, default: false },
   },
   { _id: true }
 );

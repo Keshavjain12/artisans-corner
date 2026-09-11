@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { ArrowLeft, Package, ShieldCheck, ShoppingBag, Store, Truck } from 'lucide-react';
@@ -31,6 +31,17 @@ export default function ProductDetail() {
   const product = data?.data?.product;
   const related = data?.data?.related || [];
   useDocumentTitle(product?.name);
+
+  /* Reset the gallery and quantity for each new piece: "You might also like"
+     navigates without unmounting this page, so thumbnail 2 of the last product
+     would otherwise select a nonexistent image on a product that has one. */
+  /* Reset the gallery and quantity for each new piece: "You might also like"
+     navigates without unmounting this page, so thumbnail 2 of the last product
+     would otherwise select a nonexistent image on a product that has one. */
+  useEffect(() => {
+    setActiveImage(0);
+    setQuantity(1);
+  }, [slug]);
 
   if (loading) {
     return (
@@ -109,8 +120,8 @@ export default function ProductDetail() {
           <div className="overflow-hidden rounded-2xl border border-sand bg-white">
             {product.images?.length ? (
               <img
-                src={product.images[activeImage]?.url}
-                alt={product.images[activeImage]?.alt || product.name}
+                src={(product.images[activeImage] || product.images[0]).url}
+                alt={(product.images[activeImage] || product.images[0]).alt || product.name}
                 className="aspect-square w-full object-cover"
               />
             ) : (

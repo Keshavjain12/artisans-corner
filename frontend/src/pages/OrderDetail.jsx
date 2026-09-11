@@ -174,6 +174,12 @@ export default function OrderDetail() {
               <br />
               {order.shippingAddress.addressLine1}
               <br />
+              {order.shippingAddress.addressLine2 && (
+                <>
+                  {order.shippingAddress.addressLine2}
+                  <br />
+                </>
+              )}
               {order.shippingAddress.city}, {order.shippingAddress.state}{' '}
               {order.shippingAddress.postalCode}
               <br />

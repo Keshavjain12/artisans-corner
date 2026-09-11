@@ -51,13 +51,27 @@ export function Navbar() {
   const [accountOpen, setAccountOpen] = useState(false);
   const [term, setTerm] = useState('');
   const accountRef = useRef(null);
+  const accountButtonRef = useRef(null);
 
   useEffect(() => {
     const onClick = (event) => {
       if (accountRef.current && !accountRef.current.contains(event.target)) setAccountOpen(false);
     };
+    // Escape closes the menu and hands focus back to the button that opened it.
+    const onKeyDown = (event) => {
+      if (event.key !== 'Escape') return;
+      setAccountOpen((open) => {
+        if (open) accountButtonRef.current?.focus();
+        return false;
+      });
+      setMobileOpen(false);
+    };
     document.addEventListener('mousedown', onClick);
-    return () => document.removeEventListener('mousedown', onClick);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', onClick);
+      document.removeEventListener('keydown', onKeyDown);
+    };
   }, []);
 
   const submitSearch = (event) => {
@@ -160,6 +174,7 @@ export function Navbar() {
               <div className="relative" ref={accountRef}>
                 <button
                   type="button"
+                  ref={accountButtonRef}
                   onClick={() => setAccountOpen((open) => !open)}
                   className="btn-ghost gap-1.5 px-2.5"
                   aria-expanded={accountOpen}

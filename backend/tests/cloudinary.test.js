@@ -92,10 +92,13 @@ describe('a vendor photo goes to the cloud, not the database', () => {
     expect(cloud.bytesReceived[0]).toBe(PNG.length);
 
     const [image] = res.body.data.images;
+    /* The id carries the uploader's account, which is what lets the delete
+       endpoint tell one vendor's images from another's. */
+    const folder = `artisans-corner/products/${vendor.user.id}`;
     expect(image.url).toBe(
-      'https://res.cloudinary.com/test-cloud/image/upload/v1/artisans-corner/products/img_1.webp'
+      `https://res.cloudinary.com/test-cloud/image/upload/v1/${folder}/img_1.webp`
     );
-    expect(image.publicId).toBe('artisans-corner/products/img_1');
+    expect(image.publicId).toBe(`${folder}/img_1`);
     expect(res.body.data.storage).toBe('cloudinary');
   });
 
@@ -104,7 +107,7 @@ describe('a vendor photo goes to the cloud, not the database', () => {
     await uploadAs(vendor.token);
 
     const options = cloud.uploads[0];
-    expect(options.folder).toBe('artisans-corner/products');
+    expect(options.folder).toBe(`artisans-corner/products/${vendor.user.id}`);
     expect(options.resource_type).toBe('image');
     expect(options.format).toBe('webp');
     expect(options.transformation).toEqual(
@@ -224,6 +227,32 @@ describe('what never reaches Cloudinary', () => {
 
     expect(res.status).toBe(403);
     expect(cloudinaryMock.uploader.upload_stream).not.toHaveBeenCalled();
+  });
+
+  it('will not let one vendor delete an image belonging to another', async () => {
+    /* A product's image URL exposes its public id to anybody who can open the
+       page, so "delete by public id" has to prove ownership. */
+    const owner = await registerVendor('Owner Studio');
+    const stranger = await registerVendor('Stranger Studio');
+
+    const upload = await uploadAs(owner.token);
+    const { publicId } = upload.body.data.images[0];
+
+    const denied = await api()
+      .delete('/api/uploads')
+      .set('Authorization', `Bearer ${stranger.token}`)
+      .send({ publicId });
+
+    expect(denied.status).toBe(403);
+    expect(cloudinaryMock.uploader.destroy).not.toHaveBeenCalled();
+
+    const allowed = await api()
+      .delete('/api/uploads')
+      .set('Authorization', `Bearer ${owner.token}`)
+      .send({ publicId });
+
+    expect(allowed.status).toBe(200);
+    expect(cloud.destroyed).toEqual([publicId]);
   });
 
   it('surfaces a Cloudinary outage as a clean error, not a stack trace', async () => {

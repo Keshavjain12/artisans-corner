@@ -281,7 +281,7 @@ Individual commands:
 | `npm run docs:screenshots` | Recapture the README screenshots |
 | `npm --prefix backend run seed:destroy` | Empty the database |
 | `npm test` | Backend + frontend test suites |
-| `npm run audit` | 196-check quality-bar audit against a running app |
+| `npm run audit` | 202-check quality-bar audit against a running app |
 | `npm run audit:ci` | Same audit, but boots and tears down its own server |
 | `npm run test:e2e` | 26 browser tests through real Chrome (desktop + phone) |
 | `npm run verify` | Everything: lint, tests, audit and browser suite |
@@ -534,14 +534,14 @@ a product never rewrites order history.
 ```bash
 npm run verify        # everything below, in order
 
-npm test              # 72 backend + 41 frontend
+npm test              # 73 backend + 41 frontend
 npm run test:backend   # API and business logic, in-memory MongoDB
 npm run test:frontend   # components, cart and route guards, jsdom + Vitest
-npm run test:e2e      # 36 browser tests in real Chrome, desktop and phone
-npm run audit:ci      # 196 checks against a disposable server
+npm run test:e2e      # 37 browser tests in real Chrome, desktop and phone
+npm run audit:ci      # 202 checks against a disposable server
 ```
 
-**149 automated tests and 196 audit checks**, none of which need a database,
+**151 automated tests and 202 audit checks**, none of which need a database,
 a Stripe account or a Cloudinary account to run.
 
 The backend suite runs against an in-memory MongoDB (`mongodb-memory-server`),
@@ -561,6 +561,7 @@ application itself. It covers what only a browser can:
 - both dashboards, with charts and money on screen
 - writing a verified review, editing it, and never being told a piece was not
   bought when it was
+- a product gallery that still shows a photograph after following a related piece
 - every image on the busiest pages actually loading, with alt text, and a shop
   name not painted over by its own banner
 - five phone-sized checks: the nav collapsing to a menu, the grid reflowing to
@@ -577,7 +578,7 @@ API and asserts the behaviour end to end:
 | --- | --- |
 | `project` | Every route is documented, README credentials match the seed, `.env.example` is complete, ports agree with the code, no secret appears in the built bundle, mobile nav / responsive grids / focus rings / empty states are present |
 | `api` | Registration and login rules, JWT and role authorisation, catalogue search-filter-sort-paginate, server-side pricing and commission, order lifecycle, verified reviews, vendor analytics, admin moderation and revenue |
-| `flows` | Real multipart image upload (including a file only pretending to be an image), multi-vendor baskets and their per-shop payouts, payment failure paths, cancellation and restock, paused shops and sold-out stock |
+| `flows` | Real multipart image upload (including a file only pretending to be an image, and one vendor trying to delete another's photograph), multi-vendor baskets and their per-shop payouts, payment failure paths, cancellation and restock - including one shop cancelling its line of a shared order without touching the other's stock - paused shops and sold-out stock |
 
 The audit registers accounts, publishes shops and pays for orders, so it refuses
 to run against a server whose database is persistent - `/api/health` reports

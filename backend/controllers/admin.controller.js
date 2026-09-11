@@ -8,9 +8,7 @@ import asyncHandler from '../utils/asyncHandler.js';
 import sendSuccess from '../utils/apiResponse.js';
 import { round2 } from '../utils/money.js';
 import { buildMeta, getPagination } from '../utils/pagination.js';
-
-const term = (value) => String(value || '').replace(/[^a-zA-Z0-9 @.'-]+/g, ' ').trim().slice(0, 60);
-const rxOf = (value) => new RegExp(term(value).split(' ').filter(Boolean).join('|'), 'i');
+import { searchRegex } from '../utils/search.js';
 
 export const listUsers = asyncHandler(async (req, res) => {
   const { page, limit, skip } = getPagination(req.query, { defaultLimit: 20, maxLimit: 100 });
@@ -18,10 +16,8 @@ export const listUsers = asyncHandler(async (req, res) => {
   if (req.query.role) filter.role = req.query.role;
   if (req.query.status === 'active') filter.isActive = true;
   if (req.query.status === 'inactive') filter.isActive = false;
-  if (term(req.query.q)) {
-    const rx = rxOf(req.query.q);
-    filter.$or = [{ name: rx }, { email: rx }];
-  }
+  const rx = searchRegex(req.query.q);
+  if (rx) filter.$or = [{ name: rx }, { email: rx }];
 
   const [users, total] = await Promise.all([
     User.find(filter).populate('store', 'name slug').sort({ createdAt: -1 }).skip(skip).limit(limit),
@@ -59,7 +55,8 @@ export const listStores = asyncHandler(async (req, res) => {
   const filter = {};
   if (req.query.status === 'active') filter.isActive = true;
   if (req.query.status === 'suspended') filter.isActive = false;
-  if (term(req.query.q)) filter.name = rxOf(req.query.q);
+  const rx = searchRegex(req.query.q);
+  if (rx) filter.name = rx;
 
   const [stores, total] = await Promise.all([
     Store.find(filter).populate('owner', 'name email').sort({ createdAt: -1 }).skip(skip).limit(limit),
@@ -95,7 +92,8 @@ export const listProducts = asyncHandler(async (req, res) => {
   if (req.query.status === 'hidden') filter.isActive = false;
   if (req.query.status === 'archived') filter.isArchived = true;
   if (req.query.category) filter.category = String(req.query.category).toLowerCase();
-  if (term(req.query.q)) filter.name = rxOf(req.query.q);
+  const rx = searchRegex(req.query.q);
+  if (rx) filter.name = rx;
 
   const [products, total] = await Promise.all([
     Product.find(filter).populate('vendor', 'name slug').sort({ createdAt: -1 }).skip(skip).limit(limit),
@@ -127,7 +125,8 @@ export const listOrders = asyncHandler(async (req, res) => {
   const filter = { paymentStatus: { $ne: 'pending' } };
   if (req.query.status) filter.orderStatus = req.query.status;
   if (req.query.paymentStatus) filter.paymentStatus = req.query.paymentStatus;
-  if (term(req.query.q)) filter.orderNumber = rxOf(req.query.q);
+  const rx = searchRegex(req.query.q);
+  if (rx) filter.orderNumber = rx;
 
   const [orders, total] = await Promise.all([
     Order.find(filter).populate('buyer', 'name email').sort({ createdAt: -1 }).skip(skip).limit(limit),

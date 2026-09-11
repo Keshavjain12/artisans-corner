@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { emailSchema, passwordSchema, trimmed } from './common.js';
+import { emailSchema, optionalImageUrl, passwordSchema, trimmed } from './common.js';
 
 export const registerSchema = z
   .object({
@@ -21,7 +21,7 @@ export const loginSchema = z.object({
 export const updateProfileSchema = z.object({
   name: trimmed(2, 80, 'Name').optional(),
   phone: z.string().trim().max(20).optional(),
-  avatar: z.string().trim().max(500).optional(),
+  avatar: optionalImageUrl,
 });
 
 export const changePasswordSchema = z

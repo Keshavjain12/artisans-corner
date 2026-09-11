@@ -65,6 +65,8 @@ export default function BecomeSeller() {
       navigate('/dashboard/seller', { replace: true });
     } catch (error) {
       toast.error(error.message);
+      // Name the offending fields; the message alone does not.
+      (error.fieldErrors || []).forEach((issue) => toast.error(`${issue.field}: ${issue.message}`));
     } finally {
       setSubmitting(false);
     }

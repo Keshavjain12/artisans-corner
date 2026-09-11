@@ -51,6 +51,14 @@ function PaymentForm({ onPaid, amountLabel }) {
       return;
     }
 
+    /* Redirect-based methods come back with no intent to report - the shopper
+       has left for their bank and the webhook will finish the order. */
+    if (!result.paymentIntent?.id) {
+      setError('That payment needs to be completed with your bank. Check your orders in a moment.');
+      setSubmitting(false);
+      return;
+    }
+
     try {
       await onPaid(result.paymentIntent.id);
     } catch (confirmError) {

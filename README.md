@@ -537,11 +537,11 @@ npm run verify        # everything below, in order
 npm test              # 72 backend + 41 frontend
 npm run test:backend   # API and business logic, in-memory MongoDB
 npm run test:frontend   # components, cart and route guards, jsdom + Vitest
-npm run test:e2e      # 35 browser tests in real Chrome, desktop and phone
+npm run test:e2e      # 36 browser tests in real Chrome, desktop and phone
 npm run audit:ci      # 196 checks against a disposable server
 ```
 
-**148 automated tests and 196 audit checks**, none of which need a database,
+**149 automated tests and 196 audit checks**, none of which need a database,
 a Stripe account or a Cloudinary account to run.
 
 The backend suite runs against an in-memory MongoDB (`mongodb-memory-server`),
@@ -561,7 +561,8 @@ application itself. It covers what only a browser can:
 - both dashboards, with charts and money on screen
 - writing a verified review, editing it, and never being told a piece was not
   bought when it was
-- every image on the busiest pages actually loading, with alt text
+- every image on the busiest pages actually loading, with alt text, and a shop
+  name not painted over by its own banner
 - five phone-sized checks: the nav collapsing to a menu, the grid reflowing to
   two columns, dashboard tables scrolling instead of the page, and no horizontal
   overflow anywhere

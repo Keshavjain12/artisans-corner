@@ -25,9 +25,9 @@ const manifest = (() => {
   try {
     const parsed = JSON.parse(fs.readFileSync(MANIFEST, 'utf8'));
     // Older manifests were a flat map of slug -> { main, second }.
-    return parsed.products ? parsed : { products: parsed, categories: {} };
+    return parsed.products ? parsed : { products: parsed, categories: {}, stores: {} };
   } catch {
-    return { products: {}, categories: {} };
+    return { products: {}, categories: {}, stores: {} };
   }
 })();
 
@@ -37,9 +37,13 @@ export const productPhoto = (slug) => manifest.products?.[slug];
 /** The 4:3 tile for a category slug, or undefined. */
 export const categoryPhoto = (slug) => manifest.categories?.[slug];
 
+/** The wide banner for a shop key, or undefined. */
+export const storePhoto = (key) => manifest.stores?.[key];
+
 export const photoCounts = () => ({
   products: Object.keys(manifest.products || {}).length,
   categories: Object.keys(manifest.categories || {}).length,
+  stores: Object.keys(manifest.stores || {}).length,
 });
 
 export default manifest;

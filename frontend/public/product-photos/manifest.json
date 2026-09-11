@@ -102,5 +102,13 @@
     "ceramics": "/product-photos/category-ceramics.webp",
     "bags": "/product-photos/category-bags.webp",
     "accessories": "/product-photos/category-accessories.webp"
+  },
+  "stores": {
+    "terra": "/product-photos/store-terra.webp",
+    "kiln": "/product-photos/store-kiln.webp",
+    "fern": "/product-photos/store-fern.webp",
+    "oak": "/product-photos/store-oak.webp",
+    "indigo": "/product-photos/store-indigo.webp",
+    "pigment": "/product-photos/store-pigment.webp"
   }
 }

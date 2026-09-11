@@ -1,5 +1,5 @@
 /** Realistic demo catalogue for the seeded marketplace. */
-import { productPhoto } from '../config/photoManifest.js';
+import { productPhoto, storePhoto } from '../config/photoManifest.js';
 
 export const DEMO_PASSWORDS = {
   admin: 'DemoAdmin123!',
@@ -122,9 +122,15 @@ export const productArt = (name) => {
   ];
 };
 
+/**
+ * A shop's imagery. The banner is a real photograph once one has been imported
+ * for that shop, falling back to the generated illustration otherwise. The logo
+ * stays drawn on purpose: it reads as a maker's mark at 80px, which a cropped
+ * photograph does not.
+ */
 export const storeArt = (key) => ({
   logo: `/seed-art/store-${key}-logo.svg`,
-  banner: `/seed-art/store-${key}-banner.svg`,
+  banner: storePhoto(key) || `/seed-art/store-${key}-banner.svg`,
 });
 
 export const PRODUCTS = [

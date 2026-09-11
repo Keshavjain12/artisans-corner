@@ -46,6 +46,38 @@ const QUALITY = 82;
 const CATEGORY_W = 1200;
 const CATEGORY_H = 900;
 
+/* A shop banner runs the full width of the storefront and the top of its card
+   in the artisan directory, so it is cropped wide rather than square. */
+const STORE_W = 1600;
+const STORE_H = 500;
+
+/**
+ * The piece that stands in for each shop on its banner. Chosen for how the
+ * photograph survives a wide crop - a long board or a row of cups keeps its
+ * subject, a single tall vase loses its top and bottom. A shop with no entry
+ * falls back to the first of its own products that has a photo, and an
+ * explicit photos/store-<key>.jpg beats both.
+ */
+const STORE_FACE = {
+  terra: 'hand-thrown-tea-set',
+  kiln: 'salt-white-espresso-cups',
+  fern: 'fine-silver-stacking-rings',
+  oak: 'walnut-serving-board',
+  indigo: 'handloom-cotton-table-runner',
+  pigment: 'letterpress-greeting-card-set',
+};
+
+/**
+ * Where to take the wide crop from. Centre keeps the composition the
+ * photographer chose and is right almost every time; `attention` finds the
+ * busiest region instead, which rescues a shot framed high - the stacking
+ * rings sat in the top third and a centre crop cut them in half - at the cost
+ * of zooming in. Only listed shops deviate.
+ */
+const STORE_CROP = {
+  fern: sharp.strategy.attention,
+};
+
 /**
  * The piece that best represents each craft on a category tile. Hand-picked
  * for how the photograph reads at tile size; any category without an entry
@@ -161,6 +193,7 @@ const files = fs
 
 const products = {};
 const categories = {};
+const stores = {};
 const warnings = [];
 
 /** slug -> the original file it came from, for deriving the category crop. */
@@ -262,6 +295,32 @@ for (const category of CATEGORY_SEED) {
   categories[category.slug] = `/product-photos/${target}`;
 }
 
+/* --------------------------------------------------------- shop banners --- */
+
+const { STORES } = await import('../backend/seed/data.js');
+
+for (const store of STORES) {
+  const explicit = sourceFor.get(`store-${store.key}`);
+  const face = STORE_FACE[store.key];
+  const fallback = PRODUCTS.filter((product) => product.store === store.key)
+    .map((product) => artSlug(product.name))
+    .find((slug) => sourceFor.has(slug));
+
+  const source = explicit || (face && sourceFor.get(face)) || (fallback && sourceFor.get(fallback));
+  if (!source) continue;
+
+  const target = `store-${store.key}.webp`;
+  /* eslint-disable no-await-in-loop */
+  await sharp(source)
+    .rotate()
+    .resize(STORE_W, STORE_H, { fit: 'cover', position: STORE_CROP[store.key] ?? 'centre' })
+    .webp({ quality: QUALITY, effort: 5 })
+    .toFile(path.join(OUT, target));
+  /* eslint-enable no-await-in-loop */
+
+  stores[store.key] = `/product-photos/${target}`;
+}
+
 /* Nothing else should linger in the served folder - a stale file from an
    earlier run would be dead weight in the repo. */
 const keep = new Set([
@@ -270,6 +329,7 @@ const keep = new Set([
     Object.values(entry).map((url) => path.basename(url))
   ),
   ...Object.values(categories).map((url) => path.basename(url)),
+  ...Object.values(stores).map((url) => path.basename(url)),
 ]);
 for (const existing of fs.readdirSync(OUT)) {
   if (!keep.has(existing)) {
@@ -278,7 +338,7 @@ for (const existing of fs.readdirSync(OUT)) {
   }
 }
 
-fs.writeFileSync(MANIFEST, `${JSON.stringify({ products, categories }, null, 2)}\n`);
+fs.writeFileSync(MANIFEST, `${JSON.stringify({ products, categories, stores }, null, 2)}\n`);
 
 /* ------------------------------------------------------------------ report */
 
@@ -313,7 +373,10 @@ if (processed.length) {
 console.log(`\nImported ${files.length - skipped} file(s).`);
 console.log(`${Object.keys(products).length} of ${slugs.size} products now have a real photograph.`);
 console.log(
-  `${Object.keys(categories).length} of ${CATEGORY_SEED.length} category tiles cropped to ${CATEGORY_W}x${CATEGORY_H}.\n`
+  `${Object.keys(categories).length} of ${CATEGORY_SEED.length} category tiles cropped to ${CATEGORY_W}x${CATEGORY_H}.`
+);
+console.log(
+  `${Object.keys(stores).length} of ${STORES.length} shop banners cropped to ${STORE_W}x${STORE_H}.\n`
 );
 
 if (warnings.length) {

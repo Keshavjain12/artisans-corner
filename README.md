@@ -18,6 +18,7 @@ Express + MongoDB on the back, Stripe for payments and Cloudinary for imagery.
 | --- | --- |
 | **1. GitHub repository** — controllers, models, routes and middleware kept apart; no API keys committed | This repo. See [folder structure](#folder-structure); `.env` is git-ignored and [`.env.example`](.env.example) documents every variable. A [check in the audit](#the-audit) fails the build if a secret ever reaches the client bundle. |
 | **2. Live application** — a working deployed link, with demo credentials for a vendor and a buyer | Not yet deployed. [`DEPLOYMENT.md`](DEPLOYMENT.md) is the exact 30-minute sequence (Atlas → Cloudinary → Stripe → Render → Vercel), and [demo credentials](#demo-credentials) are below. Locally: `npm run dev:memory`. |
+| **Payments** — Stripe in test mode | Integrated and tested, but **unkeyed**: Stripe onboarding is invite-only in India and requires company registration documents. See [`docs/stripe-integration.md`](docs/stripe-integration.md) for the code path, the 17 passing tests, and the one-minute switch-on. |
 | **3. Database schema diagram** — an image showing how Users, Products, Orders and Reviews connect | [`docs/database-schema.png`](docs/database-schema.png), shown [below](#database-schema). Regenerate with `npm run docs:schema`. |
 
 ### Try it in two commands
@@ -373,6 +374,15 @@ production requires real credentials.
 ---
 
 ## Stripe setup
+
+> **Read this first if you are reviewing the payment work:**
+> [`docs/stripe-integration.md`](docs/stripe-integration.md) — the full payment
+> path file by file, the 17 tests that prove it (including genuine webhook
+> signature verification), and why this repository ships without keys. Stripe
+> does not accept sign-ups from India without an invitation, and the invitation
+> process requires company PAN / GSTIN / CIN documents that a student project
+> cannot produce. The integration is complete; three environment variables and a
+> restart switch it onto the real card form, with no code change.
 
 1. Create an account at <https://stripe.com> and stay in **test mode**.
 2. Copy the test keys into `backend/.env`:

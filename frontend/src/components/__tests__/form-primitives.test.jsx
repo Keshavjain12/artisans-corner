@@ -1,17 +1,8 @@
-/**
- * Regression guard for the form primitives.
- *
- * react-hook-form registers a field by attaching a ref to the real DOM node. If
- * Input/Textarea/Select stop forwarding that ref, React drops it silently and
- * every field validates as empty no matter what the user types - the whole
- * app's forms break at once, with no build or lint error to catch it.
- */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { useForm } from 'react-hook-form';
 import { Input, Select, Textarea } from '../ui.jsx';
 
-// Vitest runs without globals, so RTL's automatic cleanup is not wired up.
 afterEach(cleanup);
 
 function SignUpForm({ onValid }) {
@@ -67,7 +58,6 @@ describe('form primitives forward their ref to react-hook-form', () => {
       bio: 'I make ceramics.',
       plan: 'buyer',
     });
-    // The exact symptom from the bug report: filled fields still flagged empty.
     expect(screen.queryAllByRole('alert')).toHaveLength(0);
   });
 

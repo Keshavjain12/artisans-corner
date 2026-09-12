@@ -11,7 +11,6 @@ import {
   rand,
 } from './harness.mjs';
 
-/* ---------------------------------------------------------------- AUTH */
 section('AUTH');
 const buyerToken = await login('buyer@artisanscorner.demo', 'DemoBuyer123!');
 const vendorToken = await login('vendor@artisanscorner.demo', 'DemoVendor123!');
@@ -65,7 +64,6 @@ const pwChange = await call('/auth/change-password', {
 check('password change works', pwChange.status === 200, pwChange.body?.message);
 check('new password is usable', Boolean(await login(fresh.email, 'NewPassw0rd1').catch(() => null)));
 
-/* -------------------------------------------------------------- VENDOR */
 section('VENDOR');
 const vendorA = await registerVendor(`Audit Studio A ${rand()}`);
 check('become a seller works', vendorA.onboard.status === 201 && Boolean(vendorA.store?.slug));
@@ -118,7 +116,6 @@ const storeUpdate = await call('/vendors/me', {
 });
 check('store profile editing works', storeUpdate.body?.data?.store?.tagline === 'Audited tagline');
 
-/* ---------------------------------------------------------------- SHOP */
 section('SHOP');
 const listing = await call('/products?limit=5');
 check('product listing works', listing.status === 200 && listing.body.data.length === 5);
@@ -161,7 +158,6 @@ check('artisan directory works', stores.body.data.length > 0 && stores.body.data
 const storePage = await call(`/vendors/${stores.body.data[0].slug}`);
 check('storefront page works', storePage.status === 200 && Array.isArray(storePage.body.data.products));
 
-/* ------------------------------------------------------------ CHECKOUT */
 section('CHECKOUT / CART SECURITY');
 const shopVendor = await registerVendor(`Audit Shop ${rand()}`);
 const p100 = (await makeProduct(shopVendor.token, { price: 100, stock: 5 })).product;
@@ -206,7 +202,6 @@ check('checkout requires authentication', anonIntent.status === 401);
 const paymentConfig = await call('/payments/config');
 check('payment config is public and has no secret', paymentConfig.status === 200 && !/sk_|secret/i.test(paymentConfig.text));
 
-/* -------------------------------------------------------------- ORDERS */
 section('ORDERS');
 const purchase = await buy(buyerToken, p100._id, 2);
 check('payment success creates a paid order', purchase.order?.paymentStatus === 'paid', purchase.confirm?.body?.message);
@@ -258,7 +253,6 @@ check('sold product is archived, not deleted', soldProduct.body?.data?.archived 
 const stillThere = await call(`/orders/${purchase.order._id}`, { token: buyerToken });
 check('archived product keeps order history intact', stillThere.body.data.order.items[0].productNameSnapshot?.length > 0);
 
-/* ------------------------------------------------------------- REVIEWS */
 section('REVIEWS');
 const reviewVendor = await registerVendor(`Review Studio ${rand()}`);
 const reviewable = (await makeProduct(reviewVendor.token, { price: 40, stock: 5 })).product;
@@ -320,7 +314,6 @@ check(
 );
 check('rating distribution returned', productReviews.body.data.distribution.length === 5);
 
-/* ----------------------------------------------------------- DASHBOARD */
 section('VENDOR DASHBOARD');
 const analytics = await call('/vendors/me/analytics?range=90d', { token: shopVendor.token });
 const t = analytics.body?.data?.totals;
@@ -344,7 +337,6 @@ check('payout row recorded per order', payouts.body.data.payouts.length === 1);
 const buyerAnalytics = await call('/vendors/me/analytics', { token: buyerToken });
 check('buyer cannot read vendor analytics', buyerAnalytics.status === 403);
 
-/* --------------------------------------------------------------- ADMIN */
 section('ADMIN');
 const adminAnalytics = await call('/admin/analytics?range=90d', { token: adminToken });
 check('admin analytics works', adminAnalytics.status === 200 && adminAnalytics.body.data.totals.totalUsers > 0);
@@ -398,7 +390,6 @@ for (const path of ['/admin/users', '/admin/vendors', '/admin/products', '/admin
   check(`buyer blocked from ${path}`, r.status === 403, `status ${r.status}`);
 }
 
-/* ------------------------------------------------------------ SECURITY */
 section('SECURITY');
 const health = await call('/health');
 check('health endpoint works', health.status === 200);

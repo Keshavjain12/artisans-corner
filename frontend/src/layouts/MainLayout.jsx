@@ -5,11 +5,6 @@ import Footer from '../components/Footer.jsx';
 import { paymentService } from '../services/orderService.js';
 import useAsync from '../hooks/useAsync.js';
 
-/**
- * Shown only on a public demo deployment - never on a local dev run - so that a
- * visitor who reaches checkout is not surprised by a simulated payment, and an
- * evaluator knows why before they ask.
- */
 function DemoBanner() {
   const config = useAsync(() => paymentService.config(), []);
   if (!config.data?.data?.demo) return null;
@@ -28,8 +23,6 @@ function DemoBanner() {
 export function MainLayout() {
   const { pathname } = useLocation();
 
-  // Every navigation should start at the top of the new page, without the
-  // smooth-scroll animation a fresh page does not need.
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);

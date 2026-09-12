@@ -2,7 +2,6 @@ import { z } from 'zod';
 import { FULFILMENT_STATUSES } from '../models/Order.js';
 import { cartItemsSchema, shippingAddressSchema } from './common.js';
 
-/** Quote requests only ever carry product ids + quantities - never prices. */
 export const quoteSchema = z.object({
   items: cartItemsSchema,
 });

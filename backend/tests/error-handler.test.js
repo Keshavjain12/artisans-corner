@@ -1,12 +1,3 @@
-/**
- * What an error looks like from the outside, in production.
- *
- * The brief is explicit that internals must not leak. Everywhere else in this
- * suite NODE_ENV is `test`, where the handler deliberately attaches the stack
- * as a debugging aid - so the production behaviour, which is the one that
- * matters for the claim, would otherwise never be exercised. Here `env` is
- * mocked as production and the handler is called directly.
- */
 import { describe, expect, it, jest } from '@jest/globals';
 
 jest.unstable_mockModule('../config/env.js', () => ({
@@ -16,7 +7,6 @@ jest.unstable_mockModule('../config/env.js', () => ({
 const { errorHandler } = await import('../middleware/error.js');
 const { default: ApiError } = await import('../utils/ApiError.js');
 
-/** Minimal req/res doubles - the handler only needs these four things. */
 const run = (err) => {
   const req = { method: 'POST', originalUrl: '/api/uploads/products' };
   let status;
@@ -32,7 +22,6 @@ const run = (err) => {
     },
   };
 
-  // The handler logs 5xx faults; keep that out of a passing run's output.
   const logged = jest.spyOn(console, 'error').mockImplementation(() => {});
   let loggedCalls = 0;
   try {

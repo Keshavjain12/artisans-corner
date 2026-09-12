@@ -1,9 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-/**
- * Runs an async loader and tracks {data, loading, error} for it.
- * `deps` behaves like a useEffect dependency list; `run()` re-fetches manually.
- */
 export function useAsync(loader, deps = [], { immediate = true } = {}) {
   const [state, setState] = useState({ data: null, loading: immediate, error: null });
   const mounted = useRef(true);
@@ -32,7 +28,6 @@ export function useAsync(loader, deps = [], { immediate = true } = {}) {
   useEffect(() => {
     if (!immediate) return;
     run().catch(() => {
-      /* the error is already stored in state for the UI to render */
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);

@@ -6,7 +6,6 @@ const initialState = {
   user: null,
   store: null,
   token: getStoredToken(),
-  // 'idle' until the stored token has been checked against the API.
   status: getStoredToken() ? 'loading' : 'idle',
   error: null,
 };
@@ -46,7 +45,6 @@ export const logout = createAsyncThunk('auth/logout', async () => {
   try {
     await authService.logout();
   } catch {
-    /* the local session is cleared regardless of what the server says */
   }
 });
 

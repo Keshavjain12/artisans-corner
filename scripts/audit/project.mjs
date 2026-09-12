@@ -1,10 +1,7 @@
-/* Checks the documentation, the shipped bundle and the UI signals against
-   reality. Runs without a server. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { check } from './harness.mjs';
 
-/* ---- every route the server declares is documented ---------------------- */
 console.log('\n=== API DOCS MATCH THE ROUTER ===');
 
 const routeFiles = fs.readdirSync('backend/routes').filter((f) => f.endsWith('.routes.js'));
@@ -33,7 +30,7 @@ for (const file of routeFiles) {
 const indexSrc = fs.readFileSync('backend/routes/index.js', 'utf8');
 if (/router\.get\('\/health'/.test(indexSrc)) declared.push({ method: 'GET', path: '/health' });
 if (/router\.get\('\/categories'/.test(indexSrc)) declared.push({ method: 'GET', path: '/categories' });
-declared.push({ method: 'POST', path: '/payments/webhook' }); // mounted in app.js for raw body
+declared.push({ method: 'POST', path: '/payments/webhook' });
 
 const docs = fs.readFileSync('docs/api-documentation.md', 'utf8');
 const readme = fs.readFileSync('README.md', 'utf8');
@@ -53,7 +50,6 @@ check(
 );
 console.log(`        (${declared.length} routes declared)`);
 
-/* ---- demo credentials in the README actually work ----------------------- */
 console.log('\n=== DOCUMENTED FACTS ARE TRUE ===');
 const seedData = fs.readFileSync('backend/seed/data.js', 'utf8');
 for (const cred of ['admin@artisanscorner.demo', 'vendor@artisanscorner.demo', 'buyer@artisanscorner.demo']) {
@@ -75,14 +71,11 @@ const readEnv = [...envJs.matchAll(/process\.env\.([A-Z_]+)/g)].map((m) => m[1])
 const undocumentedEnv = [...new Set(readEnv)].filter((k) => k !== 'NODE_ENV' && !envKeys.includes(k));
 check('every variable the server reads is documented', undocumentedEnv.length === 0, undocumentedEnv.join(', '));
 
-/* ---- ports quoted in the docs match the code ---------------------------- */
 const viteConfig = fs.readFileSync('frontend/vite.config.js', 'utf8');
 check('README client port matches vite.config.js', viteConfig.includes('|| 5273') && readme.includes('5273'));
 check('README API port matches env.js', envJs.includes('5055') && readme.includes('5055'));
 check('no stale 5173/5000 references in the README', !/localhost:5173|localhost:5000/.test(readme));
 
-/* ---- secrets ------------------------------------------------------------ */
-/* ---- seed artwork ------------------------------------------------------- */
 console.log('\n=== SEED ARTWORK ===');
 
 const { PRODUCTS, STORES, productArt, storeArt } = await import('../../backend/seed/data.js');
@@ -99,8 +92,6 @@ check(
   missingArt.length === 0,
   missingArt.join(', ')
 );
-/* SVG is XML: one unescaped & anywhere makes the browser refuse the whole
-   file and show a broken image instead of the artwork. */
 const artDir = 'frontend/public/seed-art';
 const malformed = fs
   .readdirSync(artDir)
@@ -147,7 +138,6 @@ const clientSrc = fs.readdirSync('frontend/src', { recursive: true })
 check('client source never references a secret key', !/sk_test_|sk_live_|api_secret|JWT_SECRET/.test(clientSrc));
 check('client source has no hardcoded localhost URL', !/http:\/\/localhost:\d+/.test(clientSrc));
 
-/* ---- accessibility and responsiveness signals --------------------------- */
 console.log('\n=== UI SIGNALS ===');
 const navbar = fs.readFileSync('frontend/src/components/Navbar.jsx', 'utf8');
 check('navbar has a mobile menu toggle', /aria-expanded={mobileOpen}/.test(navbar) && /lg:hidden/.test(navbar));

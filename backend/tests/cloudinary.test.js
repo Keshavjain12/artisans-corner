@@ -1,24 +1,9 @@
-/**
- * Covers the brief's image-handling rule:
- *
- *   "You cannot store images directly in the database. Integrate Cloudinary or
- *    AWS S3. When a vendor uploads a photo, upload it to the cloud, get the
- *    URL, and save that URL in your database."
- *
- * The Cloudinary *client* is mocked so no network call is made, but everything
- * around it is real: multer parses a genuine multipart upload, the service
- * streams the bytes to the SDK, and the URL it hands back is what ends up on
- * the product. The assertions below are about where the bytes go and what the
- * database is left holding.
- */
 import { afterAll, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 
-// Must be set before config/env.js is read, so cloudinaryEnabled is true.
 process.env.CLOUDINARY_CLOUD_NAME = 'test-cloud';
 process.env.CLOUDINARY_API_KEY = 'test-key-123';
 process.env.CLOUDINARY_API_SECRET = 'test-secret-shhh';
 
-/** What the fake Cloudinary saw, reset before each test. */
 const cloud = {
   uploads: [],
   bytesReceived: [],
@@ -68,7 +53,6 @@ beforeEach(async () => {
   jest.clearAllMocks();
 });
 
-/** A real 1x1 PNG, so the magic-byte check passes. */
 const PNG = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
   'base64'
@@ -88,12 +72,9 @@ describe('a vendor photo goes to the cloud, not the database', () => {
 
     expect(res.status).toBe(201);
     expect(cloudinaryMock.uploader.upload_stream).toHaveBeenCalledTimes(1);
-    // The actual file bytes reached the SDK.
     expect(cloud.bytesReceived[0]).toBe(PNG.length);
 
     const [image] = res.body.data.images;
-    /* The id carries the uploader's account, which is what lets the delete
-       endpoint tell one vendor's images from another's. */
     const folder = `artisans-corner/products/${vendor.user.id}`;
     expect(image.url).toBe(
       `https://res.cloudinary.com/test-cloud/image/upload/v1/${folder}/img_1.webp`
@@ -134,15 +115,13 @@ describe('a vendor photo goes to the cloud, not the database', () => {
 
     expect(created.status).toBe(201);
 
-    // Read the raw document, not the API response.
     const stored = await Product.findById(created.body.data.product._id).lean();
     expect(stored.images).toHaveLength(1);
     expect(stored.images[0].url).toMatch(/^https:\/\/res\.cloudinary\.com\//);
     expect(Object.keys(stored.images[0]).sort()).toEqual(['alt', 'publicId', 'url']);
 
-    // Nothing in the document is binary or base64-encoded image data.
     const raw = JSON.stringify(stored);
-    expect(raw).not.toContain('iVBORw0KGgo'); // the PNG's base64 signature
+    expect(raw).not.toContain('iVBORw0KGgo');
     expect(raw).not.toContain('data:image');
     expect(Buffer.isBuffer(stored.images[0].url)).toBe(false);
     expect(raw.length).toBeLessThan(4000);
@@ -196,7 +175,6 @@ describe('what never reaches Cloudinary', () => {
     const res = await uploadAs(vendor.token, Buffer.from('#!/bin/sh\nrm -rf /'), 'evil.png');
 
     expect(res.status).toBe(400);
-    // The magic-byte check runs before any upload is attempted.
     expect(cloudinaryMock.uploader.upload_stream).not.toHaveBeenCalled();
   });
 
@@ -230,8 +208,6 @@ describe('what never reaches Cloudinary', () => {
   });
 
   it('will not let one vendor delete an image belonging to another', async () => {
-    /* A product's image URL exposes its public id to anybody who can open the
-       page, so "delete by public id" has to prove ownership. */
     const owner = await registerVendor('Owner Studio');
     const stranger = await registerVendor('Stranger Studio');
 
@@ -259,15 +235,11 @@ describe('what never reaches Cloudinary', () => {
     const vendor = await registerVendor('Outage Studio');
     cloud.failNext = true;
 
-    /* The server logs 5xx faults to the console, which is right in production
-       and pure noise in a passing test run - so capture that log and assert on
-       it, rather than printing a stack trace across otherwise green output. */
     const logged = jest.spyOn(console, 'error').mockImplementation(() => {});
     let res;
     let loggedCalls = 0;
     try {
       res = await uploadAs(vendor.token);
-      // Counted before restoring: mockRestore() also forgets the calls.
       loggedCalls = logged.mock.calls.length;
     } finally {
       logged.mockRestore();
@@ -276,12 +248,8 @@ describe('what never reaches Cloudinary', () => {
     expect(res.status).toBe(502);
     expect(res.body.success).toBe(false);
     expect(res.body.message).toMatch(/upload failed/i);
-    // The fault is logged server-side...
     expect(loggedCalls).toBeGreaterThan(0);
-    // ...and what the shopper would be shown is a sentence, not a stack.
     expect(res.body.message).not.toMatch(/upload\.service\.js/);
-    /* The stack rides along as a development aid only: error.js drops it and
-       genericises the message in production - see error-handler.test.js. */
     expect(res.body.error).toContain('upload.service.js');
   });
 });

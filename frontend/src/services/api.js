@@ -17,7 +17,6 @@ export const setStoredToken = (token) => {
     if (token) localStorage.setItem(TOKEN_KEY, token);
     else localStorage.removeItem(TOKEN_KEY);
   } catch {
-    /* storage can be unavailable in private browsing - the app still works */
   }
 };
 
@@ -29,13 +28,11 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-/** Normalises every failure into an Error with a message worth showing a user. */
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
     if (error.response?.status === 401 && getStoredToken()) {
       setStoredToken(null);
-      // Let the app re-render as a signed-out visitor rather than looping.
       window.dispatchEvent(new CustomEvent('ac:session-expired'));
     }
 

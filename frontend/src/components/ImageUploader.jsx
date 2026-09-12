@@ -5,10 +5,6 @@ import { uploadService } from '../services/vendorService.js';
 
 const MAX_IMAGES = 6;
 
-/**
- * Uploads straight to the API (which streams to Cloudinary) and keeps only the
- * returned URLs in form state. Supports preview, reorder and remove.
- */
 export function ImageUploader({ images = [], onChange, disabled }) {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);

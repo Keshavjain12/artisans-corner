@@ -2,10 +2,6 @@ import mongoose from 'mongoose';
 
 export const PAYOUT_STATUSES = ['pending', 'processing', 'paid', 'reversed'];
 
-/**
- * Ledger of what the marketplace owes each vendor for a paid order.
- * Payouts are *recorded* only - no bank transfer is automated in this project.
- */
 const payoutSchema = new mongoose.Schema(
   {
     order: { type: mongoose.Schema.Types.ObjectId, ref: 'Order', required: true, index: true },
@@ -23,7 +19,6 @@ const payoutSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// One ledger row per (order, vendor) - makes payout creation idempotent.
 payoutSchema.index({ order: 1, vendor: 1 }, { unique: true });
 
 const Payout = mongoose.model('Payout', payoutSchema);

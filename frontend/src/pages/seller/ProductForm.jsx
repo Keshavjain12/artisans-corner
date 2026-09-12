@@ -43,7 +43,6 @@ export default function ProductForm() {
     },
   });
 
-  // Populate the form once the product being edited has loaded.
   useEffect(() => {
     const product = existing.data?.data?.product;
     if (!product) return;

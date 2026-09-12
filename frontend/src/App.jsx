@@ -11,7 +11,6 @@ export default function App() {
     dispatch(fetchCurrentUser());
   }, [dispatch]);
 
-  // The axios layer emits this when a stored token stops being accepted.
   useEffect(() => {
     const onExpired = () => dispatch(sessionExpired());
     window.addEventListener('ac:session-expired', onExpired);

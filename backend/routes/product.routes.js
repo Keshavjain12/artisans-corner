@@ -21,8 +21,6 @@ import {
 
 const router = Router();
 
-/* Vendor-owned routes are declared before "/:idOrSlug" so they are not
-   swallowed by the public product lookup. */
 router.get('/mine', authenticateUser, requireStore, listMyProducts);
 router.post(
   '/',

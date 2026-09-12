@@ -1,5 +1,3 @@
-/* Second audit pass: the checklist items that need multipart, failure paths
-   and multi-vendor baskets. */
 import {
   BASE,
   call,
@@ -17,11 +15,9 @@ import {
 const buyerToken = await login('buyer@artisanscorner.demo', 'DemoBuyer123!');
 const adminToken = await login('admin@artisanscorner.demo', 'DemoAdmin123!');
 
-/* -------------------------------------------------------- IMAGE UPLOAD */
 section('IMAGE UPLOAD');
 const uploader = await registerVendor(`Upload Studio ${rand()}`);
 
-// A real 1x1 PNG - valid magic bytes, so it passes the signature check.
 const PNG = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
   'base64'
@@ -73,7 +69,6 @@ const emptyUpload = await fetch(`${BASE}/uploads/products`, {
 });
 check('empty upload is rejected with a clear message', emptyUpload.status === 400);
 
-/* ------------------------------------------------ MULTI-VENDOR BASKETS */
 section('MULTI-VENDOR CART');
 const v1 = await registerVendor(`Multi A ${rand()}`);
 const v2 = await registerVendor(`Multi B ${rand()}`);
@@ -115,7 +110,6 @@ const v1Orders = await call('/vendors/me/orders', { token: v1.token });
 check("vendor A cannot see vendor B's line item", v1Orders.body.data[0].items.length === 1);
 check('vendor A total reflects only their own line', v1Orders.body.data[0].vendorTotals.subtotal === 60);
 
-/* ------------------------------------------------------ FAILURE PATHS */
 section('PAYMENT AND ORDER FAILURE PATHS');
 const unknownIntent = await call('/payments/confirm', {
   method: 'POST',
@@ -149,13 +143,8 @@ check('deleted product cannot be bought', ghost.status === 400, ghost.body?.mess
 const webhookNoSig = await call('/payments/webhook', { method: 'POST', body: { type: 'x' } });
 check('webhook without a signature is refused', [400, 503].includes(webhookNoSig.status), `status ${webhookNoSig.status}`);
 
-/* --------------------------------- ONE VENDOR CANCELS A SHARED ORDER */
 section('PARTIAL CANCELLATION IN A SHARED ORDER');
 
-/* The bug this covers: restocking filtered by fulfilment status, and the
-   vendor's own line was marked "cancelled" first - so the cancelled line got
-   nothing back while the *other* shop's line, still being fulfilled, was
-   restocked and had its sales counter wound back. */
 const partA = await registerVendor(`Partial A ${rand()}`);
 const partB = await registerVendor(`Partial B ${rand()}`);
 const prodA = (await makeProduct(partA.token, { price: 30, stock: 10 })).product;
@@ -184,7 +173,6 @@ const sharedOrderId = (
 const stockOf = async (slug) => (await call(`/products/${slug}`)).body.data.product.stock;
 check('both shops had stock taken', (await stockOf(prodA.slug)) === 8 && (await stockOf(prodB.slug)) === 7);
 
-// Shop A cancels only its own line.
 const partialCancel = await call(`/orders/${sharedOrderId}/status`, {
   method: 'PUT',
   token: partA.token,
@@ -197,7 +185,6 @@ const afterB = await stockOf(prodB.slug);
 check('the cancelled line stock comes back', afterA === 10, `stock ${afterA}`);
 check('the other shop stock is untouched', afterB === 7, `stock ${afterB}`);
 
-// Shop B ships, then the buyer tries to cancel what is left.
 await call(`/orders/${sharedOrderId}/status`, {
   method: 'PUT',
   token: partB.token,
@@ -210,7 +197,6 @@ const lateBuyerCancel = await call(`/orders/${sharedOrderId}/cancel`, {
 check('a buyer cannot cancel once the remaining line has shipped', lateBuyerCancel.status === 400);
 check('a shipped line keeps its stock', (await stockOf(prodB.slug)) === 7);
 
-/* --------------------------------------------- CANCELLATION / RESTOCK */
 section('ORDER CANCELLATION');
 const cancelVendor = await registerVendor(`Cancel Studio ${rand()}`);
 const cancelProduct = (await makeProduct(cancelVendor.token, { price: 50, stock: 5 })).product;
@@ -259,7 +245,6 @@ const lateCancel = await call(`/orders/${shippedOrder.order._id}/cancel`, {
 });
 check('cannot cancel once shipped', lateCancel.status === 400, lateCancel.body?.message);
 
-/* ------------------------------------------------- PAUSED SHOP / STOCK */
 section('SHOP AVAILABILITY');
 const pauseVendor = await registerVendor(`Pause Studio ${rand()}`);
 const pausedProduct = (await makeProduct(pauseVendor.token, { price: 30, stock: 5 })).product;

@@ -5,7 +5,6 @@ import asyncHandler from '../utils/asyncHandler.js';
 import sendSuccess from '../utils/apiResponse.js';
 import { clearAuthCookie, setAuthCookie, signToken } from '../utils/token.js';
 
-/** Everything the SPA needs about the signed-in user, in one shape. */
 async function buildSession(user) {
   const store = user.store ? await Store.findById(user.store).lean() : null;
   return {
@@ -32,7 +31,6 @@ export const register = asyncHandler(async (req, res) => {
   const existing = await User.findOne({ email });
   if (existing) throw ApiError.conflict('An account with that email already exists');
 
-  // `role` is deliberately ignored here - nobody can self-assign vendor/admin.
   const user = await User.create({ name, email, password });
 
   const token = signToken({ sub: user._id.toString(), role: user.role });
@@ -49,7 +47,6 @@ export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email }).select('+password');
-  // Same message either way so the endpoint cannot be used to enumerate emails.
   if (!user || !(await user.comparePassword(password))) {
     throw ApiError.unauthorized('Incorrect email or password');
   }

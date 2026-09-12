@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const imageSchema = new mongoose.Schema(
   {
     url: { type: String, required: true },
-    publicId: { type: String, default: '' }, // Cloudinary id, used when deleting
+    publicId: { type: String, default: '' },
     alt: { type: String, default: '' },
   },
   { _id: false }
@@ -34,7 +34,6 @@ const productSchema = new mongoose.Schema(
       validate: [(v) => v.length <= 8, 'A product can have at most 8 images'],
       default: [],
     },
-    // Denormalised owner references: `vendor` is the store, `vendorUser` the account.
     vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'Store', required: true, index: true },
     vendorUser: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
     stock: { type: Number, required: true, min: [0, 'Stock cannot be negative'], default: 0 },
@@ -44,7 +43,6 @@ const productSchema = new mongoose.Schema(
     reviewCount: { type: Number, default: 0, min: 0 },
     unitsSold: { type: Number, default: 0, min: 0 },
     isFeatured: { type: Boolean, default: false },
-    // Soft delete: archived products stay referenced by historical orders.
     isActive: { type: Boolean, default: true, index: true },
     isArchived: { type: Boolean, default: false, index: true },
     archivedAt: { type: Date, default: null },

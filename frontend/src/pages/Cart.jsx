@@ -22,8 +22,6 @@ export default function Cart() {
   const user = useSelector((state) => state.auth.user);
   const [confirmClear, setConfirmClear] = useState(false);
 
-  // Shipping and tax rules come from the server so this estimate matches the
-  // authoritative total calculated at checkout.
   const config = useAsync(() => paymentService.config(), []);
   const rules = config.data?.data;
 

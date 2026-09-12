@@ -1,4 +1,3 @@
-/** Operational (expected) error carrying an HTTP status and optional field details. */
 export default class ApiError extends Error {
   constructor(statusCode, message, details = undefined) {
     super(message);

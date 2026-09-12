@@ -1,8 +1,3 @@
-/**
- * The cart is the one piece of state the marketplace keeps on the client, and
- * the brief is explicit about it: it must survive a refresh and must never let
- * a shopper exceed available inventory.
- */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import reducer, {
   CART_KEY,
@@ -28,10 +23,6 @@ const product = (over = {}) => ({
 
 const emptyState = { items: [], lastAdded: null };
 
-/**
- * Re-evaluates the slice module the way a page refresh would, so the tests
- * exercise the real rehydrate-from-localStorage path rather than a stub.
- */
 async function reloadSliceAfterRefresh() {
   vi.resetModules();
   const fresh = await import('../cartSlice.js');

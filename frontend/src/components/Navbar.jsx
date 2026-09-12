@@ -57,7 +57,6 @@ export function Navbar() {
     const onClick = (event) => {
       if (accountRef.current && !accountRef.current.contains(event.target)) setAccountOpen(false);
     };
-    // Escape closes the menu and hands focus back to the button that opened it.
     const onKeyDown = (event) => {
       if (event.key !== 'Escape') return;
       setAccountOpen((open) => {

@@ -28,8 +28,6 @@ const env = {
     .map((url) => url.trim().replace(/\/$/, ''))
     .filter(Boolean),
   serverUrl: (process.env.SERVER_URL || 'http://localhost:5055').replace(/\/$/, ''),
-  /* True only for the in-memory development server, whose data is thrown away
-     when the process stops. */
   ephemeralDb: process.env.EPHEMERAL_DB === 'true',
 
   commissionRate: num(process.env.PLATFORM_COMMISSION_RATE, 0.05),
@@ -51,8 +49,6 @@ const env = {
   },
 
   allowMockPayments: bool(process.env.ALLOW_MOCK_PAYMENTS, false),
-  /* A public demo without a payment provider. Only meaningful in production,
-     where simulated payments are otherwise refused at boot. */
   demoDeployment: bool(process.env.DEMO_DEPLOYMENT, false),
 
   upload: {
@@ -67,16 +63,6 @@ env.cloudinaryEnabled = Boolean(
 );
 env.stripeEnabled = Boolean(env.stripe.secretKey);
 
-/**
- * Everything a production deployment is missing, as a list - empty when it is
- * fit to boot. Pure, so every combination can be tested without restarting.
- *
- * Simulated payments stay forbidden in production by default. The one way to
- * run without Stripe is to say so twice - DEMO_DEPLOYMENT=true *and*
- * ALLOW_MOCK_PAYMENTS=true - which exists because Stripe onboarding is
- * invite-only in some countries, and a deployment that cannot boot demonstrates
- * nothing. The site then says plainly that payments are simulated.
- */
 export function productionProblems(config = env, raw = process.env) {
   const problems = [];
   if (!raw.JWT_SECRET || raw.JWT_SECRET.length < 24) {
@@ -100,7 +86,6 @@ export function productionProblems(config = env, raw = process.env) {
   return problems;
 }
 
-/** Fails fast when the deployment is missing something it genuinely cannot run without. */
 export function assertProductionConfig() {
   if (!env.isProd) return;
   const problems = productionProblems();

@@ -5,7 +5,6 @@ export function notFound(req, _res, next) {
   next(ApiError.notFound(`Route not found: ${req.method} ${req.originalUrl}`));
 }
 
-/** Translates driver/library errors into the shared error envelope. */
 function normalise(err) {
   if (err instanceof ApiError) return err;
 
@@ -54,7 +53,6 @@ export function errorHandler(err, req, res, _next) {
   };
 
   if (apiError.details) body.errors = apiError.details;
-  // Stack traces never leave the server in production.
   if (!env.isProd && err.stack) body.error = err.stack;
 
   res.status(statusCode).json(body);

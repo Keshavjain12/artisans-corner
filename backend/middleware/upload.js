@@ -2,11 +2,6 @@ import multer from 'multer';
 import env from '../config/env.js';
 import ApiError from '../utils/ApiError.js';
 
-/**
- * Files are held in memory only long enough to stream them to Cloudinary.
- * Type and size are checked here *and* the extension is re-checked in the
- * upload service, so a spoofed mime type cannot smuggle a non-image through.
- */
 const storage = multer.memoryStorage();
 
 const fileFilter = (_req, file, cb) => {

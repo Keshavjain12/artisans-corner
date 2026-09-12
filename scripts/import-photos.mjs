@@ -1,29 +1,3 @@
-/**
- * Imports real product photographs, replacing the generated placeholder art.
- *
- *   1. Put image files in  photos/  at the repo root
- *   2. Name each one after the product slug, e.g.
- *        photos/hand-painted-ceramic-vase.jpg
- *        photos/hand-painted-ceramic-vase-2.jpg   (optional second view)
- *   3. npm run seed:photos
- *   4. npm run seed        (or restart npm run dev:memory)
- *
- * Files can be named after the product slug OR after the search term printed
- * by a previous run - whichever is easier - and matching ignores case,
- * punctuation and word order.
- *
- * Every image is normalised to an identical 1200x1200 WebP: centre-cropped to
- * a square, because every product image slot in the UI is square, so the
- * browser never has to crop anything away and no product looks stretched or
- * off-centre next to another.
- *
- * Anything without a photo keeps its generated illustration, so you can add
- * them a few at a time. Every run rewrites photos/NEEDED.md with what is left.
- *
- * Source images you are allowed to use: unsplash.com, pexels.com and
- * pixabay.com all license free commercial use. Do not scrape Pinterest or
- * Google Images - those are other people's copyrighted photographs.
- */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -36,28 +10,15 @@ const MANIFEST = path.join(OUT, 'manifest.json');
 
 const ALLOWED = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif']);
 
-/* Square, because every product image slot in the UI is square. 1200px is
-   twice the largest slot, so it stays sharp on a retina screen. */
 const EDGE = 1200;
 const QUALITY = 82;
 
-/* Category tiles are 4:3 in the UI, so they get their own crop rather than a
-   squeezed square. */
 const CATEGORY_W = 1200;
 const CATEGORY_H = 900;
 
-/* A shop banner runs the full width of the storefront and the top of its card
-   in the artisan directory, so it is cropped wide rather than square. */
 const STORE_W = 1600;
 const STORE_H = 500;
 
-/**
- * The piece that stands in for each shop on its banner. Chosen for how the
- * photograph survives a wide crop - a long board or a row of cups keeps its
- * subject, a single tall vase loses its top and bottom. A shop with no entry
- * falls back to the first of its own products that has a photo, and an
- * explicit photos/store-<key>.jpg beats both.
- */
 const STORE_FACE = {
   terra: 'hand-thrown-tea-set',
   kiln: 'salt-white-espresso-cups',
@@ -67,22 +28,10 @@ const STORE_FACE = {
   pigment: 'letterpress-greeting-card-set',
 };
 
-/**
- * Where to take the wide crop from. Centre keeps the composition the
- * photographer chose and is right almost every time; `attention` finds the
- * busiest region instead, which rescues a shot framed high - the stacking
- * rings sat in the top third and a centre crop cut them in half - at the cost
- * of zooming in. Only listed shops deviate.
- */
 const STORE_CROP = {
   fern: sharp.strategy.attention,
 };
 
-/**
- * The piece that best represents each craft on a category tile. Hand-picked
- * for how the photograph reads at tile size; any category without an entry
- * falls back to the first of its products that has a photo.
- */
 const CATEGORY_FACE = {
   'home-decor': 'handwoven-cotton-cushion-cover',
   pottery: 'hand-painted-ceramic-vase',
@@ -96,11 +45,6 @@ const CATEGORY_FACE = {
   accessories: 'natural-indigo-scarf',
 };
 
-/**
- * What to type into Unsplash or Pexels for each piece, so the checklist is
- * usable rather than just a list of slugs. Anything missing an entry is
- * flagged at the end of a run, so this cannot drift from the catalogue.
- */
 const SEARCH_TERMS = {
   'hand-painted-ceramic-vase': 'hand painted ceramic vase',
   'jaipur-block-print-tote': 'block print cotton tote bag',
@@ -207,7 +151,6 @@ const SEARCH_TERMS = {
 const { PRODUCTS, artSlug } = await import('../backend/seed/data.js');
 const slugs = new Set(PRODUCTS.map((p) => artSlug(p.name)));
 
-/** Words only, sorted - so "silver hoop earrings" matches "hoop-earrings-silver". */
 const fingerprint = (value) =>
   String(value)
     .toLowerCase()
@@ -218,8 +161,6 @@ const fingerprint = (value) =>
     .sort()
     .join(' ');
 
-/* A filename may be the slug, the product name, or the search term we
-   suggested. All three resolve to the same product. */
 const lookup = new Map();
 for (const product of PRODUCTS) {
   const slug = artSlug(product.name);
@@ -229,7 +170,6 @@ for (const product of PRODUCTS) {
   if (term) lookup.set(fingerprint(term), slug);
 }
 
-/** Falls back to the best word-overlap match, so a near-miss still lands. */
 function resolveSlug(base) {
   const exact = lookup.get(fingerprint(base));
   if (exact) return exact;
@@ -246,7 +186,6 @@ function resolveSlug(base) {
       best = slug;
     }
   }
-  // Two thirds of the words in common is a confident match; below that, refuse.
   return bestScore >= 0.6 ? best : null;
 }
 
@@ -266,7 +205,6 @@ const categories = {};
 const stores = {};
 const warnings = [];
 
-/** slug -> the original file it came from, for deriving the category crop. */
 const sourceFor = new Map();
 
 const processed = [];
@@ -278,7 +216,6 @@ for (const file of files) {
   const isSecondView = /-2$/.test(base);
   if (isSecondView) base = base.replace(/-2$/, '');
 
-  /* photos/category-pottery.jpg overrides the representative piece. */
   const slug = /^category-[a-z-]+$/.test(base.toLowerCase().replace(/\s+/g, '-'))
     ? base.toLowerCase().replace(/\s+/g, '-')
     : resolveSlug(base);
@@ -294,26 +231,17 @@ for (const file of files) {
   /* eslint-disable no-await-in-loop */
   const meta = await sharp(source).metadata();
 
-  /* Centre-crop to a square and resize to one exact size, so every card in the
-     grid presents the subject at the same scale. `fit: cover` with
-     `position: centre` is what the browser would do anyway - doing it here
-     means we ship 1200x1200 instead of a 7MB original. */
   const shortEdge = Math.min(meta.width || 0, meta.height || 0);
 
   let pipeline = sharp(source)
-    .rotate() // honour the EXIF orientation before cropping
+    .rotate()
     .resize(EDGE, EDGE, { fit: 'cover', position: 'centre', withoutEnlargement: false });
 
-  /* An enlarged image goes soft. A light unsharp mask will not invent detail,
-     but it does stop the result looking mushy - worth it only when we actually
-     had to enlarge. */
   if (shortEdge < EDGE) pipeline = pipeline.sharpen({ sigma: 0.7 });
 
   const info = await pipeline.webp({ quality: QUALITY, effort: 6 }).toFile(path.join(OUT, target));
   /* eslint-enable no-await-in-loop */
 
-  /* Upscaling past the source resolution looks soft on a retina screen, so
-     say which files would benefit from a bigger download. */
   if (shortEdge < EDGE) {
     warnings.push(
       `  "${file}" is only ${shortEdge}px on its short edge - upscaled to ${EDGE}px, so it will look soft. Re-download a larger version if you can.`
@@ -336,13 +264,9 @@ for (const file of files) {
   products[slug][isSecondView ? 'second' : 'main'] = `/product-photos/${target}`;
 }
 
-/* ------------------------------------------------------- category tiles --- */
-
 const { CATEGORY_SEED } = await import('../backend/config/categories.js');
 
 for (const category of CATEGORY_SEED) {
-  /* An explicit photos/category-<slug>.jpg wins; otherwise use the chosen
-     representative piece, or the first product in the category that has one. */
   const explicit = sourceFor.get(`category-${category.slug}`);
   const face = CATEGORY_FACE[category.slug];
   const fallback = PRODUCTS.filter((product) => product.category === category.slug)
@@ -364,8 +288,6 @@ for (const category of CATEGORY_SEED) {
 
   categories[category.slug] = `/product-photos/${target}`;
 }
-
-/* --------------------------------------------------------- shop banners --- */
 
 const { STORES } = await import('../backend/seed/data.js');
 
@@ -391,8 +313,6 @@ for (const store of STORES) {
   stores[store.key] = `/product-photos/${target}`;
 }
 
-/* Nothing else should linger in the served folder - a stale file from an
-   earlier run would be dead weight in the repo. */
 const keep = new Set([
   'manifest.json',
   ...Object.values(products).flatMap((entry) =>
@@ -409,8 +329,6 @@ for (const existing of fs.readdirSync(OUT)) {
 }
 
 fs.writeFileSync(MANIFEST, `${JSON.stringify({ products, categories, stores }, null, 2)}\n`);
-
-/* ------------------------------------------------------------------ report */
 
 const termFor = (slug, name) => SEARCH_TERMS[slug] || `${name} handmade`;
 
@@ -455,8 +373,6 @@ if (warnings.length) {
   console.log('');
 }
 
-/* The checklist is written to disk as well as printed, so it can be worked
-   through over several sittings. */
 const checklist = [
   '# Photos still needed',
   '',

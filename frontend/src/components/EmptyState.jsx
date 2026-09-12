@@ -1,6 +1,5 @@
 import cn from '../utils/cn.js';
 
-/** `as` sets the heading level: "h1" when the empty state is the whole page. */
 export function EmptyState({ icon: Icon, title, description, action, className, as: Heading = 'h3' }) {
   return (
     <div

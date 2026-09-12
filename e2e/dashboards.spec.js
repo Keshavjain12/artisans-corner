@@ -10,7 +10,6 @@ test.describe('vendor dashboard', () => {
     await expect(page.getByText('Total sales')).toBeVisible();
     await expect(page.getByText('Net earnings')).toBeVisible();
 
-    // The seed creates paid orders, so these must be real money, not zeroes.
     const sales = await page.locator('.card', { hasText: 'Total sales' }).first().innerText();
     expect(sales).toMatch(/\$\d/);
 
@@ -48,7 +47,6 @@ test.describe('vendor dashboard', () => {
     await page.getByLabel(/^Stock/).fill('7');
     await page.getByLabel(/^Tags/).fill('e2e, stoneware');
 
-    // Real upload through the API, which stores only the returned URL.
     await page.locator('input[type="file"]').setInputFiles({
       name: 'swatch.png',
       mimeType: 'image/png',
@@ -61,13 +59,9 @@ test.describe('vendor dashboard', () => {
     await expect(page).toHaveURL(/dashboard\/seller\/products$/);
     await expect(page.getByText(name)).toBeVisible();
 
-    // And a shopper can find it.
     await page.goto(`/shop?q=${encodeURIComponent(name)}`);
     await expect(page.getByRole('heading', { name })).toBeVisible();
 
-    /* Delete it again, so a test run leaves the marketplace exactly as it found
-       it. This also exercises the delete path: the piece has never been
-       ordered, so it is removed outright and its uploaded image with it. */
     await page.goto('/dashboard/seller/products');
     const row = page.locator('tr', { hasText: name });
     await row.getByRole('button', { name: `Delete ${name}` }).click();
@@ -139,7 +133,6 @@ test.describe('admin dashboard', () => {
     await firstRow.getByRole('button', { name: 'Hide' }).click();
     await expect(firstRow.getByRole('button', { name: 'Publish' })).toBeVisible();
 
-    // Put it back so the run leaves the marketplace as it found it.
     await firstRow.getByRole('button', { name: 'Publish' }).click();
     await expect(firstRow.getByRole('button', { name: 'Hide' })).toBeVisible();
     expect(productName.length).toBeGreaterThan(0);

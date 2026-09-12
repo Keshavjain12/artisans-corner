@@ -22,12 +22,10 @@
     @apply font-display tracking-tight;
   }
 
-  /* One visible focus treatment everywhere, including keyboard-only users. */
   :focus-visible {
     @apply outline-none ring-2 ring-clay-500 ring-offset-2 ring-offset-cream rounded-sm;
   }
 
-  /* Native checkboxes default to the browser blue, which fights the palette. */
   input[type='checkbox'],
   input[type='radio'] {
     accent-color: theme('colors.clay.600');

@@ -31,7 +31,6 @@ export async function resetDb() {
 
 export const api = () => request(app);
 
-/** Registers a buyer and returns { token, user }. */
 export async function registerBuyer(overrides = {}) {
   const payload = {
     name: 'Test Buyer',
@@ -44,7 +43,6 @@ export async function registerBuyer(overrides = {}) {
   return { ...res.body.data, password: payload.password, email: payload.email };
 }
 
-/** Registers a buyer and onboards them as a vendor with a store. */
 export async function registerVendor(storeName = 'Test Studio') {
   const account = await registerBuyer();
   const res = await api()
@@ -54,7 +52,6 @@ export async function registerVendor(storeName = 'Test Studio') {
       name: storeName,
       description: 'A small test studio making carefully finished handmade things.',
     });
-  // Re-issue the session so the token payload matches the upgraded role.
   const login = await api()
     .post('/api/auth/login')
     .send({ email: account.email, password: account.password });

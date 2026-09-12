@@ -4,7 +4,6 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Lock } from 'lucide-react';
 import { Button } from './ui.jsx';
 
-/** Cached per publishable key so the Stripe script loads once per session. */
 const stripeCache = new Map();
 const getStripe = (key) => {
   if (!stripeCache.has(key)) stripeCache.set(key, loadStripe(key));
@@ -37,8 +36,6 @@ function PaymentForm({ onPaid, amountLabel }) {
     setSubmitting(true);
     setError('');
 
-    // `if_required` keeps the shopper on the page for card payments, while
-    // still supporting redirect-based methods when Stripe needs them.
     const result = await stripe.confirmPayment({
       elements,
       redirect: 'if_required',
@@ -51,8 +48,6 @@ function PaymentForm({ onPaid, amountLabel }) {
       return;
     }
 
-    /* Redirect-based methods come back with no intent to report - the shopper
-       has left for their bank and the webhook will finish the order. */
     if (!result.paymentIntent?.id) {
       setError('That payment needs to be completed with your bank. Check your orders in a moment.');
       setSubmitting(false);

@@ -11,7 +11,6 @@ import { finalizePaidOrder, markOrderFailed } from '../services/order.service.js
 
 const MOCK_PREFIX = 'mock_pi_';
 
-/** Read-only pricing preview: the cart page shows exactly what will be charged. */
 export const getQuote = asyncHandler(async (req, res) => {
   const quote = await buildCheckoutQuote(req.body.items);
   return sendSuccess(res, {
@@ -30,15 +29,9 @@ export const getQuote = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * Step 1 of payment: the server prices the basket from the database, writes a
- * pending order and asks Stripe for a PaymentIntent. Nothing the browser sent
- * about money is used.
- */
 export const createPaymentIntent = asyncHandler(async (req, res) => {
   const { items, shippingAddress, saveAddress } = req.body;
 
-  // Drop this buyer's abandoned checkouts so history stays clean.
   await Order.deleteMany({
     buyer: req.user._id,
     paymentStatus: 'pending',
@@ -106,7 +99,6 @@ export const createPaymentIntent = asyncHandler(async (req, res) => {
     throw new ApiError(503, 'Payments are not configured on this server yet');
   }
 
-  // Development-only path so the marketplace stays demo-able without keys.
   order.paymentProvider = 'mock';
   order.stripePaymentIntentId = `${MOCK_PREFIX}${order._id}`;
   await order.save();
@@ -125,10 +117,6 @@ export const createPaymentIntent = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * Step 2: the browser reports back after Stripe.js finishes. We never trust
- * that report - the intent is re-read from Stripe before the order is paid.
- */
 export const confirmPayment = asyncHandler(async (req, res) => {
   const { paymentIntentId } = req.body;
 
@@ -168,10 +156,6 @@ export const confirmPayment = asyncHandler(async (req, res) => {
   });
 });
 
-/**
- * Stripe's own notification. Signature-verified and idempotent, this is the
- * authoritative confirmation - the client call above is only a fast path.
- */
 export const handleWebhook = asyncHandler(async (req, res) => {
   if (!env.stripeEnabled || !env.stripe.webhookSecret) {
     throw new ApiError(503, 'Stripe webhooks are not configured');
@@ -202,7 +186,6 @@ export const handleWebhook = asyncHandler(async (req, res) => {
     }
   }
 
-  // Always 200 so Stripe stops retrying events we have handled or ignore.
   return res.json({ received: true });
 });
 
@@ -211,7 +194,6 @@ export const getPaymentConfig = asyncHandler(async (_req, res) =>
     message: 'Payment configuration',
     data: {
       provider: env.stripeEnabled ? 'stripe' : env.allowMockPayments ? 'mock' : 'disabled',
-      // Lets the client label a public demo, rather than every local dev run.
       demo: env.demoDeployment && !env.stripeEnabled,
       publishableKey: env.stripe.publishableKey,
       currency: env.currency,

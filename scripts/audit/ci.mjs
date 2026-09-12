@@ -1,14 +1,3 @@
-/**
- * Runs the audit against a disposable server on its own port.
- *
- *   npm run audit:ci
- *
- * The audit spends most of its request budget on the payments rate limiter, so
- * running it twice against one long-lived server trips that limiter. Rather
- * than relax a security control for the convenience of its own test, this boots
- * a fresh in-memory server with fresh counters, audits it, and shuts it down -
- * which also makes the audit safe to run in CI with no database installed.
- */
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -26,9 +15,6 @@ const server = spawn(process.execPath, ['scripts/dev-memory-db.mjs'], {
     CLIENT_URL: 'http://localhost:5273',
     ALLOW_MOCK_PAYMENTS: 'true',
     NODE_ENV: 'development',
-    /* The audit uploads images and pays for orders. Real credentials in
-       backend/.env must not turn that into traffic against someone's actual
-       Cloudinary library or Stripe account. */
     CLOUDINARY_CLOUD_NAME: '',
     CLOUDINARY_API_KEY: '',
     CLOUDINARY_API_SECRET: '',

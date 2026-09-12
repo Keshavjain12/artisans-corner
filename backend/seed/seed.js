@@ -1,11 +1,3 @@
-/**
- * Seeds a complete, demonstrable marketplace: categories, an admin, six
- * artisan shops, 100 products, a spread of paid orders across the last 90 days
- * (with real commission/payout records) and verified reviews.
- *
- *   npm run seed            # wipe and reseed
- *   npm run seed:destroy    # wipe only
- */
 import mongoose from 'mongoose';
 import { pathToFileURL } from 'node:url';
 import env from '../config/env.js';
@@ -55,7 +47,6 @@ async function wipe() {
   console.log('[seed] collections cleared');
 }
 
-/** Backdates a document past Mongoose timestamps so charts have real history. */
 async function backdate(model, id, date) {
   await model.collection.updateOne(
     { _id: new mongoose.Types.ObjectId(String(id)) },
@@ -134,11 +125,7 @@ async function seedProducts(storesByKey) {
   return products;
 }
 
-/** Builds one paid order through the real pricing + payout pipeline. */
 async function seedOneOrder(buyer, address, when) {
-  /* Re-read live stock so the seeded orders never oversell, and leave the
-     scarce pieces alone: one-of-a-kind items should still be in stock for
-     someone browsing the demo, rather than sold out by the seeder. */
   const available = await Product.find({ stock: { $gte: 6 }, isActive: true })
     .select('_id')
     .lean();
@@ -171,7 +158,6 @@ async function seedOneOrder(buyer, address, when) {
 
   await finalizePaidOrder(order, { paymentIntentId: `mock_pi_seed_${order._id}` });
 
-  // Age the order so the analytics charts show a believable history.
   const age = Math.floor((Date.now() - when.getTime()) / (24 * 60 * 60 * 1000));
   const status = age > 12 ? 'delivered' : age > 6 ? 'shipped' : age > 2 ? 'confirmed' : 'processing';
   order.items.forEach((item) => {
@@ -198,8 +184,6 @@ async function seedOneOrder(buyer, address, when) {
 
 async function seedOrdersAndReviews(buyers) {
   const orders = [];
-  /* Enough orders, weighted towards recent days, that the analytics charts read
-     like a working marketplace rather than three isolated spikes. */
   for (let i = 0; i < 90; i += 1) {
     const buyer = buyers[i % buyers.length];
     const address = ADDRESSES[i % ADDRESSES.length];
@@ -210,8 +194,6 @@ async function seedOrdersAndReviews(buyers) {
   }
   console.log(`[seed] ${orders.length} paid orders with commission + payout records`);
 
-  /* Every delivered line a buyer could review, deduped: one review per buyer
-     per product is all the API allows. */
   const seen = new Set();
   const eligible = [];
   for (const { order, status } of orders) {
@@ -235,9 +217,6 @@ async function seedOrdersAndReviews(buyers) {
       comment: template.comment,
     });
 
-    /* Flag the line item exactly as the API does when a buyer reviews for
-       real. Without this the order page keeps offering "Write a review" for a
-       piece that has already been reviewed, and the API then refuses it. */
     await Order.updateOne(
       { _id: order._id, 'items.product': item.product },
       { $set: { 'items.$[line].reviewed': true } },
@@ -247,13 +226,9 @@ async function seedOrdersAndReviews(buyers) {
     await Review.recalculateProductRating(item.product);
   };
 
-  /* The demo buyer is the account a reviewer of this project signs in as, so
-     their history is not left to chance: one piece already reviewed, and one
-     still waiting to be. Everyone else is sprinkled randomly. */
   const demoBuyer = String(buyers[0]._id);
   const demoLines = eligible.filter((entry) => String(entry.order.buyer) === demoBuyer);
   const alwaysReview = demoLines.length > 1 ? demoLines[0] : null;
-  /* Held back so the "Write a review" path always has something to offer. */
   const heldBack = demoLines.length > 1 ? demoLines[demoLines.length - 1] : null;
 
   let reviewCount = 0;
@@ -295,8 +270,6 @@ export async function run() {
   console.log('[seed] done');
 }
 
-// Only self-execute when run directly (`npm run seed`); importing just
-// exposes `run` so the in-memory dev server can seed before it boots.
 const isEntryPoint = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 
 if (isEntryPoint) {

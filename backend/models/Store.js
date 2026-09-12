@@ -33,7 +33,6 @@ const storeSchema = new mongoose.Schema(
     },
     contactEmail: { type: String, trim: true, lowercase: true, default: '' },
     contactPhone: { type: String, trim: true, default: '' },
-    // Vendors can pause their shop; admins can suspend it.
     isActive: { type: Boolean, default: true, index: true },
     suspendedReason: { type: String, default: '' },
     ratingAverage: { type: Number, default: 0, min: 0, max: 5 },

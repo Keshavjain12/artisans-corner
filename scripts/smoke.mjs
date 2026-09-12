@@ -1,15 +1,3 @@
-/**
- * Read-only smoke test for a deployed Artisan's Corner.
- *
- *   API=https://<api>.onrender.com/api SITE=https://<site>.vercel.app npm run smoke
- *
- * The audit refuses a persistent database, correctly: it creates accounts and
- * pays for orders. This is the opposite - it writes nothing, so it is safe to
- * point at the live deployment you are about to hand in. It checks what
- * actually breaks on a first deploy: the API is up, the database is seeded,
- * CORS admits the site, the site serves its pages and photographs, and a demo
- * account can sign in.
- */
 const API = (process.env.API || process.argv[2] || '').replace(/\/$/, '');
 const SITE = (process.env.SITE || process.argv[3] || '').replace(/\/$/, '');
 
@@ -24,8 +12,6 @@ const check = (name, ok, detail = '') => {
   console.log(`  ${ok ? 'ok  ' : 'FAIL'}  ${name}${!ok && detail ? `  :: ${detail}` : ''}`);
 };
 
-/* A free Render instance sleeps when idle and takes ~30s to wake, so the first
-   request gets a long timeout rather than a false failure. */
 const get = async (url, { timeout = 15000, ...options } = {}) => {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
@@ -36,7 +22,6 @@ const get = async (url, { timeout = 15000, ...options } = {}) => {
     try {
       body = JSON.parse(text);
     } catch {
-      /* not JSON - a page or an image */
     }
     return { status: res.status, headers: res.headers, text, body };
   } catch (error) {
@@ -93,8 +78,6 @@ if (token) {
 if (SITE) {
   console.log('\nSite');
 
-  /* The most common first-deploy failure: CLIENT_URL on the API does not match
-     the site's origin, so every browser request is refused. */
   const preflight = await get(`${API}/products`, {
     method: 'OPTIONS',
     headers: { Origin: SITE, 'Access-Control-Request-Method': 'GET' },
@@ -108,7 +91,6 @@ if (SITE) {
   const home = await get(SITE);
   check('the site serves its app', home.status === 200 && /<div id="root">/.test(home.text));
 
-  // A deep link must survive a refresh, which needs the SPA rewrite.
   const deep = await get(`${SITE}/shop`);
   check('deep links are rewritten to the app', deep.status === 200 && /<div id="root">/.test(deep.text));
 

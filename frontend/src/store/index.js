@@ -10,7 +10,6 @@ export const store = configureStore({
   middleware: (getDefault) => getDefault({ serializableCheck: false }),
 });
 
-// Keep the cart in localStorage so it survives refreshes and new tabs.
 let previousItems = store.getState().cart.items;
 store.subscribe(() => {
   const { items } = store.getState().cart;

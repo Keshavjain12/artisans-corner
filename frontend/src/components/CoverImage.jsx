@@ -1,12 +1,5 @@
 import cn from '../utils/cn.js';
 
-/**
- * An image that degrades to a tinted monogram instead of a broken-image icon.
- *
- * Store logos and banners are optional at onboarding, so a brand new shop has
- * empty strings for both. Rendering `<img src="">` shows the browser's broken
- * image glyph, which makes a working shop look defective.
- */
 export function CoverImage({ src, alt = '', label = '', className, imgClassName, ...props }) {
   if (src) {
     return (

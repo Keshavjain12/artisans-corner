@@ -8,7 +8,6 @@ import { buildMeta, getPagination } from '../utils/pagination.js';
 import { uniqueSlug } from '../utils/slugify.js';
 import { searchRegex } from '../utils/search.js';
 
-/** "Become a Seller": upgrades the current buyer account and creates its shop. */
 export const onboardVendor = asyncHandler(async (req, res) => {
   const existing = await Store.findOne({ owner: req.user._id });
   if (existing) throw ApiError.conflict('You already have a store');
@@ -24,7 +23,6 @@ export const onboardVendor = asyncHandler(async (req, res) => {
     contactEmail: req.body.contactEmail || req.user.email,
   });
 
-  // Admins keep their admin role; buyers are promoted to vendor.
   const role = req.user.role === 'admin' ? 'admin' : 'vendor';
   await User.findByIdAndUpdate(req.user._id, { role, store: store._id });
 
@@ -70,11 +68,9 @@ export const updateMyStore = asyncHandler(async (req, res) => {
   return sendSuccess(res, { message: 'Store profile updated', data: { store } });
 });
 
-/** Public directory of shops, ranked by sales so the homepage can feature them. */
 export const listStores = asyncHandler(async (req, res) => {
   const { page, limit, skip } = getPagination(req.query, { defaultLimit: 12, maxLimit: 48 });
   const filter = { isActive: true };
-  // Sanitised, never interpolated raw: a crafted pattern is a denial of service.
   const search = searchRegex(req.query.q);
   if (search) filter.name = search;
 
@@ -109,7 +105,6 @@ export const getStoreBySlug = asyncHandler(async (req, res) => {
   const visible = { vendor: store._id, isActive: true, isArchived: false };
   const [products, productCount] = await Promise.all([
     Product.find(visible).sort({ createdAt: -1 }).limit(24).lean(),
-    // Counted, not inferred from the page above, which stops at 24.
     Product.countDocuments(visible),
   ]);
 

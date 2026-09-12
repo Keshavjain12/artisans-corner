@@ -1,7 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import cn from '../utils/cn.js';
 
-/** Compact numeric pagination with a sliding window around the current page. */
 export function Pagination({ meta, onChange, className }) {
   if (!meta || meta.totalPages <= 1) return null;
 

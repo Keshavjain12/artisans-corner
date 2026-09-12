@@ -11,11 +11,6 @@ import catalogService from '../services/catalogService.js';
 import useAsync from '../hooks/useAsync.js';
 import { formatDate } from '../utils/format.js';
 
-/**
- * Reviews for one product. The write form only appears for signed-in buyers who
- * have a paid order containing this product - and the API enforces the same
- * rule, so this is presentation, not permission.
- */
 export function ReviewSection({ product, onRatingChange }) {
   const user = useSelector((state) => state.auth.user);
   const [rating, setRating] = useState(5);
@@ -25,8 +20,6 @@ export function ReviewSection({ product, onRatingChange }) {
   const [error, setError] = useState('');
   const [editing, setEditing] = useState(false);
 
-  /* Re-fetched when the viewer changes: the response carries their own review,
-     which decides whether the write form or the edit link is shown. */
   const reviews = useAsync(
     () => catalogService.getProductReviews(product._id, { limit: 20 }),
     [product._id, user?.id]
@@ -40,9 +33,6 @@ export function ReviewSection({ product, onRatingChange }) {
     (entry) => String(entry.productId) === String(product._id)
   );
   const list = reviews.data?.data?.reviews || [];
-  /* Someone who has already reviewed this piece is a verified buyer too - the
-     pending list no longer offers it, so without this they would be told they
-     had never bought it. */
   const myReview = reviews.data?.data?.viewerReview || null;
   const distribution = reviews.data?.data?.distribution || [];
   const totalReviews = reviews.data?.meta?.total || list.length;

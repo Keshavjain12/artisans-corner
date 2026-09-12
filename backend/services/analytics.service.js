@@ -15,7 +15,6 @@ export function resolveRange(range = '30d') {
   return { from, to, days, range: key };
 }
 
-/** Fills gaps so a sparse sales history still draws a continuous chart. */
 function toDailySeries(rows, from, to) {
   const byDay = new Map(rows.map((row) => [row._id, row]));
   const series = [];
@@ -40,10 +39,6 @@ function toDailySeries(rows, from, to) {
   return series;
 }
 
-/**
- * Vendor-scoped analytics. Everything is computed from paid orders, restricted
- * to the line items belonging to this store - never the whole order.
- */
 export async function getVendorAnalytics(storeId, range = '30d') {
   const { from, to } = resolveRange(range);
   const vendor = new mongoose.Types.ObjectId(String(storeId));
@@ -141,12 +136,8 @@ export async function getVendorAnalytics(storeId, range = '30d') {
   };
 }
 
-/** Platform-wide analytics for the admin dashboard. */
 export async function getAdminAnalytics(range = '30d') {
   const { from, to } = resolveRange(range);
-  /* Cancelled orders are excluded to agree with the revenue report, which
-     ignores reversed payouts. Two screens quoting different platform revenue
-     is worse than either number. */
   const paidInRange = {
     paymentStatus: 'paid',
     orderStatus: { $ne: 'cancelled' },

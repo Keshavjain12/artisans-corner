@@ -1,14 +1,3 @@
-/**
- * The drawing vocabulary for the seed artwork.
- *
- * Motifs are chosen from the product's *name* first and its category only as a
- * fallback, so a cushion gets a cushion and bookends get books - rather than
- * every Home Decor piece getting the same lamp, which is what happened when
- * the motif was keyed on category alone.
- *
- * Every motif draws inside a 1200x900 box, centred near (600, 450).
- */
-
 export const MOTIFS = {
   vase: (c) => `
     <path d="M470 330 q-30 130 40 250 q90 90 180 0 q70 -120 40 -250 q-130 40 -260 0 z" fill="${c.ink}" opacity="0.82"/>
@@ -229,10 +218,6 @@ export const MOTIFS = {
     </g>`,
 };
 
-/**
- * First match wins, so put the specific words before the general ones.
- * The category fallback is only reached when a name says nothing useful.
- */
 const NAME_RULES = [
   [/vase/i, 'vase'],
   [/plate|platter|dinner/i, 'plates'],
@@ -280,7 +265,6 @@ const CATEGORY_FALLBACK = {
   'handmade-gifts': 'gift',
 };
 
-/** Picks the motif that best describes this particular product. */
 export function motifFor(name = '', category = '') {
   for (const [pattern, motif] of NAME_RULES) {
     if (pattern.test(name)) return motif;

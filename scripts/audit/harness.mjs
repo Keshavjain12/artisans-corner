@@ -1,4 +1,3 @@
-/* End-to-end audit of the quality-bar checklist against the running API. */
 const BASE = process.env.API || 'http://localhost:5055/api';
 
 let passed = 0;
@@ -29,13 +28,8 @@ async function call(path, { method = 'GET', body, token } = {}) {
   try {
     json = JSON.parse(text);
   } catch {
-    /* non-json response */
   }
 
-  /* A rate-limited run produces a cascade of meaningless failures, so stop and
-     say what actually happened. The audit spends most of its budget on the
-     payments limiter (60 requests / 10 min), which a back-to-back second run
-     will exhaust. */
   if (res.status === 429) {
     console.error(
       `\nRate limited on ${method} ${path}.\n` +

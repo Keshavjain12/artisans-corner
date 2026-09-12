@@ -7,10 +7,6 @@ import asyncHandler from '../utils/asyncHandler.js';
 import sendSuccess from '../utils/apiResponse.js';
 import { buildMeta, getPagination } from '../utils/pagination.js';
 
-/**
- * Verified-purchase check: there must be a *paid* order belonging to this
- * buyer that contains this product and was not cancelled.
- */
 async function findPurchaseOrder(userId, productId, orderId) {
   const filter = {
     buyer: userId,
@@ -46,7 +42,6 @@ export const createReview = asyncHandler(async (req, res) => {
     comment,
   });
 
-  // Flag the order line so the UI can stop prompting for a review.
   await Order.updateOne(
     { _id: order._id, 'items.product': productId },
     { $set: { 'items.$[item].reviewed': true } },
@@ -79,9 +74,6 @@ export const listProductReviews = asyncHandler(async (req, res) => {
       { $match: { product: new mongoose.Types.ObjectId(String(req.params.id)), isVisible: true } },
       { $group: { _id: '$rating', count: { $sum: 1 } } },
     ]),
-    /* The viewer's own review, looked up rather than searched for in the page
-       above: on a piece with many reviews theirs may be pages away, and the UI
-       needs to know it exists to avoid telling a buyer they never bought it. */
     req.user
       ? Review.findOne({ ...filter, user: req.user._id }).populate('user', 'name avatar').lean()
       : null,
@@ -128,7 +120,6 @@ export const deleteReview = asyncHandler(async (req, res) => {
   return sendSuccess(res, { message: 'Review removed', data: stats });
 });
 
-/** Products the signed-in buyer has bought but not yet reviewed. */
 export const getReviewableProducts = asyncHandler(async (req, res) => {
   const orders = await Order.find({ buyer: req.user._id, paymentStatus: 'paid' })
     .sort({ createdAt: -1 })

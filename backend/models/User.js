@@ -34,7 +34,6 @@ const userSchema = new mongoose.Schema(
       minlength: 8,
       select: false,
     },
-    // A vendor keeps every buyer capability - the role only *adds* permissions.
     role: { type: String, enum: USER_ROLES, default: 'buyer', index: true },
     avatar: { type: String, default: '' },
     phone: { type: String, trim: true, default: '' },

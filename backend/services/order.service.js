@@ -3,14 +3,6 @@ import Product from '../models/Product.js';
 import Store from '../models/Store.js';
 import { round2 } from '../utils/money.js';
 
-/**
- * Turns a `pending_payment` order into a paid one.
- *
- * Called from both the Stripe webhook and the client confirmation endpoint, so
- * it must be idempotent: the `paymentStatus`/`inventoryApplied` guards make
- * repeated calls a no-op instead of double-decrementing stock or double-paying
- * a vendor.
- */
 export async function finalizePaidOrder(order, { paymentIntentId, chargeId = '' } = {}) {
   if (order.paymentStatus === 'paid') return order;
 
@@ -24,8 +16,6 @@ export async function finalizePaidOrder(order, { paymentIntentId, chargeId = '' 
 
   if (!order.inventoryApplied) {
     for (const item of order.items) {
-      // Conditional update: only decrements when the stock is genuinely there.
-       
       const updated = await Product.findOneAndUpdate(
         { _id: item.product, stock: { $gte: item.quantity } },
         { $inc: { stock: -item.quantity, unitsSold: item.quantity } },
@@ -33,8 +23,6 @@ export async function finalizePaidOrder(order, { paymentIntentId, chargeId = '' 
       );
 
       if (!updated) {
-        /* Sold out between payment intent creation and capture. No stock was
-           taken for this line, so it holds nothing to give back. */
         item.fulfillmentStatus = 'cancelled';
         item.restocked = true;
         refundDue = round2(refundDue + item.subtotal);
@@ -67,7 +55,6 @@ export async function finalizePaidOrder(order, { paymentIntentId, chargeId = '' 
   return order;
 }
 
-/** Writes one payout ledger row per vendor in the order (idempotent). */
 export async function recordPayouts(order) {
   const byVendor = new Map();
 
@@ -126,15 +113,6 @@ export async function markOrderFailed(order, reason = 'Payment was not completed
   return order;
 }
 
-/**
- * Gives stock back for the given lines, defaulting to the whole order.
- *
- * Driven by the per-line `restocked` flag rather than by fulfilment status.
- * Status was the wrong signal: a vendor cancelling their line marks it
- * "cancelled" first, so a status-based filter skipped exactly the line being
- * cancelled and instead returned another vendor's stock while they were still
- * fulfilling it.
- */
 export async function restockOrder(order, lines = order.items) {
   if (!order.inventoryApplied) return;
 
@@ -145,8 +123,6 @@ export async function restockOrder(order, lines = order.items) {
     holding.map((item) => Product.updateOne({ _id: item.product }, { $inc: { stock: item.quantity } }))
   );
 
-  /* unitsSold is a lifetime counter that drives "best selling", so it is
-     decremented conditionally - a cancellation must never push it negative. */
   await Promise.all(
     holding.map((item) =>
       Product.updateOne(
@@ -160,17 +136,9 @@ export async function restockOrder(order, lines = order.items) {
     item.restocked = true;
   });
 
-  // The order only stops holding inventory once every line has been returned.
   if (order.items.every((item) => item.restocked)) order.inventoryApplied = false;
 }
 
-/**
- * Reverses the vendor-facing totals a cancelled order contributed.
- *
- * recordPayouts increments these when an order is paid, and the shop directory
- * ranks by totalSales - so without this a cancelled sale would keep promoting
- * the shop forever.
- */
 export async function reverseStoreTotals(order) {
   const byVendor = new Map();
   for (const item of order.items) {
@@ -188,7 +156,6 @@ export async function reverseStoreTotals(order) {
   );
 }
 
-/** Order status is the least-advanced stage across its per-vendor line items. */
 export function deriveOrderStatus(order) {
   const active = order.items.filter((item) => item.fulfillmentStatus !== 'cancelled');
   if (active.length === 0) return 'cancelled';

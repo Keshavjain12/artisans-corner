@@ -43,7 +43,6 @@ export default function Shop() {
     [params.toString()]
   );
 
-  // Keep the URL in step with the debounced search box.
   useEffect(() => {
     if (debouncedTerm === (params.get('q') || '')) return;
     const next = new URLSearchParams(params);
@@ -115,8 +114,6 @@ export default function Shop() {
           <label className="sr-only" htmlFor="minPrice">
             Minimum price
           </label>
-          {/* Keyed on the value so clearing the filters clears the box too:
-              an uncontrolled input ignores a changed defaultValue. */}
           <input
             key={`min-${query.minPrice}`}
             id="minPrice"

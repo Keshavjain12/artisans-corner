@@ -1,18 +1,3 @@
-/**
- * Full quality-bar audit.
- *
- *   npm run audit:ci       # boots a disposable server, audits it, shuts it down
- *   npm run audit          # against an already-running disposable server
- *   API=<url> npm run audit
- *
- * Three passes:
- *   project.mjs  documentation, secrets and UI signals   (no server needed)
- *   api.mjs      auth, catalogue, checkout, orders, reviews, dashboards, admin
- *   flows.mjs    uploads, multi-vendor baskets, failure paths, cancellation
- *
- * Everything is checked against the running application, so this fails when the
- * app regresses rather than when someone forgets to tick a box.
- */
 import { BASE, report } from './harness.mjs';
 
 const say = (line = '') => console.error(line);
@@ -21,9 +6,6 @@ const health = await fetch(`${BASE}/health`)
   .then((r) => (r.ok ? r.json() : null))
   .catch(() => null);
 
-/* The audit registers accounts, publishes shops and pays for real orders. On a
-   persistent database that is somebody's actual data, so it runs only where the
-   server says its database is disposable. `npm run audit:ci` always is. */
 const disposable = health?.data?.database === 'ephemeral';
 const forced = process.argv.includes('--force');
 

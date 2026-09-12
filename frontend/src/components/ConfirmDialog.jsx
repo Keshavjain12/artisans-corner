@@ -2,10 +2,6 @@ import { useEffect, useRef } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { Button } from './ui.jsx';
 
-/**
- * Accessible confirmation modal: focus moves in on open, Escape closes, and
- * focus is trapped between the two actions while it is showing.
- */
 export function ConfirmDialog({
   open,
   title,
@@ -33,8 +29,6 @@ export function ConfirmDialog({
       }
       if (event.key !== 'Tab') return;
 
-      // Keep Tab inside the dialog: a modal that lets focus wander onto the
-      // page behind it is unusable with a keyboard or a screen reader.
       const focusable = panelRef.current?.querySelectorAll(
         'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
       );
@@ -55,7 +49,6 @@ export function ConfirmDialog({
     document.addEventListener('keydown', onKeyDown);
     return () => {
       document.removeEventListener('keydown', onKeyDown);
-      // Hand focus back to whatever opened the dialog.
       if (typeof previouslyFocused?.focus === 'function') previouslyFocused.focus();
     };
   }, [open, onCancel]);

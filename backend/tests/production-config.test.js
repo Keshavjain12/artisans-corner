@@ -1,12 +1,3 @@
-/**
- * Which production configurations are allowed to boot.
- *
- * Found by reading the guard before deploying: it demanded a Stripe secret key
- * and refused simulated payments outright - so with Stripe onboarding closed to
- * this developer, the deployed API could never have started. The demo escape
- * hatch has to exist, and it has to take *two* explicit flags, so that nobody
- * ships simulated payments to real shoppers by setting one variable by mistake.
- */
 import { describe, expect, it } from '@jest/globals';
 import { productionProblems } from '../config/env.js';
 

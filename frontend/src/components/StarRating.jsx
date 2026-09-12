@@ -3,7 +3,6 @@ import cn from '../utils/cn.js';
 
 const SIZES = { sm: 'h-3.5 w-3.5', md: 'h-4 w-4', lg: 'h-6 w-6' };
 
-/** Read-only star display, or an accessible radio group when `onChange` is given. */
 export function StarRating({ value = 0, count, size = 'md', onChange, className, idPrefix = 'star' }) {
   const rounded = Math.round(value * 2) / 2;
 

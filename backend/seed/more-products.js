@@ -1,20 +1,4 @@
-/**
- * The second half of the demo catalogue: seventy more pieces, so every one of
- * the ten categories holds exactly ten products.
- *
- * Each piece belongs to the studio whose craft it genuinely fits - block print
- * and terracotta from Jaipur, stoneware from Lisbon, silver from Wellington,
- * wood from Portland, natural dye and handloom from Kutch, works on paper from
- * Edinburgh - so a shop's page reads as one maker's range rather than a mix.
- *
- * Every name and description was written against the photograph it ships
- * with, so the listing never promises a walnut board and shows an acacia one.
- *
- * Kept apart from data.js purely for readability; it is appended to PRODUCTS
- * there and seeded, photographed and illustrated exactly like the first thirty.
- */
 export const MORE_PRODUCTS = [
-  /* ---------------------------------------------------------- clothing */
   { store: 'terra', name: 'Block Print Cotton Dress', category: 'clothing', price: 98, compareAtPrice: 120, stock: 11, featured: true, tags: ['dress', 'block-print', 'cotton'],
     description: 'A relaxed dress in soft cotton, printed by hand with a bold floral block in madder red and rose. Side pockets, a tie waist, and a fabric that gets softer with every wash.' },
   { store: 'terra', name: 'Hand Block Printed Kaftan', category: 'clothing', price: 86, compareAtPrice: null, stock: 9, featured: false, tags: ['kaftan', 'block-print', 'loungewear'],
@@ -34,7 +18,6 @@ export const MORE_PRODUCTS = [
   { store: 'indigo', name: 'Khadi Cotton Trousers', category: 'clothing', price: 58, compareAtPrice: null, stock: 18, featured: false, tags: ['trousers', 'khadi', 'cotton'],
     description: 'Wide-leg trousers in hand-spun khadi cotton, in natural oatmeal or deep bark brown, with an elasticated back waist and a flat front. Cut to sit just above the ankle.' },
 
-  /* -------------------------------------------------------- home decor */
   { store: 'kiln', name: 'Stoneware Taper Candle Holder', category: 'home-decor', price: 32, compareAtPrice: null, stock: 24, featured: false, tags: ['candle', 'stoneware', 'taper'],
     description: 'A taper candle holder in matte white stoneware, shaped by hand so every one stands a little differently. Sold singly; they look best grouped in threes along a table.' },
   { store: 'oak', name: 'Oak Box Wall Shelf', category: 'home-decor', price: 96, compareAtPrice: 115, stock: 8, featured: false, tags: ['shelf', 'oak', 'wall'],
@@ -46,7 +29,6 @@ export const MORE_PRODUCTS = [
   { store: 'indigo', name: 'Macrame Cotton Wall Hanging', category: 'home-decor', price: 58, compareAtPrice: 70, stock: 12, featured: false, tags: ['macrame', 'wall-hanging', 'cotton'],
     description: 'A 60cm macrame hanging knotted from recycled cotton cord on a length of driftwood, finished with a brushed fringe. Knotted by hand, so each pattern varies a little.' },
 
-  /* ---------------------------------------------------------- ceramics */
   { store: 'kiln', name: 'Stoneware Pour-Over Coffee Dripper', category: 'ceramics', price: 42, compareAtPrice: null, stock: 18, featured: true, tags: ['coffee', 'dripper', 'stoneware'],
     description: 'A single-cup pour-over dripper thrown in matte white stoneware, with spiral ribs inside that help the coffee flow evenly. Takes standard size 02 paper filters.' },
   { store: 'kiln', name: 'Matte White Butter Dish', category: 'ceramics', price: 38, compareAtPrice: null, stock: 15, featured: false, tags: ['butter', 'kitchen', 'stoneware'],
@@ -58,7 +40,6 @@ export const MORE_PRODUCTS = [
   { store: 'terra', name: 'Handmade Ceramic Soap Dish', category: 'ceramics', price: 18, compareAtPrice: null, stock: 35, featured: false, tags: ['soap-dish', 'bathroom', 'ceramic'],
     description: 'A shallow hand-thrown soap dish in a soft white glaze, wide enough for a generous bar and curved so water runs off rather than pooling underneath.' },
 
-  /* ----------------------------------------------------------- jewelry */
   { store: 'fern', name: 'Sterling Silver Chain Bracelet', category: 'jewelry', price: 58, compareAtPrice: null, stock: 16, featured: false, tags: ['bracelet', 'silver', 'chain'],
     description: 'A chunky sterling silver chain bracelet, each link shaped and polished at the bench, closed with a handmade toggle clasp. Heavy enough to feel, comfortable enough to forget.' },
   { store: 'fern', name: 'Freshwater Pearl Drop Earrings', category: 'jewelry', price: 72, compareAtPrice: 88, stock: 12, featured: true, tags: ['earrings', 'pearl', 'gold-vermeil'],
@@ -72,7 +53,6 @@ export const MORE_PRODUCTS = [
   { store: 'fern', name: 'Sterling Silver Curb Chain', category: 'jewelry', price: 96, compareAtPrice: 115, stock: 9, featured: false, tags: ['necklace', 'chain', 'silver'],
     description: 'A heavy sterling silver curb chain necklace, 50cm long and finished with a hand-soldered clasp. Polished link by link so it lies flat and catches the light.' },
 
-  /* --------------------------------------------------------------- art */
   { store: 'pigment', name: 'Coastal Village Painting', category: 'art', price: 320, compareAtPrice: 380, stock: 1, featured: true, tags: ['painting', 'original', 'coastal'],
     description: 'An original 30 x 40cm painting of a hillside harbour village above the sea, painted on location and supplied in its frame. One of a kind, signed on the reverse.' },
   { store: 'pigment', name: 'Red Magnolia Watercolour Print', category: 'art', price: 38, compareAtPrice: null, stock: 30, featured: false, tags: ['watercolour', 'print', 'flowers'],
@@ -88,7 +68,6 @@ export const MORE_PRODUCTS = [
   { store: 'pigment', name: 'Hand-Lettered Calligraphy Print', category: 'art', price: 34, compareAtPrice: null, stock: 25, featured: false, tags: ['calligraphy', 'lettering', 'print'],
     description: 'A short line - love what you are good at - hand lettered in ink with a pointed pen and printed on textured cotton paper. A5, signed, and made to be framed.' },
 
-  /* ---------------------------------------------------------- woodwork */
   { store: 'oak', name: 'Hand-Carved Wooden Spoon Set', category: 'woodwork', price: 46, compareAtPrice: null, stock: 20, featured: true, tags: ['spoons', 'carved', 'kitchen'],
     description: 'Four cooking spoons carved by hand from cherry, birch and walnut with a knife and axe, then oiled. The facets left by the knife stay in the handles.' },
   { store: 'oak', name: 'Acacia Paddle Chopping Board', category: 'woodwork', price: 64, compareAtPrice: 78, stock: 6, featured: false, tags: ['chopping-board', 'acacia', 'kitchen'],
@@ -104,7 +83,6 @@ export const MORE_PRODUCTS = [
   { store: 'oak', name: 'Wooden Wall Clock', category: 'woodwork', price: 88, compareAtPrice: null, stock: 9, featured: false, tags: ['clock', 'wall', 'wood'],
     description: 'A 30cm wall clock with a face of real wood and a carved leaf pattern, fitted with a silent sweep movement. No numbers - the grain does the talking.' },
 
-  /* ---------------------------------------------------- handmade gifts */
   { store: 'pigment', name: 'Leather-Bound Travel Journal', category: 'handmade-gifts', price: 54, compareAtPrice: 65, stock: 16, featured: true, tags: ['journal', 'leather', 'notebook'],
     description: 'A refillable A6 journal with a hand-stitched vegetable-tanned leather cover and a wrap-around cord tie. Comes with two inserts of plain cotton paper.' },
   { store: 'pigment', name: 'Wax Seal Stamp Kit', category: 'handmade-gifts', price: 32, compareAtPrice: null, stock: 28, featured: false, tags: ['wax-seal', 'stationery', 'kit'],
@@ -120,7 +98,6 @@ export const MORE_PRODUCTS = [
   { store: 'indigo', name: 'Reusable Fabric Gift Wrap Set', category: 'handmade-gifts', price: 22, compareAtPrice: null, stock: 40, featured: false, tags: ['gift-wrap', 'furoshiki', 'reusable'],
     description: 'Three reusable cotton wraps in forest green, mustard and oatmeal, in the Japanese furoshiki style: tie one around any gift and it becomes part of the present.' },
 
-  /* ----------------------------------------------------------- pottery */
   { store: 'terra', name: 'Terracotta Water Jug', category: 'pottery', price: 36, compareAtPrice: null, stock: 20, featured: true, tags: ['jug', 'terracotta', 'water'],
     description: 'A traditional unglazed terracotta jug that keeps water naturally cool through evaporation. Thrown in Jaipur from local red clay, with a pinched pouring lip.' },
   { store: 'terra', name: 'Earthenware Cooking Pot', category: 'pottery', price: 58, compareAtPrice: 70, stock: 10, featured: false, tags: ['cooking-pot', 'earthenware', 'kitchen'],
@@ -138,7 +115,6 @@ export const MORE_PRODUCTS = [
   { store: 'kiln', name: 'Blue and White Glazed Planter', category: 'pottery', price: 56, compareAtPrice: null, stock: 16, featured: false, tags: ['planter', 'blue-and-white', 'glazed'],
     description: 'A generous planter hand painted in cobalt on a white glaze, with a drainage hole in the base. Big enough for a lush fern, and happy indoors or out.' },
 
-  /* -------------------------------------------------------------- bags */
   { store: 'terra', name: 'Black Canvas Crossbody Bag', category: 'bags', price: 48, compareAtPrice: 58, stock: 14, featured: false, tags: ['crossbody', 'canvas', 'everyday'],
     description: 'A compact crossbody bag in waxed black canvas with a zip top, an adjustable strap and a slip pocket inside. Room for a phone, keys and a wallet, and not much else.' },
   { store: 'terra', name: 'Jute Market Bag', category: 'bags', price: 28, compareAtPrice: null, stock: 32, featured: true, tags: ['jute', 'market-bag', 'eco'],
@@ -156,7 +132,6 @@ export const MORE_PRODUCTS = [
   { store: 'indigo', name: 'Hand-Embroidered Floral Handbag', category: 'bags', price: 68, compareAtPrice: null, stock: 7, featured: false, tags: ['handbag', 'embroidery', 'floral'],
     description: 'A structured top-handle bag in sunflower yellow, hand embroidered with a garden of flowers in bright thread. Every stitch is placed by hand, so each bag takes weeks to finish.' },
 
-  /* ------------------------------------------------------- accessories */
   { store: 'fern', name: 'Amber Claw Hair Clip', category: 'accessories', price: 18, compareAtPrice: null, stock: 30, featured: false, tags: ['hair-clip', 'claw', 'acetate'],
     description: 'A large claw clip in amber-toned acetate, strong enough to hold a full twist of thick hair and gentle enough not to snag it.' },
   { store: 'fern', name: 'Sterling Silver Cufflinks', category: 'accessories', price: 74, compareAtPrice: null, stock: 10, featured: false, tags: ['cufflinks', 'silver', 'gift'],

@@ -1,7 +1,3 @@
-/**
- * Where a signed-in user is sent from /login. The redirect comes from the URL,
- * so anything that a browser would treat as another site must fall back home.
- */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, screen } from '@testing-library/react';
 import { Route, Routes, useLocation } from 'react-router-dom';

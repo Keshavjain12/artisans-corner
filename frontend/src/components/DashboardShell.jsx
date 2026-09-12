@@ -2,10 +2,6 @@ import { Link, NavLink, Outlet } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import cn from '../utils/cn.js';
 
-/**
- * Shared chrome for the vendor and admin dashboards: a sticky sidebar on
- * desktop that becomes a horizontally scrollable tab strip on small screens.
- */
 export function DashboardShell({ title, subtitle, links, badge }) {
   return (
     <div className="min-h-screen bg-cream">
@@ -35,9 +31,6 @@ export function DashboardShell({ title, subtitle, links, badge }) {
       </header>
 
       <div className="container-page grid gap-8 py-8 lg:grid-cols-[220px_1fr]">
-        {/* min-w-0: a grid item defaults to min-width:auto, so without this the
-            nav stretches to its content width and the tab strip below never
-            scrolls - it drags the whole page sideways on a phone instead. */}
         <nav aria-label="Dashboard" className="min-w-0 lg:sticky lg:top-8 lg:h-fit">
           <div className="relative lg:contents">
             <ul className="flex gap-1.5 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
@@ -61,7 +54,6 @@ export function DashboardShell({ title, subtitle, links, badge }) {
               </li>
             ))}
             </ul>
-            {/* Hints that the tab strip continues past the right edge. */}
             <span
               aria-hidden="true"
               className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-cream to-transparent lg:hidden"

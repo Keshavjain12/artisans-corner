@@ -1,4 +1,3 @@
-/** Realistic demo catalogue for the seeded marketplace. */
 import { productPhoto, storePhoto } from '../config/photoManifest.js';
 import { MORE_PRODUCTS } from './more-products.js';
 
@@ -77,34 +76,12 @@ export const ADMIN = {
   password: DEMO_PASSWORDS.admin,
 };
 
-/**
- * Seed artwork is generated locally by scripts/generate-seed-art.mjs and served
- * from the client at /seed-art. It is deterministic, works offline and matches
- * the craft it illustrates - unlike the stock photography this replaced, which
- * needed the network, throttled under the load of a full page of cards, and
- * showed a bridge on a tote bag. Real vendors upload through Cloudinary.
- */
 export const artSlug = (value) =>
   value
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
-/*
- * Real photographs win when they exist. Drop files into photos/ and run
- * `npm run seed:photos`; anything without one keeps its generated
- * illustration, so photos can be added a few at a time.
- */
-
-/**
- * The images a seeded product gets.
- *
- * With a real photograph and no second view, the product carries a single
- * image: repeating the same picture would give the gallery two identical
- * thumbnails, which looks like a mistake rather than a choice. The generated
- * illustrations always come as a pair, since the second is a genuinely
- * different view of the same piece.
- */
 export const productArt = (name) => {
   const slug = artSlug(name);
   const photo = productPhoto(slug);
@@ -123,12 +100,6 @@ export const productArt = (name) => {
   ];
 };
 
-/**
- * A shop's imagery. The banner is a real photograph once one has been imported
- * for that shop, falling back to the generated illustration otherwise. The logo
- * stays drawn on purpose: it reads as a maker's mark at 80px, which a cropped
- * photograph does not.
- */
 export const storeArt = (key) => ({
   logo: `/seed-art/store-${key}-logo.svg`,
   banner: storePhoto(key) || `/seed-art/store-${key}-banner.svg`,
@@ -206,5 +177,4 @@ PRODUCTS.push(
     description: 'An A5 coptic-bound sketchbook with 120 pages of 140gsm cartridge paper and a marbled cover papered by hand. Opens completely flat, which is the whole point.' }
 );
 
-/* Seventy more pieces, so every category holds ten - see more-products.js. */
 PRODUCTS.push(...MORE_PRODUCTS);

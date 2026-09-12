@@ -1,13 +1,5 @@
 import { expect, test } from '@playwright/test';
 
-/**
- * A broken image is invisible to every other kind of test: the request returns
- * 200, the markup is right, and nothing throws - the browser just cannot decode
- * the file. That is exactly how three shop logos shipped broken, because an
- * unescaped "&" in "Kiln & Coast" made their SVG invalid XML.
- *
- * naturalWidth === 0 on a completed image is the reliable signal.
- */
 const PAGES = [
   ['/', 'home'],
   ['/shop', 'shop'],
@@ -22,7 +14,6 @@ for (const [url, label] of PAGES) {
     await page.goto(url);
     await page.waitForLoadState('domcontentloaded');
 
-    // Bring lazy images into view and give them a moment to decode.
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
     await page.waitForTimeout(1000);
     await page
@@ -51,19 +42,9 @@ test('every image carries alt text', async ({ page }) => {
       .map((img) => img.currentSrc || img.src)
   );
 
-  // Decorative images are allowed alt="", but the attribute must be present.
   expect(missing).toEqual([]);
 });
 
-/**
- * A shop's header card is lifted over the bottom of its banner photograph. The
- * banner is positioned and the card was not, so the banner painted on top and
- * took the shop's name and logo with it - invisible while the banners were pale
- * illustrations, obvious the moment they became photographs.
- *
- * Visibility assertions do not catch this: the heading is in the layout, laid
- * out, and "visible". What matters is which element owns the pixel.
- */
 test('a storefront header sits above its banner, not under it', async ({ page }) => {
   await page.goto('/shop/silver-fern-atelier');
 

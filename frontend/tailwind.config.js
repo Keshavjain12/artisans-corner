@@ -1,10 +1,8 @@
-/** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
     extend: {
       colors: {
-        // Warm, earthen palette - clay, sand and ink rather than primary blue.
         cream: '#FCFAF7',
         sand: '#F3EDE6',
         ink: {

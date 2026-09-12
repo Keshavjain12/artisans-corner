@@ -96,9 +96,6 @@ describe('product authorization', () => {
 });
 
 describe('the images a product may carry', () => {
-  /* The seed writes its artwork as root-relative paths, and the vendor form
-     resubmits whatever images it loaded - so an absolute-URL-only rule made
-     every seeded product unsaveable, price change and all. */
   it('accepts the paths this app actually produces', async () => {
     const vendor = await registerVendor('Path Studio');
 
@@ -121,7 +118,6 @@ describe('the images a product may carry', () => {
       images: [{ url: '/product-photos/terracotta-planter-set-of-three.webp', alt: 'Planters' }],
     });
 
-    // Exactly what the form sends: the price changed, the images untouched.
     const res = await api()
       .put(`/api/products/${product._id}`)
       .set('Authorization', `Bearer ${vendor.token}`)

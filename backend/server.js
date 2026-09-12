@@ -29,9 +29,6 @@ const server = await (async () => {
 const shutdown = (signal) => {
   console.log(`[server] ${signal} received, shutting down`);
 
-  /* A keep-alive connection can hold the server open indefinitely, and a
-     platform that sends SIGTERM will send SIGKILL soon after - so close the
-     database, then leave regardless. */
   const bail = setTimeout(() => process.exit(0), 8000);
   bail.unref();
 

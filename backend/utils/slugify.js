@@ -10,10 +10,6 @@ export function slugify(input = '') {
     .slice(0, 70);
 }
 
-/**
- * Produces a slug that does not collide with an existing document.
- * `exists` receives a candidate slug and resolves true when it is taken.
- */
 export async function uniqueSlug(base, exists) {
   const root = slugify(base) || 'item';
   let candidate = root;

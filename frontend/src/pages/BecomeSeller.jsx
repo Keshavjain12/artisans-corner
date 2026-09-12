@@ -31,7 +31,6 @@ export default function BecomeSeller() {
     formState: { errors },
   } = useForm();
 
-  // Someone who already runs a shop belongs in their dashboard.
   if (store) return <Navigate to="/dashboard/seller" replace />;
 
   const uploadLogo = async (file) => {
@@ -59,13 +58,11 @@ export default function BecomeSeller() {
         contactEmail: values.contactEmail,
         contactPhone: values.contactPhone,
       });
-      // Refresh the session so the new vendor role and store are in Redux.
       await dispatch(fetchCurrentUser());
       toast.success('Your shop is live');
       navigate('/dashboard/seller', { replace: true });
     } catch (error) {
       toast.error(error.message);
-      // Name the offending fields; the message alone does not.
       (error.fieldErrors || []).forEach((issue) => toast.error(`${issue.field}: ${issue.message}`));
     } finally {
       setSubmitting(false);

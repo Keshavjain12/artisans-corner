@@ -21,18 +21,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export function createApp() {
   const app = express();
 
-  // Behind Render/Railway/Vercel proxies, trust the first hop so rate limiting
-  // and secure cookies see the real client address.
   app.set('trust proxy', 1);
   app.disable('x-powered-by');
 
   app.use(
     helmet({
-      // Product images are served to a different origin than the API.
       crossOriginResourcePolicy: { policy: 'cross-origin' },
-      /* This process serves JSON and uploaded images, never HTML that could
-         execute a script, and the client is a separate origin that sets its
-         own policy. A CSP here would restrict nothing that exists. */
       contentSecurityPolicy: false,
     })
   );
@@ -41,18 +35,13 @@ export function createApp() {
   app.use(
     cors({
       origin(origin, callback) {
-        // Same-origin/server-to-server calls arrive without an Origin header.
         if (!origin || allowList.has(origin.replace(/\/$/, ''))) return callback(null, true);
-        /* An ApiError, not a bare Error: otherwise a browser calling from the
-           wrong origin is reported as a 500 and logged as a server fault. */
         return callback(ApiError.forbidden('This origin is not allowed to call the API'));
       },
       credentials: true,
     })
   );
 
-  /* Stripe signs the *raw* body, so the webhook is mounted before the JSON
-     parser and never sees the parsed payload. */
   app.post(
     '/api/payments/webhook',
     express.raw({ type: 'application/json' }),
@@ -64,11 +53,10 @@ export function createApp() {
   app.use(cookieParser());
   app.use(compression());
   app.use(hpp());
-  app.use(mongoSanitize()); // strips $ and . operators out of user input
+  app.use(mongoSanitize());
 
   if (!env.isTest) app.use(morgan(env.isProd ? 'combined' : 'dev'));
 
-  // Development image fallback when Cloudinary is not configured.
   app.use('/uploads', express.static(path.join(__dirname, 'uploads'), { maxAge: '7d' }));
 
   app.use('/api', apiLimiter, routes);

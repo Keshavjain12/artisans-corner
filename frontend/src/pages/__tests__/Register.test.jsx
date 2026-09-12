@@ -1,8 +1,3 @@
-/**
- * Page-level cover for the bug that shipped: a filled-in registration form
- * reporting every field as empty. This exercises the real page, its real
- * validation rules and the real Redux thunk, with only the HTTP call stubbed.
- */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
 import Register from '../Register.jsx';
@@ -60,7 +55,6 @@ describe('Register page', () => {
       confirmPassword: 'Passw0rd123',
     });
 
-    // The exact symptom of the shipped bug: filled fields flagged as empty.
     expect(screen.queryByText('Please tell us your name')).toBeNull();
     expect(screen.queryByText('Email is required')).toBeNull();
   });

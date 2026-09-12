@@ -21,7 +21,6 @@ const SORTS = {
 
 const PUBLIC_POPULATE = { path: 'vendor', select: 'name slug logo location ratingAverage' };
 
-/** Builds the marketplace filter from a validated query string. */
 async function buildProductFilter(query) {
   const filter = { isActive: true, isArchived: false };
 
@@ -46,9 +45,6 @@ async function buildProductFilter(query) {
     const words = searchWords(query.q);
     if (words.length === 0) return filter;
 
-    /* Every word must match something, and each word may match any field.
-       ANDing the words is what a shopper expects: adding a word should narrow
-       the results, not widen them the way an OR would. */
     const anyWord = searchRegex(query.q);
     const candidateStores = await Store.find({ name: anyWord, isActive: true })
       .select('_id name')
@@ -56,7 +52,6 @@ async function buildProductFilter(query) {
 
     filter.$and = words.map((word) => {
       const rx = wordRegex(word);
-      // Shop names count too, so "Terra vase" finds that studio's vases.
       const storeIds = candidateStores.filter((store) => rx.test(store.name)).map((s) => s._id);
       return {
         $or: [
@@ -91,7 +86,6 @@ export const listProducts = asyncHandler(async (req, res) => {
   });
 });
 
-/** Accepts either a slug or an id so links stay friendly but ids still work. */
 export const getProduct = asyncHandler(async (req, res) => {
   const { idOrSlug } = req.params;
   const criteria = /^[0-9a-fA-F]{24}$/.test(idOrSlug) ? { _id: idOrSlug } : { slug: idOrSlug };
@@ -128,16 +122,11 @@ export const listCategories = asyncHandler(async (_req, res) => {
   });
 });
 
-/* ------------------------------------------------------------------ *
- * Vendor-owned product management                                     *
- * ------------------------------------------------------------------ */
-
 async function assertCategoryExists(slug) {
   const exists = await Category.exists({ slug, isActive: true });
   if (!exists) throw ApiError.badRequest('Pick one of the marketplace categories');
 }
 
-/** Loads a product the caller is allowed to change, or throws. */
 async function findOwnedProduct(req) {
   const product = await Product.findById(req.params.id);
   if (!product) throw ApiError.notFound('Product not found');
@@ -160,7 +149,6 @@ export const createProduct = asyncHandler(async (req, res) => {
     compareAtPrice: req.body.compareAtPrice || null,
     tags: (req.body.tags || []).map((tag) => tag.toLowerCase()),
     slug,
-    // Ownership always comes from the session, never from the request body.
     vendor: req.store._id,
     vendorUser: req.user._id,
   });
@@ -182,7 +170,6 @@ export const listMyProducts = asyncHandler(async (req, res) => {
   if (req.query.status === undefined || req.query.status === 'all') filter.isArchived = false;
   if (req.query.category) filter.category = String(req.query.category).toLowerCase();
   if (req.query.q) {
-    // Same AND semantics as the public search: more words means fewer results.
     const words = searchWords(req.query.q);
     if (words.length) filter.$and = words.map((word) => ({ name: wordRegex(word) }));
   }
@@ -236,10 +223,6 @@ export const updateProduct = asyncHandler(async (req, res) => {
   return sendSuccess(res, { message: 'Product updated', data: { product } });
 });
 
-/**
- * Products that appear in an order are archived rather than deleted, so past
- * orders keep resolving. Only never-sold products are removed outright.
- */
 export const deleteProduct = asyncHandler(async (req, res) => {
   const product = await findOwnedProduct(req);
   const hasOrders = await Order.exists({ 'items.product': product._id });

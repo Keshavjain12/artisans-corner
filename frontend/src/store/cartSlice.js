@@ -3,11 +3,6 @@ import { MAX_QTY_PER_LINE } from '../utils/constants.js';
 
 export const CART_KEY = 'ac_cart_v1';
 
-/**
- * The cart is a *convenience* copy of what the shopper picked. Prices here are
- * only for display - the server re-prices everything from the database at
- * checkout, so a tampered cart cannot change what is charged.
- */
 function loadCart() {
   try {
     const raw = localStorage.getItem(CART_KEY);
@@ -24,7 +19,6 @@ export function persistCart(items) {
   try {
     localStorage.setItem(CART_KEY, JSON.stringify(items));
   } catch {
-    /* private browsing - the cart simply will not survive a refresh */
   }
 }
 

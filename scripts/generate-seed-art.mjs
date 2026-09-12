@@ -1,18 +1,3 @@
-/**
- * Generates the placeholder artwork the seed catalogue uses.
- *
- *   npm run seed:art
- *
- * The demo previously pulled random photographs from an external service. They
- * needed the network, throttled under the ~40 requests a page makes (leaving
- * blank cards), and had nothing to do with the products - a tote bag
- * illustrated by a photograph of a bridge. These are small deterministic SVGs
- * in the marketplace palette, with a motif per craft: they load instantly,
- * work offline, and read as considered placeholders rather than broken photos.
- *
- * Output lands in frontend/public/seed-art, so the files are served at
- * /seed-art/<name>.svg by both the Vite dev server and the production build.
- */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -21,7 +6,6 @@ import { MOTIFS, motifFor } from './seed-art-motifs.mjs';
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_DIR = path.join(repoRoot, 'frontend', 'public', 'seed-art');
 
-/* Warm grounds drawn from the Tailwind theme, paired with an ink for the motif. */
 const PALETTES = [
   { from: '#F6EBE3', to: '#E7CFC1', ink: '#8F5739', accent: '#A96F4C' },
   { from: '#F1EDE6', to: '#DFD5C6', ink: '#74452E', accent: '#C28C6E' },
@@ -31,10 +15,6 @@ const PALETTES = [
   { from: '#F4EEE9', to: '#E0D2C8', ink: '#3A4C38', accent: '#8F5739' },
 ];
 
-/**
- * SVG is XML, so a raw & in a name ("Kiln & Coast") makes the whole file fail
- * to parse and the browser shows a broken image rather than the artwork.
- */
 const esc = (value) =>
   String(value)
     .replace(/&/g, '&amp;')
@@ -43,14 +23,12 @@ const esc = (value) =>
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;');
 
-/** Stable hash so the same name always gets the same look. */
 const hash = (value) => {
   let h = 0;
   for (let i = 0; i < value.length; i += 1) h = (h * 31 + value.charCodeAt(i)) >>> 0;
   return h;
 };
 
-/** Faint concentric rings, so a tile has some depth behind the motif. */
 const texture = (c, seed) =>
   Array.from({ length: 3 }, (_, i) => {
     const cx = 200 + ((seed >> (i * 3)) % 800);
@@ -58,19 +36,10 @@ const texture = (c, seed) =>
     return `<circle cx="${cx}" cy="${cy}" r="${170 + i * 90}" fill="none" stroke="${c.ink}" stroke-width="2" opacity="0.07"/>`;
   }).join('');
 
-/**
- * Product tiles are square, because every product image slot in the UI is
- * square - the card, the detail view and its thumbnails. Matching the asset to
- * the container means object-cover never has to crop anything away.
- *
- * Motifs are drawn for a 1200x900 box, so the group is nudged down to sit in
- * the middle of the taller canvas.
- */
 function tile({ name, category, size = 1200, paletteShift = 0, view = 1 }) {
   const seed = hash(name);
   const c = PALETTES[(seed + paletteShift) % PALETTES.length];
   const motif = MOTIFS[motifFor(name, category)];
-  // The second view is the same piece, turned slightly and framed differently.
   const rotation = ((seed % 7) - 3) * (view === 2 ? -1.6 : 1);
   const scale = view === 2 ? 0.86 : 1;
 
@@ -88,7 +57,6 @@ function tile({ name, category, size = 1200, paletteShift = 0, view = 1 }) {
 `;
 }
 
-/** A wide, calmer version for shop banners. */
 function banner({ name, category }) {
   const seed = hash(name);
   const c = PALETTES[seed % PALETTES.length];
@@ -109,7 +77,6 @@ function banner({ name, category }) {
 `;
 }
 
-/** A square monogram for shop logos. */
 function logo({ name }) {
   const seed = hash(name);
   const c = PALETTES[seed % PALETTES.length];
@@ -130,8 +97,6 @@ function logo({ name }) {
 }
 
 export { tile, banner, logo };
-
-/* ------------------------------------------------------------------ write */
 
 if (process.argv[1] && import.meta.url.endsWith(path.basename(process.argv[1]))) {
   const { PRODUCTS, STORES } = await import('../backend/seed/data.js');
@@ -155,7 +120,6 @@ if (process.argv[1] && import.meta.url.endsWith(path.basename(process.argv[1])))
   for (const product of PRODUCTS) {
     const base = slug(product.name);
     write(`${base}.svg`, tile({ name: product.name, category: product.category }));
-    // A second angle of the same piece for the product-page gallery.
     write(
       `${base}-2.svg`,
       tile({ name: product.name, category: product.category, paletteShift: 3, view: 2 })

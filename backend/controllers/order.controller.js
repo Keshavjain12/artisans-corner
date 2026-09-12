@@ -11,10 +11,6 @@ import {
   reverseStoreTotals,
 } from '../services/order.service.js';
 
-/**
- * Vendors only ever see their own lines of a shared order, plus the shipping
- * address they need in order to fulfil them.
- */
 function projectForVendor(order, storeId) {
   const items = order.items.filter((item) => String(item.vendor) === String(storeId));
   const subtotal = round2(items.reduce((sum, item) => sum + item.subtotal, 0));
@@ -81,7 +77,6 @@ export const getOrderById = asyncHandler(async (req, res) => {
   });
 });
 
-/** Orders containing at least one item from the signed-in vendor's store. */
 export const getVendorOrders = asyncHandler(async (req, res) => {
   const { page, limit, skip } = getPagination(req.query, { defaultLimit: 10, maxLimit: 50 });
   const filter = { vendors: req.store._id, paymentStatus: 'paid' };
@@ -99,7 +94,6 @@ export const getVendorOrders = asyncHandler(async (req, res) => {
   });
 });
 
-/** A vendor advances fulfilment for their own lines only. */
 export const updateFulfilmentStatus = asyncHandler(async (req, res) => {
   const { status, trackingNumber, itemIds } = req.body;
   const order = await Order.findById(req.params.id);
@@ -124,7 +118,6 @@ export const updateFulfilmentStatus = asyncHandler(async (req, res) => {
     if (trackingNumber) item.trackingNumber = trackingNumber;
   }
 
-  // Only the lines this vendor just cancelled go back on the shelf.
   if (status === 'cancelled') await restockOrder(order, targets);
 
   order.orderStatus = deriveOrderStatus(order);
@@ -141,7 +134,6 @@ export const updateFulfilmentStatus = asyncHandler(async (req, res) => {
   });
 });
 
-/** Buyers may cancel while every line is still un-shipped. */
 export const cancelOrder = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
   if (!order) throw ApiError.notFound('Order not found');
@@ -175,7 +167,6 @@ export const cancelOrder = asyncHandler(async (req, res) => {
   return sendSuccess(res, { message: 'Order cancelled', data: { order } });
 });
 
-/** The vendor earnings ledger (recorded payouts, not real bank transfers). */
 export const getVendorPayouts = asyncHandler(async (req, res) => {
   const { page, limit, skip } = getPagination(req.query, { defaultLimit: 20, maxLimit: 100 });
   const filter = { vendor: req.store._id };

@@ -18,7 +18,6 @@ router.get('/health', (_req, res) =>
     message: 'Artisan\u2019s Corner API is running',
     data: {
       environment: env.nodeEnv,
-      // Kind only, never the name or host: this endpoint is public.
       database: env.ephemeralDb ? 'ephemeral' : 'persistent',
       payments: env.stripeEnabled ? 'stripe' : env.allowMockPayments ? 'mock' : 'disabled',
       demo: env.demoDeployment,

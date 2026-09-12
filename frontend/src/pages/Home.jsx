@@ -58,8 +58,6 @@ export default function Home() {
   const categories = useAsync(() => catalogService.listCategories(), []);
   const stores = useAsync(() => catalogService.listStores({ limit: 4 }), []);
 
-  /* Counted live rather than written into the copy, so the hero stays true as
-     makers add and retire pieces - it read "Thirty pieces" long after it wasn't. */
   const studioCount = stores.data?.meta?.total;
   const pieceCount = trending.data?.meta?.total;
   const heroCount =

@@ -1,26 +1,9 @@
-/**
- * Pays with Stripe's test card, in real Chrome, against a running site.
- *
- *   npm run stripe:checkout                                    # http://localhost:5273
- *   SITE=https://artisans-corner-keshav.vercel.app npm run stripe:checkout
- *
- * The automated suites run with Stripe keys blanked on purpose, so they never
- * touch a real account - which leaves Stripe's own card form, an iframe served
- * by Stripe, untested by them. This covers it: sign in as the demo buyer, buy
- * one piece, type 4242 4242 4242 4242 into the Payment Element, and wait for
- * the confirmation page and an emptied cart.
- *
- * It makes a real TEST-MODE payment, so it creates a paid order in whichever
- * database that site uses. No money moves. The site needs Stripe keys; in
- * simulated-payment mode there is no card form and this exits saying so.
- */
 import { chromium } from '@playwright/test';
 
 const SITE = (process.env.SITE || process.argv[2] || 'http://localhost:5273').replace(/\/$/, '');
 
 const browser = await chromium.launch({ channel: 'chrome' });
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-// A free Render instance can take ~50 seconds to wake on the first request.
 page.setDefaultTimeout(90000);
 
 const errors = [];
@@ -66,7 +49,6 @@ try {
   await number.fill('4242424242424242');
   await frame.locator('input[name="expiry"]').fill('12 / 34');
   await frame.locator('input[name="cvc"]').fill('123');
-  // Stripe guesses the country from the visitor's address; a US card wants a ZIP.
   const country = frame.locator('select[name="country"]');
   if (await country.count()) await country.selectOption('US');
   const zip = frame.locator('input[name="postalCode"]');

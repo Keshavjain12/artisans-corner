@@ -11,7 +11,6 @@ export const onboardStoreSchema = z.object({
   name: trimmed(2, 60, 'Store name'),
   description: trimmed(20, 1200, 'Store description'),
   tagline: z.string().trim().max(120).optional().default(''),
-  // Same rule as product images: an upload of ours, or nothing.
   logo: optionalImageUrl,
   banner: optionalImageUrl,
   location: locationSchema.optional(),

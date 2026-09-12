@@ -32,12 +32,6 @@ export default function ProductDetail() {
   const related = data?.data?.related || [];
   useDocumentTitle(product?.name);
 
-  /* Reset the gallery and quantity for each new piece: "You might also like"
-     navigates without unmounting this page, so thumbnail 2 of the last product
-     would otherwise select a nonexistent image on a product that has one. */
-  /* Reset the gallery and quantity for each new piece: "You might also like"
-     navigates without unmounting this page, so thumbnail 2 of the last product
-     would otherwise select a nonexistent image on a product that has one. */
   useEffect(() => {
     setActiveImage(0);
     setQuantity(1);

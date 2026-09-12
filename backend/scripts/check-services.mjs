@@ -1,13 +1,3 @@
-/**
- * Verifies the three external services against your real credentials.
- *
- *   npm run check:services        (from the repo root)
- *
- * Run this the moment you paste real keys into backend/.env, and again on the
- * deployed API with its own environment. It does the smallest real operation
- * against each service and cleans up after itself, so a green run is proof the
- * credentials work - not just that they are present.
- */
 import mongoose from 'mongoose';
 import env from '../config/env.js';
 import cloudinary from '../config/cloudinary.js';
@@ -19,7 +9,6 @@ const record = (service, ok, detail) => {
   console.log(`  ${ok ? 'PASS' : 'FAIL'}  ${service.padEnd(12)} ${detail}`);
 };
 
-/** A real 1x1 PNG, so Cloudinary receives a genuine image. */
 const PNG = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
   'base64'
@@ -27,7 +16,6 @@ const PNG = Buffer.from(
 
 console.log(`\nChecking external services (${env.nodeEnv})\n`);
 
-/* ------------------------------------------------------------- MongoDB --- */
 try {
   await mongoose.connect(env.mongoUri, { serverSelectionTimeoutMS: 10000 });
   const { host, name } = mongoose.connection;
@@ -38,7 +26,6 @@ try {
   record('MongoDB', false, error.message);
 }
 
-/* ----------------------------------------------------------- Cloudinary --- */
 if (!env.cloudinaryEnabled) {
   record(
     'Cloudinary',
@@ -55,7 +42,6 @@ if (!env.cloudinaryEnabled) {
       stream.end(PNG);
     });
 
-    // The URL must actually serve the image, not just come back in the response.
     const fetched = await fetch(uploaded.secure_url);
     const served = fetched.ok && (fetched.headers.get('content-type') || '').startsWith('image/');
 
@@ -73,7 +59,6 @@ if (!env.cloudinaryEnabled) {
   }
 }
 
-/* --------------------------------------------------------------- Stripe --- */
 if (!env.stripeEnabled) {
   record('Stripe', false, 'not configured - set STRIPE_SECRET_KEY');
 } else {
@@ -104,7 +89,6 @@ if (!env.stripeEnabled) {
   }
 }
 
-/* -------------------------------------------------------- production gate -- */
 if (env.allowMockPayments) {
   record(
     'Mock payments',

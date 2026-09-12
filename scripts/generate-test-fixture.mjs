@@ -1,11 +1,3 @@
-/**
- * Regenerates the image the browser suite uploads.
- *
- *   node scripts/generate-test-fixture.mjs
- *
- * Kept as a committed fixture so e2e/helpers.js can read it synchronously -
- * Playwright's loader does not allow top-level await in a helper module.
- */
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';

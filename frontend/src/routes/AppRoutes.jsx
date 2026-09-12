@@ -4,8 +4,6 @@ import MainLayout from '../layouts/MainLayout.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
 import { Spinner } from '../components/ui.jsx';
 
-/* Route-level code splitting keeps the marketplace bundle small; the
-   dashboards and their charts only load for the people who use them. */
 const Home = lazy(() => import('../pages/Home.jsx'));
 const Shop = lazy(() => import('../pages/Shop.jsx'));
 const Categories = lazy(() => import('../pages/Categories.jsx'));

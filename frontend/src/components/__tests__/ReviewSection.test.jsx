@@ -1,8 +1,3 @@
-/**
- * The review panel has three honest states, and getting them wrong is worse
- * than showing nothing: a buyer who has already reviewed a piece used to be
- * told that only verified buyers could review it.
- */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
 import ReviewSection from '../ReviewSection.jsx';
@@ -40,7 +35,6 @@ const myReview = {
   user: { _id: 'u1', name: 'Test Person' },
 };
 
-/** Shapes the two calls the panel makes on mount. */
 function serve({ reviews = [], viewerReview = null, reviewable = [] } = {}) {
   getProductReviews.mockResolvedValue({
     data: { reviews, viewerReview, distribution: [] },
@@ -87,8 +81,6 @@ describe('ReviewSection', () => {
   });
 
   it('recognises a review the buyer has already written, and edits it', async () => {
-    /* The pending list is empty here precisely because the review exists - the
-       old code read that as "never bought it". */
     serve({ reviews: [myReview], viewerReview: myReview });
     renderWithProviders(<ReviewSection product={product} />, {
       preloadedState: signedInAs('buyer'),

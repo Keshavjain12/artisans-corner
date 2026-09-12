@@ -1,8 +1,3 @@
-/**
- * Route guards are a UX convenience - the API enforces the same rules - but a
- * broken guard either locks legitimate users out of their dashboard or shows
- * them an admin screen that then fails every request.
- */
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, screen } from '@testing-library/react';
 import { Route, Routes } from 'react-router-dom';
@@ -36,7 +31,6 @@ describe('ProtectedRoute', () => {
       preloadedState: { auth: { user: null, store: null, token: 't', status: 'loading', error: null } },
       route: '/dashboard/seller',
     });
-    // It must not bounce to /login before /auth/me has answered.
     expect(screen.queryByText('login page')).toBeNull();
     expect(screen.getByRole('status')).toBeTruthy();
   });
@@ -74,7 +68,6 @@ describe('ProtectedRoute', () => {
   });
 
   it('lets a vendor who is also a buyer keep both capabilities', () => {
-    // The brief is explicit: vendor and buyer must not be mutually exclusive.
     const { store: reduxStore } = renderWithProviders(
       <Guarded roles={['vendor', 'admin']} requireStore />,
       { preloadedState: signedInAs('vendor', store), route: '/dashboard/seller' }

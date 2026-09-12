@@ -1,16 +1,6 @@
-/**
- * Covers the real Stripe branch of checkout, which the simulated payment
- * provider never touches: what we ask Stripe to charge, that we re-read the
- * intent instead of trusting the browser, and webhook signature verification.
- *
- * The Stripe *client* is mocked so no network call is made, but the signature
- * check runs against the genuine `stripe` library, so a tampered payload is
- * rejected here exactly as it would be in production.
- */
 import { afterAll, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import Stripe from 'stripe';
 
-// Must be set before config/env.js is evaluated by the dynamic imports below.
 process.env.STRIPE_SECRET_KEY = 'sk_test_audit_dummy_key';
 process.env.STRIPE_PUBLISHABLE_KEY = 'pk_test_audit_dummy_key';
 process.env.STRIPE_WEBHOOK_SECRET = 'whsec_audit_dummy_secret';
@@ -18,7 +8,6 @@ process.env.ALLOW_MOCK_PAYMENTS = 'false';
 
 const realStripe = new Stripe('sk_test_audit_dummy_key', { apiVersion: '2024-12-18.acacia' });
 
-/** State the fake Stripe client returns, reset before each test. */
 const stripeState = {
   createdIntents: [],
   retrieveStatus: 'succeeded',
@@ -42,7 +31,6 @@ const stripeMock = {
       last_payment_error: stripeState.retrieveStatus === 'canceled' ? { message: 'Card declined' } : null,
     })),
   },
-  // Genuine verification - not stubbed.
   webhooks: {
     constructEvent: (payload, signature, secret) =>
       realStripe.webhooks.constructEvent(payload, signature, secret),
@@ -76,7 +64,6 @@ const SHIPPING = {
   phone: '+1 917 555 0143',
 };
 
-/** Vendor with one product, plus a buyer holding a live payment intent. */
 async function startCheckout({ price = 100, stock = 5, quantity = 2 } = {}) {
   const vendor = await registerVendor('Stripe Test Studio');
   const product = await createProduct(vendor.token, { price, stock });
@@ -90,12 +77,6 @@ async function startCheckout({ price = 100, stock = 5, quantity = 2 } = {}) {
   return { vendor, product, buyer, res };
 }
 
-/**
- * Builds a webhook request Stripe itself would consider authentic.
- *
- * The payload is sent as a *string*: supertest JSON-encodes a Buffer body into
- * {"type":"Buffer",...}, which is not the byte sequence that was signed.
- */
 function signedWebhook(event) {
   const payload = JSON.stringify(event);
   const header = realStripe.webhooks.generateTestHeaderString({
@@ -113,7 +94,6 @@ describe('creating a Stripe PaymentIntent', () => {
     expect(stripeMock.paymentIntents.create).toHaveBeenCalledTimes(1);
 
     const params = stripeState.createdIntents[0];
-    // $200.00 with free shipping over the threshold -> 20000 cents.
     expect(params.amount).toBe(20000);
     expect(params.currency).toBe('usd');
     expect(res.body.data.totals.total).toBe(200);
@@ -161,7 +141,6 @@ describe('creating a Stripe PaymentIntent', () => {
     expect(order.orderStatus).toBe('pending_payment');
     expect(order.stripePaymentIntentId).toBe(stripeState.nextIntentId);
 
-    // No stock moves on intent creation.
     expect((await Product.findById(product._id)).stock).toBe(5);
   });
 
@@ -210,7 +189,6 @@ describe('confirming a Stripe payment', () => {
     const order = await Order.findById(res.body.data.orderId);
     expect(order.paymentStatus).toBe('failed');
     expect(order.orderStatus).toBe('cancelled');
-    // A failed payment must not move inventory or create earnings.
     expect((await Product.findById(product._id)).stock).toBe(5);
     expect(await Payout.countDocuments({ order: order._id })).toBe(0);
   });
@@ -345,7 +323,6 @@ describe('webhook signature verification', () => {
     const intentId = stripeState.nextIntentId;
     const { payload, header } = signedWebhook(succeededEvent(intentId));
 
-    // Webhook first, then the browser reports back - and then Stripe retries.
     await api()
       .post('/api/payments/webhook')
       .set('stripe-signature', header)
@@ -376,7 +353,6 @@ describe('webhook signature verification', () => {
       .set('Content-Type', 'application/json')
       .send(payload);
 
-    // Still 200, so Stripe stops retrying an event we have nothing to do with.
     expect(hook.status).toBe(200);
   });
 });

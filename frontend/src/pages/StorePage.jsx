@@ -52,9 +52,6 @@ export default function StorePage() {
       </div>
 
       <div className="container-page">
-        {/* `relative` is load-bearing: the banner above is positioned, so without
-            it this card paints *underneath* the banner and loses the top of the
-            logo and the shop name to it. */}
         <div className="relative -mt-12 flex flex-wrap items-end gap-5 rounded-2xl border border-sand bg-white p-6 shadow-card">
           <CoverImage
             src={store.logo}

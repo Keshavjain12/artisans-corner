@@ -1,16 +1,10 @@
 import { expect, test } from '@playwright/test';
 import { DEMO, signIn } from './helpers.js';
 
-/**
- * Runs on the `mobile` project (Pixel 5). The brief asks for a mobile
- * experience that is not a squashed desktop, so these assert the behaviour
- * actually changes rather than just that the page fits.
- */
 test.describe('on a phone', () => {
   test('navigation collapses into a menu', async ({ page }) => {
     await page.goto('/');
 
-    // The desktop nav is hidden; the hamburger takes over.
     const openMenu = page.getByRole('button', { name: 'Open menu' });
     await expect(openMenu).toBeVisible();
 
@@ -32,7 +26,6 @@ test.describe('on a phone', () => {
     const first = await cards.nth(0).boundingBox();
     const second = await cards.nth(1).boundingBox();
 
-    // Two columns on a phone, not four squashed ones.
     expect(Math.abs(first.y - second.y)).toBeLessThan(20);
     const third = await cards.nth(2).boundingBox();
     expect(third.y).toBeGreaterThan(first.y + first.height - 20);
@@ -73,7 +66,6 @@ test.describe('on a phone', () => {
     const nameField = page.getByLabel('Full name');
     await expect(nameField).toBeVisible();
 
-    // Tap targets should not be hairline-thin on a touch screen.
     const box = await nameField.boundingBox();
     expect(box.height).toBeGreaterThanOrEqual(36);
 

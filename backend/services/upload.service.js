@@ -9,7 +9,6 @@ import ApiError from '../utils/ApiError.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LOCAL_DIR = path.resolve(__dirname, '..', 'uploads');
 
-/** Magic-byte signatures - a spoofed Content-Type alone is not trusted. */
 const SIGNATURES = [
   { ext: 'jpg', test: (b) => b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff },
   { ext: 'png', test: (b) => b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4e && b[3] === 0x47 },
@@ -20,8 +19,6 @@ const SIGNATURES = [
       b.subarray(0, 4).toString('ascii') === 'RIFF' && b.subarray(8, 12).toString('ascii') === 'WEBP',
   },
   {
-    /* "ftyp" alone is every ISO base media file - MP4 and MOV included - so the
-       brand has to be read too, or a video passes as an image. */
     ext: 'avif',
     test: (b) =>
       b.subarray(4, 8).toString('ascii') === 'ftyp' &&
@@ -39,13 +36,6 @@ export function assertIsImage(file) {
   return match.ext;
 }
 
-/**
- * Every upload lands in a folder named after the account that made it.
- *
- * That is not tidiness: a public id is visible in the image URL of any product,
- * so without an owner segment to check, the delete endpoint would let one
- * vendor destroy another vendor's photographs.
- */
 export const ownedFolder = (folder, ownerId) => `${folder}/${String(ownerId)}`;
 
 async function uploadToCloudinary(file, folder) {
@@ -54,7 +44,6 @@ async function uploadToCloudinary(file, folder) {
       {
         folder,
         resource_type: 'image',
-        // Server-side normalisation keeps product imagery fast and consistent.
         transformation: [{ width: 1600, height: 1600, crop: 'limit' }, { quality: 'auto:good' }],
         format: 'webp',
       },
@@ -74,11 +63,6 @@ async function uploadToLocalDisk(file, ext, ownerId) {
   return { url: `${env.serverUrl}/uploads/${name}`, publicId: `local:${name}` };
 }
 
-/**
- * Uploads one validated image and returns the URL to persist.
- * Cloudinary is used whenever it is configured; otherwise the file is written
- * to backend/uploads so the app stays usable in local development.
- */
 export async function uploadImage(file, folder = 'artisans-corner/products', ownerId) {
   const ext = assertIsImage(file);
   if (env.cloudinaryEnabled) return uploadToCloudinary(file, ownedFolder(folder, ownerId));
@@ -89,12 +73,6 @@ export async function uploadMany(files = [], folder, ownerId) {
   return Promise.all(files.map((file) => uploadImage(file, folder, ownerId)));
 }
 
-/**
- * True when this public id was produced by this account's uploads.
- *
- * Cloudinary ids carry the owner as a path segment; local ids carry it as a
- * filename prefix. Admins bypass the check so they can clean up after anyone.
- */
 export function ownsImage(publicId, ownerId, { isAdmin = false } = {}) {
   if (isAdmin) return true;
   if (!publicId || !ownerId) return false;
@@ -103,14 +81,10 @@ export function ownsImage(publicId, ownerId, { isAdmin = false } = {}) {
   return publicId.split('/').includes(owner);
 }
 
-/** Best-effort cleanup; a failed delete must never break the request. */
 export async function destroyImage(publicId) {
   if (!publicId) return;
   try {
     if (publicId.startsWith('local:')) {
-      /* basename first, then prove the result is still inside the uploads
-         folder: "local:../../config/env.js" is a delete-anything primitive
-         otherwise. */
       const name = path.basename(publicId.slice(6));
       const target = path.resolve(LOCAL_DIR, name);
       if (!target.startsWith(path.resolve(LOCAL_DIR) + path.sep)) return;

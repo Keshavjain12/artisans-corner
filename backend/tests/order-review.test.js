@@ -24,7 +24,6 @@ const SHIPPING = {
   phone: '+1 917 555 0143',
 };
 
-/** Runs a full simulated purchase and returns the resulting paid order. */
 async function purchase(buyerToken, productId, quantity = 1) {
   const intent = await api()
     .post('/api/payments/create-intent')
@@ -171,7 +170,6 @@ describe('verified reviews', () => {
       .send({ productId: product._id, rating: 3, comment: 'Lovely glaze, a little smaller than I hoped.' });
     expect(created.status).toBe(201);
 
-    /* The order line is flagged, so nothing keeps prompting for a review. */
     const orders = await api()
       .get('/api/orders/my-orders')
       .set('Authorization', `Bearer ${buyer.token}`);
@@ -182,8 +180,6 @@ describe('verified reviews', () => {
       .set('Authorization', `Bearer ${buyer.token}`);
     expect(pending.body.data).toHaveLength(0);
 
-    /* With nothing left to review, the only thing that stops the page calling a
-       verified buyer a stranger is the viewer's own review coming back. */
     const mine = await api()
       .get(`/api/products/${product._id}/reviews`)
       .set('Authorization', `Bearer ${buyer.token}`);

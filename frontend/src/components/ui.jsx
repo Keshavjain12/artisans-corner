@@ -46,7 +46,6 @@ export function Badge({ children, className, tone = 'bg-sand text-ink-muted' }) 
   return <span className={cn('badge', tone, className)}>{children}</span>;
 }
 
-/** Labelled input that wires its own error text to the field for screen readers. */
 export function Field({ label, error, hint, id, required, className, children }) {
   const describedBy = error ? `${id}-error` : hint ? `${id}-hint` : undefined;
   return (
@@ -69,11 +68,6 @@ export function Field({ label, error, hint, id, required, className, children })
     </div>
   );
 }
-
-/* These forward their ref on purpose: react-hook-form's `register()` returns a
-   ref that has to reach the real DOM node. A plain function component drops it
-   silently, and every field then validates as empty however much the user
-   types. */
 
 export const Input = forwardRef(function Input({ invalid, className, ...props }, ref) {
   return (

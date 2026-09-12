@@ -68,7 +68,6 @@ export default function Checkout() {
     );
   }
 
-  /** Step 2 submit: the server re-prices the basket and opens a PaymentIntent. */
   const startPayment = async (values) => {
     setCreating(true);
     setPayError('');
@@ -97,7 +96,6 @@ export default function Checkout() {
     }
   };
 
-  /** Step 3: the server re-checks the intent with Stripe before creating stock movements. */
   const finishPayment = async (paymentIntentId) => {
     const res = await paymentService.confirm(paymentIntentId);
     dispatch(clearCart());
@@ -293,8 +291,6 @@ export default function Checkout() {
     </form>
   );
 
-  /* Built only once an intent exists: this JSX dereferences intent.totals
-     eagerly, so constructing it with no intent crashes the whole page. */
   const paymentPanel = intent ? (
     <div className="card space-y-5 p-6">
       <h2 className="text-lg font-semibold text-ink">Payment</h2>

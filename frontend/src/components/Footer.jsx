@@ -36,7 +36,6 @@ export function Footer() {
 
   const subscribe = (event) => {
     event.preventDefault();
-    // No mailing-list provider is wired up in this project.
     toast.success('Thanks - we will let you know when new makers join.');
     setEmail('');
   };

@@ -1,7 +1,3 @@
-/**
- * The product card is the main way anything enters the cart, so its wiring to
- * the store - and its out-of-stock guard - are worth pinning down.
- */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, screen } from '@testing-library/react';
 import ProductCard from '../ProductCard.jsx';
@@ -87,7 +83,6 @@ describe('CoverImage', () => {
   });
 
   it('falls back to a monogram rather than a broken image', () => {
-    // A shop that has not uploaded a banner must not look defective.
     const { container } = renderWithProviders(<CoverImage src="" label="Terra & Thread" />, {
       preloadedState: signedOut,
     });

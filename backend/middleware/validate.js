@@ -1,10 +1,5 @@
 import ApiError from '../utils/ApiError.js';
 
-/**
- * Validates and *replaces* the given request part with the parsed result, so
- * controllers only ever see whitelisted, coerced values.
- * Usage: `router.post('/', validate(createProductSchema), controller)`
- */
 export const validate =
   (schema, source = 'body') =>
   (req, _res, next) => {

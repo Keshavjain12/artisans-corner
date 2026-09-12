@@ -1,19 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { DEMO, PNG_BYTES, unique } from './helpers.js';
 
-/**
- * The product gallery, across a navigation.
- *
- * "You might also like" moves between products without unmounting the page, so
- * the selected thumbnail index survived the change: going from a piece with two
- * views to one with a single photograph selected an image that did not exist and
- * rendered an empty frame. That is the same empty-image symptom that has reached
- * this project's shop twice before, and no API test can see it.
- *
- * The two-view product is created here rather than assumed: every seeded piece
- * currently has exactly one photograph, so a test that waited for a second view
- * to exist would quietly skip itself and prove nothing.
- */
 test.describe('the product gallery', () => {
   test('still shows a photograph after following a related piece', async ({ page, request }) => {
     const login = await request.post('/api/auth/login', { data: DEMO.vendor });
@@ -44,7 +31,6 @@ test.describe('the product gallery', () => {
         name: `Gallery Test Piece ${suffix}`,
         description: 'A temporary piece created by the browser suite to exercise the image gallery.',
         price: 42,
-        // A category with other pieces in it, so "You might also like" is populated.
         category: 'pottery',
         stock: 3,
         images: [
@@ -63,7 +49,6 @@ test.describe('the product gallery', () => {
       await expect(thumbs).toHaveCount(2);
       await thumbs.nth(1).click();
 
-      // Follow a related piece, which has only one photograph.
       const related = page.locator('section', { hasText: 'You might also like' });
       await expect(related).toBeVisible();
       await related.locator('article').first().getByRole('heading').getByRole('link').click();
@@ -74,14 +59,11 @@ test.describe('the product gallery', () => {
       const hero = page.locator('main img').first();
       await expect(hero).toBeVisible();
 
-      /* An <img> with no src is still "visible" and still occupies its box, so
-         the load state is the only thing worth asserting. */
       const broken = await hero.evaluate(
         (img) => !img.currentSrc || !img.complete || img.naturalWidth === 0
       );
       expect(broken, 'the main product image did not load after navigating').toBe(false);
     } finally {
-      // Never leave a test piece in the shop, whatever happened above.
       await request.delete(`/api/products/${product._id}`, { headers: auth });
     }
   });

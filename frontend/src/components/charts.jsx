@@ -15,7 +15,6 @@ import {
 } from 'recharts';
 import { formatCurrency } from '../utils/format.js';
 
-/* One palette for every chart, drawn from the marketplace design tokens. */
 export const CHART_COLORS = ['#A96F4C', '#5F7A5B', '#C28C6E', '#8F5739', '#D6AF99', '#3A4C38'];
 
 const AXIS = { stroke: '#9A8F86', fontSize: 12, tickLine: false, axisLine: false };
@@ -86,7 +85,6 @@ export function TopProductsChart({ data = [], height = 260 }) {
           dataKey="name"
           width={190}
           {...AXIS}
-          // Trim on a word boundary so a label never breaks mid-word.
           tickFormatter={(value) =>
             value.length > 28 ? `${value.slice(0, 27).replace(/\s\S*$/, '')}...` : value
           }

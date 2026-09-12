@@ -5,19 +5,11 @@ import { round2, splitCommission } from '../utils/money.js';
 
 export const MAX_QTY_PER_LINE = 20;
 
-/**
- * The single source of truth for what a basket costs.
- *
- * The browser only ever sends `{ productId, quantity }` pairs. Prices, vendor
- * ownership, commission and totals are all read/derived from MongoDB here, so a
- * tampered client cart cannot change what is charged or what a vendor earns.
- */
 export async function buildCheckoutQuote(rawItems = []) {
   if (!Array.isArray(rawItems) || rawItems.length === 0) {
     throw ApiError.badRequest('Your cart is empty');
   }
 
-  // Collapse duplicate lines for the same product before pricing.
   const requested = new Map();
   for (const item of rawItems) {
     const id = String(item.productId || item.product || '');

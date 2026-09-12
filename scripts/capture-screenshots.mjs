@@ -1,12 +1,3 @@
-/**
- * Captures the screenshots the README embeds.
- *
- *   npm run dev:memory        # in one terminal
- *   npm run docs:screenshots  # in another
- *
- * Uses the Chrome already on the machine. Shots are viewport-sized rather than
- * full-page, so they look like screenshots rather than tall strips.
- */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -34,14 +25,10 @@ fs.mkdirSync(OUT, { recursive: true });
 
 const browser = await chromium.launch({ channel: 'chrome' });
 
-/* Vite keeps an HMR websocket open, so 'networkidle' never fires in dev.
-   Wait for the DOM plus the images instead, with a hard ceiling per page. */
 const STEP_TIMEOUT = 20_000;
 
-/** Lets lazy images decode and animations settle before the shutter. */
 async function settle(page) {
   await page.waitForLoadState('domcontentloaded').catch(() => {});
-  // Nudge lazy images into view, then give them a bounded window to decode.
   await page
     .evaluate(async () => {
       window.scrollTo(0, document.body.scrollHeight);
@@ -58,8 +45,6 @@ async function settle(page) {
 }
 
 async function signIn(page, { email, password }) {
-  /* Drop any existing session first: the login page redirects away the moment
-     it sees one, which detaches the form mid-click when switching roles. */
   await page.goto(BASE);
   await page.evaluate(() => localStorage.clear()).catch(() => {});
   await page.goto(`${BASE}/login`);
@@ -78,7 +63,6 @@ async function shoot(page, name, { fullPage = false } = {}) {
   console.log(`  ${name}.png`);
 }
 
-/* ---------------------------------------------------------------- desktop */
 console.log('desktop (1440x900)');
 const desktop = await browser.newContext({ viewport: { width: 1440, height: 900 } });
 const page = await desktop.newPage();
@@ -94,7 +78,6 @@ await shoot(page, '02-shop');
 await page.goto(`${BASE}/product/hand-painted-ceramic-vase`);
 await shoot(page, '03-product');
 
-// Reviews sit lower on the product page.
 await page.evaluate(() => document.getElementById('reviews-heading')?.scrollIntoView());
 await page.waitForTimeout(400);
 await shoot(page, '04-reviews');
@@ -140,7 +123,6 @@ for (const [route, name] of [
 }
 await desktop.close();
 
-/* ----------------------------------------------------------------- mobile */
 console.log('mobile (Pixel 5)');
 const mobile = await browser.newContext({ ...devices['Pixel 5'] });
 const phone = await mobile.newPage();

@@ -1,18 +1,8 @@
-/**
- * Runs the API against a throwaway in-memory MongoDB, seeded on boot.
- *
- * This exists so the marketplace can be demonstrated on a machine with no
- * MongoDB installed. Data lives only as long as the process: for real work,
- * point MONGO_URI at a local mongod or an Atlas cluster and use `npm run dev`.
- */
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 
-/* Reuse the binary the test suite already downloaded instead of fetching a
-   second copy into the home cache. Env vars must be set before
-   mongodb-memory-server is imported, hence the dynamic import below. */
 process.env.MONGOMS_DOWNLOAD_DIR =
   process.env.MONGOMS_DOWNLOAD_DIR ||
   path.resolve(scriptDir, '..', 'node_modules', '.cache', 'mongodb-memory-server');
@@ -20,10 +10,7 @@ process.env.MONGOMS_DOWNLOAD_DIR =
 const { MongoMemoryServer } = await import('mongodb-memory-server');
 const memory = await MongoMemoryServer.create();
 
-// Must also be set before any module reads config/env.js.
 process.env.MONGO_URI = memory.getUri('artisans-corner');
-/* Lets /api/health say the database is disposable, which the audit checks
-   before it starts creating accounts and orders. */
 process.env.EPHEMERAL_DB = 'true';
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 process.env.ALLOW_MOCK_PAYMENTS = process.env.ALLOW_MOCK_PAYMENTS || 'true';

@@ -12,7 +12,6 @@ test.describe('accounts', () => {
     await page.getByLabel(/^Confirm password/).fill('Passw0rd123');
     await page.getByRole('button', { name: 'Create account' }).click();
 
-    // Regression cover for the shipped bug: a filled form reporting itself empty.
     await expect(page.getByText('Please tell us your name')).toBeHidden();
     await expect(page).toHaveURL('/');
 

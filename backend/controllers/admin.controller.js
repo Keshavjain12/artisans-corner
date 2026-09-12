@@ -70,7 +70,6 @@ export const listStores = asyncHandler(async (req, res) => {
   });
 });
 
-/** Suspending a store hides every product it sells from the marketplace. */
 export const moderateStore = asyncHandler(async (req, res) => {
   const store = await Store.findById(req.params.id);
   if (!store) throw ApiError.notFound('Store not found');
@@ -140,7 +139,6 @@ export const listOrders = asyncHandler(async (req, res) => {
   });
 });
 
-/** Commission report: what the platform earned and what it owes each vendor. */
 export const getRevenueReport = asyncHandler(async (req, res) => {
   const { page, limit, skip } = getPagination(req.query, { defaultLimit: 20, maxLimit: 100 });
 
@@ -207,7 +205,6 @@ export const getRevenueReport = asyncHandler(async (req, res) => {
   });
 });
 
-/** Marks a recorded payout as settled (simulated - no bank transfer happens). */
 export const settlePayout = asyncHandler(async (req, res) => {
   const payout = await Payout.findById(req.params.id);
   if (!payout) throw ApiError.notFound('Payout not found');

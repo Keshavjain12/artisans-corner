@@ -4,10 +4,6 @@ import asyncHandler from '../utils/asyncHandler.js';
 import sendSuccess from '../utils/apiResponse.js';
 import { destroyImage, ownsImage, uploadMany } from '../services/upload.service.js';
 
-/**
- * Vendors post raw files here; only the resulting hosted URL is ever stored on
- * the product. Cloudinary credentials stay on the server.
- */
 export const uploadProductImages = asyncHandler(async (req, res) => {
   if (!req.files?.length) throw ApiError.badRequest('Choose at least one image to upload');
 
@@ -33,12 +29,6 @@ export const uploadStoreImage = asyncHandler(async (req, res) => {
   return sendSuccess(res, { statusCode: 201, message: 'Image uploaded', data: { image } });
 });
 
-/**
- * Deletion is restricted to images this account uploaded.
- *
- * A product's image URL exposes its public id to anyone who can view the page,
- * so without this any vendor could delete any other vendor's photographs.
- */
 export const deleteUploadedImage = asyncHandler(async (req, res) => {
   const publicId = req.body.publicId || req.query.publicId;
   if (!publicId) throw ApiError.badRequest('publicId is required');

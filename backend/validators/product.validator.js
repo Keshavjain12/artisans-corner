@@ -1,10 +1,6 @@
 import { z } from 'zod';
 import { imageUrl, trimmed } from './common.js';
 
-/* The URL rule lives in common.js because shop logos, banners and avatars
-   need exactly the same one. Demanding an absolute URL here had made every
-   seeded product unsaveable: the vendor form resubmits the images it loaded,
-   so editing even the price of a seeded piece was rejected. */
 const imageSchema = z.object({
   url: imageUrl,
   publicId: z.string().trim().max(200).optional().default(''),

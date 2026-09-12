@@ -1,13 +1,3 @@
-/**
- * Draws the database schema diagram the brief asks for as a deliverable:
- * "an image showing how Users, Products, Orders, and Reviews are connected".
- *
- *   npm run docs:schema
- *
- * Writes docs/database-schema.svg, and rasterises docs/database-schema.png via
- * the Chrome that Playwright already drives, so the image can be dropped into a
- * slide or a report as well as rendered on GitHub.
- */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -36,10 +26,6 @@ const ROW = 26;
 const HEAD = 46;
 const PAD = 12;
 
-/**
- * One entity box. `core` marks the four tables the brief names, which are
- * drawn in the accent colour so the required relationships read at a glance.
- */
 function entity({ x, y, w, title, subtitle, fields, core = false }) {
   const h = HEAD + fields.length * ROW + PAD;
   const accent = core ? C.clay600 : C.moss500;
@@ -85,12 +71,6 @@ function entity({ x, y, w, title, subtitle, fields, core = false }) {
   };
 }
 
-/**
- * Orthogonal connector with a cardinality label.
- *  - 'hvh' (default) leaves sideways, turns down a vertical corridor, comes in sideways
- *  - 'vhv' leaves vertically, runs along a horizontal corridor, drops in
- * The corridor keeps lines out of the boxes they pass.
- */
 function link({ from, to, label, note = '', dashed = false, route = 'hvh', corridor }) {
   let path;
   let mx;
@@ -332,8 +312,6 @@ fs.mkdirSync(DOCS, { recursive: true });
 fs.writeFileSync(path.join(DOCS, 'database-schema.svg'), svg);
 console.log('wrote docs/database-schema.svg');
 
-/* Rasterise with the browser Playwright already uses, so the diagram can be
-   pasted into a slide deck or a report as a PNG. */
 try {
   const { chromium } = await import('@playwright/test');
   const browser = await chromium.launch({ channel: 'chrome' });

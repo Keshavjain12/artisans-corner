@@ -17,7 +17,6 @@ const LABELS = {
   delivered: 'Delivered',
 };
 
-/** Horizontal progress rail for an order, or a clear cancelled state. */
 export function OrderTimeline({ status, history = [] }) {
   if (status === 'cancelled') {
     return (

@@ -11,10 +11,6 @@ export const ORDER_STATUSES = [
 export const FULFILMENT_STATUSES = ['processing', 'confirmed', 'shipped', 'delivered', 'cancelled'];
 export const PAYMENT_STATUSES = ['pending', 'paid', 'failed', 'refunded'];
 
-/**
- * Order items snapshot the product name, image and price at purchase time so a
- * later edit (or archive) of the product never rewrites history.
- */
 const orderItemSchema = new mongoose.Schema(
   {
     product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true, index: true },
@@ -30,7 +26,6 @@ const orderItemSchema = new mongoose.Schema(
     quantity: { type: Number, required: true, min: 1 },
     subtotal: { type: Number, required: true, min: 0 },
 
-    // Per-item commission split: subtotal = platformFee + vendorEarnings
     commissionRate: { type: Number, required: true, min: 0, max: 1 },
     platformFee: { type: Number, required: true, min: 0 },
     vendorEarnings: { type: Number, required: true, min: 0 },
@@ -38,10 +33,6 @@ const orderItemSchema = new mongoose.Schema(
     fulfillmentStatus: { type: String, enum: FULFILMENT_STATUSES, default: 'processing' },
     trackingNumber: { type: String, default: '' },
     reviewed: { type: Boolean, default: false },
-    /* Whether this line's stock has been given back. False means the line is
-       still holding decremented stock, which is the only safe basis for
-       restocking: a vendor cancelling their own line and a buyer cancelling
-       the whole order must not both return the same units. */
     restocked: { type: Boolean, default: false },
   },
   { _id: true }
@@ -69,7 +60,6 @@ const orderSchema = new mongoose.Schema(
       type: [orderItemSchema],
       validate: [(v) => v.length > 0, 'An order needs at least one item'],
     },
-    // Every distinct store in the order - lets vendors query their orders cheaply.
     vendors: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Store', index: true }],
 
     shippingAddress: { type: shippingAddressSchema, required: true },
@@ -92,7 +82,6 @@ const orderSchema = new mongoose.Schema(
     paymentError: { type: String, default: '' },
 
     orderStatus: { type: String, enum: ORDER_STATUSES, default: 'pending_payment', index: true },
-    // Guards against double-processing a webhook + client confirmation race.
     inventoryApplied: { type: Boolean, default: false },
     statusHistory: [
       {

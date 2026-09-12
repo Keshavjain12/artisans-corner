@@ -22,9 +22,11 @@ export default function Login() {
   const { user, status, error } = useSelector((state) => state.auth);
 
   /* Only in-app paths: "?redirect=https://elsewhere" must not survive, and a
-     protocol-relative "//host" is a URL to somebody else's site. */
+     protocol-relative "//host" is a URL to somebody else's site. Browsers read
+     "/\host" as "//host" and drop tabs and newlines, so "/\evil.com" and
+     "/<tab>/evil.com" are refused too. */
   const requested = params.get('redirect') || location.state?.from?.pathname || '/';
-  const redirectTo = /^\/(?!\/)/.test(requested) ? requested : '/';
+  const redirectTo = /^\/(?![/\\])[^\\\s]*$/.test(requested) ? requested : '/';
 
   const {
     register,

@@ -50,5 +50,8 @@
       "**/tests/**/*.test.js"
     ],
     "transform": {}
+  },
+  "overrides": {
+    "qs": "^6.16.0"
   }
 }

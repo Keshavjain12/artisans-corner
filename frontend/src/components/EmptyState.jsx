@@ -1,6 +1,7 @@
 import cn from '../utils/cn.js';
 
-export function EmptyState({ icon: Icon, title, description, action, className }) {
+/** `as` sets the heading level: "h1" when the empty state is the whole page. */
+export function EmptyState({ icon: Icon, title, description, action, className, as: Heading = 'h3' }) {
   return (
     <div
       className={cn(
@@ -13,7 +14,7 @@ export function EmptyState({ icon: Icon, title, description, action, className }
           <Icon className="h-5 w-5" aria-hidden="true" />
         </span>
       )}
-      <h3 className="text-lg font-semibold text-ink">{title}</h3>
+      <Heading className="text-lg font-semibold text-ink">{title}</Heading>
       {description && <p className="mt-2 max-w-sm text-sm text-ink-muted">{description}</p>}
       {action && <div className="mt-6">{action}</div>}
     </div>

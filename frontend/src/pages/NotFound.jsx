@@ -9,6 +9,7 @@ export default function NotFound() {
   return (
     <div className="container-page py-24">
       <EmptyState
+        as="h1"
         icon={Compass}
         title="We could not find that page"
         description="The link may be out of date, or the piece may have sold out and been removed."

@@ -54,6 +54,7 @@ export default function Checkout() {
     return (
       <div className="container-page py-16">
         <EmptyState
+          as="h1"
           icon={ShoppingBag}
           title="There is nothing to check out"
           description="Add a piece to your cart and come back to complete your order."

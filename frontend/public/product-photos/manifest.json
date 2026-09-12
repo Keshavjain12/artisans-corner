@@ -1,7 +1,19 @@
 {
   "products": {
+    "abstract-acrylic-canvas": {
+      "main": "/product-photos/abstract-acrylic-canvas.webp"
+    },
+    "acacia-paddle-chopping-board": {
+      "main": "/product-photos/acacia-paddle-chopping-board.webp"
+    },
+    "amber-claw-hair-clip": {
+      "main": "/product-photos/amber-claw-hair-clip.webp"
+    },
     "ash-wood-coffee-scoop": {
       "main": "/product-photos/ash-wood-coffee-scoop.webp"
+    },
+    "black-canvas-crossbody-bag": {
+      "main": "/product-photos/black-canvas-crossbody-bag.webp"
     },
     "jaipur-block-print-tote": {
       "main": "/product-photos/jaipur-block-print-tote.webp"
@@ -9,8 +21,17 @@
     "ajrakh-print-kimono-jacket": {
       "main": "/product-photos/ajrakh-print-kimono-jacket.webp"
     },
+    "block-print-cotton-dress": {
+      "main": "/product-photos/block-print-cotton-dress.webp"
+    },
+    "blue-and-white-glazed-planter": {
+      "main": "/product-photos/blue-and-white-glazed-planter.webp"
+    },
     "brass-feather-cuff": {
       "main": "/product-photos/brass-feather-cuff.webp"
+    },
+    "brass-eagle-key-clip": {
+      "main": "/product-photos/brass-eagle-key-clip.webp"
     },
     "olive-oil-pourer": {
       "main": "/product-photos/olive-oil-pourer.webp"
@@ -18,8 +39,41 @@
     "atlantic-glaze-serving-bowl": {
       "main": "/product-photos/atlantic-glaze-serving-bowl.webp"
     },
+    "charcoal-portrait-study": {
+      "main": "/product-photos/charcoal-portrait-study.webp"
+    },
+    "coastal-village-painting": {
+      "main": "/product-photos/coastal-village-painting.webp"
+    },
+    "coil-built-earthenware-vase": {
+      "main": "/product-photos/coil-built-earthenware-vase.webp"
+    },
+    "cotton-canvas-drawstring-bag": {
+      "main": "/product-photos/cotton-canvas-drawstring-bag.webp"
+    },
+    "cotton-canvas-shoulder-bag": {
+      "main": "/product-photos/cotton-canvas-shoulder-bag.webp"
+    },
+    "earthenware-cooking-pot": {
+      "main": "/product-photos/earthenware-cooking-pot.webp"
+    },
+    "embossed-white-stoneware-pitcher": {
+      "main": "/product-photos/embossed-white-stoneware-pitcher.webp"
+    },
     "kutch-embroidered-pouch": {
       "main": "/product-photos/kutch-embroidered-pouch.webp"
+    },
+    "embroidered-cotton-blouse": {
+      "main": "/product-photos/embroidered-cotton-blouse.webp"
+    },
+    "embroidered-cotton-waistcoat": {
+      "main": "/product-photos/embroidered-cotton-waistcoat.webp"
+    },
+    "freshwater-pearl-drop-earrings": {
+      "main": "/product-photos/freshwater-pearl-drop-earrings.webp"
+    },
+    "geometric-print-silk-scarf": {
+      "main": "/product-photos/geometric-print-silk-scarf.webp"
     },
     "original-gouache-coastal-study": {
       "main": "/product-photos/original-gouache-coastal-study.webp"
@@ -33,11 +87,41 @@
     "hand-painted-ceramic-vase": {
       "main": "/product-photos/hand-painted-ceramic-vase.webp"
     },
+    "hand-block-printed-kaftan": {
+      "main": "/product-photos/hand-block-printed-kaftan.webp"
+    },
+    "hand-carved-wooden-spoon-set": {
+      "main": "/product-photos/hand-carved-wooden-spoon-set.webp"
+    },
+    "hand-embroidered-floral-handbag": {
+      "main": "/product-photos/hand-embroidered-floral-handbag.webp"
+    },
+    "hand-lettered-calligraphy-print": {
+      "main": "/product-photos/hand-lettered-calligraphy-print.webp"
+    },
+    "hand-painted-wood-slice-coasters": {
+      "main": "/product-photos/hand-painted-wood-slice-coasters.webp"
+    },
+    "hand-pinched-salt-cellar": {
+      "main": "/product-photos/hand-pinched-salt-cellar.webp"
+    },
+    "hand-pulled-screen-print": {
+      "main": "/product-photos/hand-pulled-screen-print.webp"
+    },
+    "handloom-cotton-kurta": {
+      "main": "/product-photos/handloom-cotton-kurta.webp"
+    },
     "hand-thrown-tea-set": {
       "main": "/product-photos/hand-thrown-tea-set.webp"
     },
     "coastal-ceramic-wall-tiles": {
       "main": "/product-photos/coastal-ceramic-wall-tiles.webp"
+    },
+    "handmade-ceramic-soap-dish": {
+      "main": "/product-photos/handmade-ceramic-soap-dish.webp"
+    },
+    "handmade-oak-bar-stool": {
+      "main": "/product-photos/handmade-oak-bar-stool.webp"
     },
     "handwoven-cotton-cushion-cover": {
       "main": "/product-photos/handwoven-cotton-cushion-cover.webp"
@@ -45,11 +129,65 @@
     "natural-indigo-scarf": {
       "main": "/product-photos/natural-indigo-scarf.webp"
     },
+    "indigo-canvas-backpack": {
+      "main": "/product-photos/indigo-canvas-backpack.webp"
+    },
+    "indigo-dyed-linen-shirt": {
+      "main": "/product-photos/indigo-dyed-linen-shirt.webp"
+    },
+    "jute-market-bag": {
+      "main": "/product-photos/jute-market-bag.webp"
+    },
+    "khadi-cotton-trousers": {
+      "main": "/product-photos/khadi-cotton-trousers.webp"
+    },
+    "leather-bound-travel-journal": {
+      "main": "/product-photos/leather-bound-travel-journal.webp"
+    },
     "letterpress-greeting-card-set": {
       "main": "/product-photos/letterpress-greeting-card-set.webp"
     },
     "harbour-light-linocut-print": {
       "main": "/product-photos/harbour-light-linocut-print.webp"
+    },
+    "macrame-cotton-wall-hanging": {
+      "main": "/product-photos/macrame-cotton-wall-hanging.webp"
+    },
+    "matte-black-bud-vase": {
+      "main": "/product-photos/matte-black-bud-vase.webp"
+    },
+    "matte-white-butter-dish": {
+      "main": "/product-photos/matte-white-butter-dish.webp"
+    },
+    "natural-linen-smock-dress": {
+      "main": "/product-photos/natural-linen-smock-dress.webp"
+    },
+    "oak-box-wall-shelf": {
+      "main": "/product-photos/oak-box-wall-shelf.webp"
+    },
+    "olive-wood-salad-servers": {
+      "main": "/product-photos/olive-wood-salad-servers.webp"
+    },
+    "pressed-flower-wall-frame": {
+      "main": "/product-photos/pressed-flower-wall-frame.webp"
+    },
+    "quilted-evening-clutch": {
+      "main": "/product-photos/quilted-evening-clutch.webp"
+    },
+    "raku-fired-vessel": {
+      "main": "/product-photos/raku-fired-vessel.webp"
+    },
+    "red-magnolia-watercolour-print": {
+      "main": "/product-photos/red-magnolia-watercolour-print.webp"
+    },
+    "reusable-fabric-gift-wrap-set": {
+      "main": "/product-photos/reusable-fabric-gift-wrap-set.webp"
+    },
+    "satin-scrunchie-set": {
+      "main": "/product-photos/satin-scrunchie-set.webp"
+    },
+    "shibori-cotton-bandana": {
+      "main": "/product-photos/shibori-cotton-bandana.webp"
     },
     "hammered-silver-hoops": {
       "main": "/product-photos/hammered-silver-hoops.webp"
@@ -63,23 +201,77 @@
     "fine-silver-stacking-rings": {
       "main": "/product-photos/fine-silver-stacking-rings.webp"
     },
+    "silver-bangle-trio": {
+      "main": "/product-photos/silver-bangle-trio.webp"
+    },
+    "smoky-quartz-beaded-bracelet": {
+      "main": "/product-photos/smoky-quartz-beaded-bracelet.webp"
+    },
+    "soy-candle-in-clay-pot": {
+      "main": "/product-photos/soy-candle-in-clay-pot.webp"
+    },
     "speckled-clay-dinner-plates": {
       "main": "/product-photos/speckled-clay-dinner-plates.webp"
+    },
+    "square-crystal-stud-earrings": {
+      "main": "/product-photos/square-crystal-stud-earrings.webp"
+    },
+    "sterling-silver-chain-bracelet": {
+      "main": "/product-photos/sterling-silver-chain-bracelet.webp"
+    },
+    "sterling-silver-cufflinks": {
+      "main": "/product-photos/sterling-silver-cufflinks.webp"
+    },
+    "sterling-silver-curb-chain": {
+      "main": "/product-photos/sterling-silver-curb-chain.webp"
     },
     "ribbed-stoneware-mug": {
       "main": "/product-photos/ribbed-stoneware-mug.webp"
     },
+    "stoneware-pasta-bowls": {
+      "main": "/product-photos/stoneware-pasta-bowls.webp"
+    },
+    "stoneware-pour-over-coffee-dripper": {
+      "main": "/product-photos/stoneware-pour-over-coffee-dripper.webp"
+    },
+    "stoneware-taper-candle-holder": {
+      "main": "/product-photos/stoneware-taper-candle-holder.webp"
+    },
+    "stoneware-utensil-crock": {
+      "main": "/product-photos/stoneware-utensil-crock.webp"
+    },
     "terracotta-planter-set-of-three": {
       "main": "/product-photos/terracotta-planter-set-of-three.webp"
+    },
+    "terracotta-diya-lamp-set": {
+      "main": "/product-photos/terracotta-diya-lamp-set.webp"
+    },
+    "terracotta-water-jug": {
+      "main": "/product-photos/terracotta-water-jug.webp"
     },
     "turned-cherry-bowl": {
       "main": "/product-photos/turned-cherry-bowl.webp"
     },
+    "turquoise-silver-ring": {
+      "main": "/product-photos/turquoise-silver-ring.webp"
+    },
+    "waffle-cotton-bathrobe": {
+      "main": "/product-photos/waffle-cotton-bathrobe.webp"
+    },
     "walnut-serving-board": {
       "main": "/product-photos/walnut-serving-board.webp"
     },
+    "watercolour-acorn-bookmark-set": {
+      "main": "/product-photos/watercolour-acorn-bookmark-set.webp"
+    },
+    "wax-seal-stamp-kit": {
+      "main": "/product-photos/wax-seal-stamp-kit.webp"
+    },
     "salt-white-espresso-cups": {
       "main": "/product-photos/salt-white-espresso-cups.webp"
+    },
+    "whitewashed-oak-picture-frame": {
+      "main": "/product-photos/whitewashed-oak-picture-frame.webp"
     },
     "carved-oak-bookends": {
       "main": "/product-photos/carved-oak-bookends.webp"
@@ -87,8 +279,26 @@
     "handcrafted-wooden-lamp": {
       "main": "/product-photos/handcrafted-wooden-lamp.webp"
     },
+    "wooden-keepsake-box": {
+      "main": "/product-photos/wooden-keepsake-box.webp"
+    },
+    "wooden-serving-tray": {
+      "main": "/product-photos/wooden-serving-tray.webp"
+    },
+    "wooden-toy-train": {
+      "main": "/product-photos/wooden-toy-train.webp"
+    },
+    "wooden-wall-clock": {
+      "main": "/product-photos/wooden-wall-clock.webp"
+    },
     "handloom-cotton-table-runner": {
       "main": "/product-photos/handloom-cotton-table-runner.webp"
+    },
+    "woven-straw-basket-bag": {
+      "main": "/product-photos/woven-straw-basket-bag.webp"
+    },
+    "woven-stripe-leather-belt": {
+      "main": "/product-photos/woven-stripe-leather-belt.webp"
     }
   },
   "categories": {

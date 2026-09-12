@@ -58,6 +58,15 @@ export default function Home() {
   const categories = useAsync(() => catalogService.listCategories(), []);
   const stores = useAsync(() => catalogService.listStores({ limit: 4 }), []);
 
+  /* Counted live rather than written into the copy, so the hero stays true as
+     makers add and retire pieces - it read "Thirty pieces" long after it wasn't. */
+  const studioCount = stores.data?.meta?.total;
+  const pieceCount = trending.data?.meta?.total;
+  const heroCount =
+    studioCount && pieceCount
+      ? `${studioCount} studios. ${pieceCount} pieces. All handmade.`
+      : 'Independent studios. All handmade.';
+
   return (
     <>
       <section className="relative overflow-hidden border-b border-sand bg-clay-50/60">
@@ -65,7 +74,7 @@ export default function Home() {
           <div className="animate-fade-up">
             <span className="badge bg-white text-clay-700 shadow-card">
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
-              Six studios. Thirty pieces. All handmade.
+              {heroCount}
             </span>
             <h1 className="mt-5 text-4xl leading-[1.1] text-ink sm:text-5xl lg:text-6xl">
               Things made slowly,

@@ -1,6 +1,6 @@
 /**
  * Seeds a complete, demonstrable marketplace: categories, an admin, six
- * artisan shops, 30 products, a spread of paid orders across the last 90 days
+ * artisan shops, 100 products, a spread of paid orders across the last 90 days
  * (with real commission/payout records) and verified reviews.
  *
  *   npm run seed            # wipe and reseed

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Oak Box Wall Shelf">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F1EDE6"/>
+      <stop offset="100%" stop-color="#DFD5C6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#g)"/>
+  <g transform="translate(0 150)"><circle cx="696" cy="556" r="170" fill="none" stroke="#74452E" stroke-width="2" opacity="0.07"/><circle cx="462" cy="271" r="260" fill="none" stroke="#74452E" stroke-width="2" opacity="0.07"/><circle cx="632" cy="748" r="350" fill="none" stroke="#74452E" stroke-width="2" opacity="0.07"/></g>
+  <g transform="translate(600 600) scale(0.86) rotate(4.800000000000001) translate(-600 -450)">
+    <g fill="none" stroke-linecap="round">
+      <circle cx="600" cy="460" r="60" stroke="#74452E" stroke-width="16" opacity="0.85"/><circle cx="600" cy="460" r="102" stroke="#C28C6E" stroke-width="10" opacity="0.75"/><circle cx="600" cy="460" r="144" stroke="#74452E" stroke-width="16" opacity="0.6499999999999999"/><circle cx="600" cy="460" r="186" stroke="#C28C6E" stroke-width="10" opacity="0.5499999999999999"/><circle cx="600" cy="460" r="228" stroke="#74452E" stroke-width="16" opacity="0.44999999999999996"/>
+    </g>
+    <path d="M600 460 l170 -120" stroke="#74452E" stroke-width="12" opacity="0.5" stroke-linecap="round"/></g>
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Silver Bangle Trio">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F6EBE3"/>
+      <stop offset="100%" stop-color="#E7CFC1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#g)"/>
+  <g transform="translate(0 150)"><circle cx="488" cy="588" r="170" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="736" cy="768" r="260" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="267" cy="696" r="350" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/></g>
+  <g transform="translate(600 600) scale(1) rotate(-2) translate(-600 -450)">
+    <path d="M420 470 a180 180 0 1 1 360 0" fill="none" stroke="#8F5739" stroke-width="46" stroke-linecap="round" opacity="0.85"/>
+    <path d="M420 470 a180 180 0 1 1 360 0" fill="none" stroke="#A96F4C" stroke-width="14" opacity="0.75"/>
+    <circle cx="420" cy="480" r="26" fill="#8F5739" opacity="0.9"/>
+    <circle cx="780" cy="480" r="26" fill="#8F5739" opacity="0.9"/></g>
+</svg>

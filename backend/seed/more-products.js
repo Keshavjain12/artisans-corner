@@ -1,0 +1,178 @@
+/**
+ * The second half of the demo catalogue: seventy more pieces, so every one of
+ * the ten categories holds exactly ten products.
+ *
+ * Each piece belongs to the studio whose craft it genuinely fits - block print
+ * and terracotta from Jaipur, stoneware from Lisbon, silver from Wellington,
+ * wood from Portland, natural dye and handloom from Kutch, works on paper from
+ * Edinburgh - so a shop's page reads as one maker's range rather than a mix.
+ *
+ * Every name and description was written against the photograph it ships
+ * with, so the listing never promises a walnut board and shows an acacia one.
+ *
+ * Kept apart from data.js purely for readability; it is appended to PRODUCTS
+ * there and seeded, photographed and illustrated exactly like the first thirty.
+ */
+export const MORE_PRODUCTS = [
+  /* ---------------------------------------------------------- clothing */
+  { store: 'terra', name: 'Block Print Cotton Dress', category: 'clothing', price: 98, compareAtPrice: 120, stock: 11, featured: true, tags: ['dress', 'block-print', 'cotton'],
+    description: 'A relaxed dress in soft cotton, printed by hand with a bold floral block in madder red and rose. Side pockets, a tie waist, and a fabric that gets softer with every wash.' },
+  { store: 'terra', name: 'Hand Block Printed Kaftan', category: 'clothing', price: 86, compareAtPrice: null, stock: 9, featured: false, tags: ['kaftan', 'block-print', 'loungewear'],
+    description: 'A loose, ankle-length kaftan printed by hand with carved teak blocks in indigo on white cotton voile. Cut from a single length of cloth so it moves and breathes in the heat.' },
+  { store: 'terra', name: 'Embroidered Cotton Blouse', category: 'clothing', price: 64, compareAtPrice: 78, stock: 14, featured: false, tags: ['blouse', 'embroidery', 'cotton'],
+    description: 'A white cotton blouse with fine floral embroidery scattered across the front and a soft collar. Light, breathable, and easy to tuck in or knot at the waist.' },
+  { store: 'indigo', name: 'Waffle Cotton Bathrobe', category: 'clothing', price: 72, compareAtPrice: null, stock: 16, featured: false, tags: ['robe', 'waffle', 'cotton'],
+    description: 'A mid-length bathrobe in handloomed waffle cotton, light enough to dry quickly and thick enough to feel like a warm towel. Deep pockets, a long tie belt and a loop to hang it by.' },
+  { store: 'indigo', name: 'Indigo Dyed Linen Shirt', category: 'clothing', price: 94, compareAtPrice: null, stock: 12, featured: true, tags: ['shirt', 'indigo', 'linen'],
+    description: 'A mid-weight linen shirt dipped in a natural indigo vat until the blue sits deep in the weave. Corozo buttons, a curved hem, and a colour that fades beautifully over the years.' },
+  { store: 'indigo', name: 'Handloom Cotton Kurta', category: 'clothing', price: 68, compareAtPrice: 82, stock: 15, featured: false, tags: ['kurta', 'handloom', 'cotton'],
+    description: 'A straight-cut white kurta in handloom cotton, finished with tiny hand-cut eyelet work and a mandarin collar. The slight irregularity in the weave is the loom’s own signature.' },
+  { store: 'indigo', name: 'Embroidered Cotton Waistcoat', category: 'clothing', price: 76, compareAtPrice: null, stock: 10, featured: false, tags: ['waistcoat', 'embroidery', 'cotton'],
+    description: 'A cropped cotton waistcoat hand embroidered in Kutch with bright floral motifs on a deep blue ground. Worn open over a white shirt, or fastened on its own.' },
+  { store: 'indigo', name: 'Natural Linen Smock Dress', category: 'clothing', price: 124, compareAtPrice: 150, stock: 6, featured: false, tags: ['dress', 'linen', 'natural'],
+    description: 'A loose smock dress in undyed handwoven linen with gathered balloon sleeves and a relaxed below-the-knee length. Soft from the first wear, and softer with every wash.' },
+  { store: 'indigo', name: 'Khadi Cotton Trousers', category: 'clothing', price: 58, compareAtPrice: null, stock: 18, featured: false, tags: ['trousers', 'khadi', 'cotton'],
+    description: 'Wide-leg trousers in hand-spun khadi cotton, in natural oatmeal or deep bark brown, with an elasticated back waist and a flat front. Cut to sit just above the ankle.' },
+
+  /* -------------------------------------------------------- home decor */
+  { store: 'kiln', name: 'Stoneware Taper Candle Holder', category: 'home-decor', price: 32, compareAtPrice: null, stock: 24, featured: false, tags: ['candle', 'stoneware', 'taper'],
+    description: 'A taper candle holder in matte white stoneware, shaped by hand so every one stands a little differently. Sold singly; they look best grouped in threes along a table.' },
+  { store: 'oak', name: 'Oak Box Wall Shelf', category: 'home-decor', price: 96, compareAtPrice: 115, stock: 8, featured: false, tags: ['shelf', 'oak', 'wall'],
+    description: 'A shallow box shelf in solid oak that hangs flush on hidden keyhole fixings - deep enough for a row of books, a plant and the small things that need a home.' },
+  { store: 'oak', name: 'Whitewashed Oak Picture Frame', category: 'home-decor', price: 48, compareAtPrice: null, stock: 20, featured: false, tags: ['frame', 'oak', 'whitewashed'],
+    description: 'A hand-mitred oak frame finished in a soft whitewash that lets the grain show through, with real glass, an acid-free mount, and both a wall hook and an easel stand.' },
+  { store: 'terra', name: 'Terracotta Diya Lamp Set', category: 'home-decor', price: 26, compareAtPrice: null, stock: 40, featured: true, tags: ['diya', 'terracotta', 'festival'],
+    description: 'Twelve hand-pressed terracotta oil lamps, each painted by hand in festival reds and golds. Made for Diwali, and just as lovely with a tea light on an ordinary evening.' },
+  { store: 'indigo', name: 'Macrame Cotton Wall Hanging', category: 'home-decor', price: 58, compareAtPrice: 70, stock: 12, featured: false, tags: ['macrame', 'wall-hanging', 'cotton'],
+    description: 'A 60cm macrame hanging knotted from recycled cotton cord on a length of driftwood, finished with a brushed fringe. Knotted by hand, so each pattern varies a little.' },
+
+  /* ---------------------------------------------------------- ceramics */
+  { store: 'kiln', name: 'Stoneware Pour-Over Coffee Dripper', category: 'ceramics', price: 42, compareAtPrice: null, stock: 18, featured: true, tags: ['coffee', 'dripper', 'stoneware'],
+    description: 'A single-cup pour-over dripper thrown in matte white stoneware, with spiral ribs inside that help the coffee flow evenly. Takes standard size 02 paper filters.' },
+  { store: 'kiln', name: 'Matte White Butter Dish', category: 'ceramics', price: 38, compareAtPrice: null, stock: 15, featured: false, tags: ['butter', 'kitchen', 'stoneware'],
+    description: 'A lidded stoneware butter dish in a soft matte white glaze, topped with a turned wooden knob and sized for a standard 250g block.' },
+  { store: 'kiln', name: 'Stoneware Pasta Bowls', category: 'ceramics', price: 84, compareAtPrice: 98, stock: 9, featured: false, tags: ['bowls', 'pasta', 'stoneware'],
+    description: 'A set of four wide bowls in speckled grey stoneware with a pale glazed rim - right for pasta, salads or a generous helping of stew. Dishwasher and oven safe.' },
+  { store: 'terra', name: 'Hand-Pinched Salt Cellar', category: 'ceramics', price: 24, compareAtPrice: null, stock: 22, featured: false, tags: ['salt', 'cellar', 'stoneware'],
+    description: 'A small hand-pinched stoneware salt cellar in a soft speckled glaze, with a little spoon to match - for keeping flaky salt within pinching distance of the stove.' },
+  { store: 'terra', name: 'Handmade Ceramic Soap Dish', category: 'ceramics', price: 18, compareAtPrice: null, stock: 35, featured: false, tags: ['soap-dish', 'bathroom', 'ceramic'],
+    description: 'A shallow hand-thrown soap dish in a soft white glaze, wide enough for a generous bar and curved so water runs off rather than pooling underneath.' },
+
+  /* ----------------------------------------------------------- jewelry */
+  { store: 'fern', name: 'Sterling Silver Chain Bracelet', category: 'jewelry', price: 58, compareAtPrice: null, stock: 16, featured: false, tags: ['bracelet', 'silver', 'chain'],
+    description: 'A chunky sterling silver chain bracelet, each link shaped and polished at the bench, closed with a handmade toggle clasp. Heavy enough to feel, comfortable enough to forget.' },
+  { store: 'fern', name: 'Freshwater Pearl Drop Earrings', category: 'jewelry', price: 72, compareAtPrice: 88, stock: 12, featured: true, tags: ['earrings', 'pearl', 'gold-vermeil'],
+    description: 'Baroque freshwater pearls hung from small gold vermeil huggie hoops. Each pearl is a slightly different shape, so no two pairs match exactly.' },
+  { store: 'fern', name: 'Turquoise Silver Ring', category: 'jewelry', price: 88, compareAtPrice: null, stock: 7, featured: false, tags: ['ring', 'turquoise', 'silver'],
+    description: 'A large turquoise cabochon held in an engraved sterling silver setting with warm bronze accents. Made to order in your size, and the matrix running through every stone is its own.' },
+  { store: 'fern', name: 'Square Crystal Stud Earrings', category: 'jewelry', price: 44, compareAtPrice: null, stock: 25, featured: false, tags: ['earrings', 'studs', 'crystal'],
+    description: 'Square-cut crystals held in sterling silver four-claw settings, with secure screw backs. Small enough for every day, and bright enough to catch the light.' },
+  { store: 'fern', name: 'Smoky Quartz Beaded Bracelet', category: 'jewelry', price: 49, compareAtPrice: null, stock: 18, featured: false, tags: ['bracelet', 'quartz', 'beaded'],
+    description: 'A stretch bracelet of polished smoky quartz beads, hand strung on durable elastic cord. The stones run from pale tea to deep brown, so every bracelet is its own mix.' },
+  { store: 'fern', name: 'Sterling Silver Curb Chain', category: 'jewelry', price: 96, compareAtPrice: 115, stock: 9, featured: false, tags: ['necklace', 'chain', 'silver'],
+    description: 'A heavy sterling silver curb chain necklace, 50cm long and finished with a hand-soldered clasp. Polished link by link so it lies flat and catches the light.' },
+
+  /* --------------------------------------------------------------- art */
+  { store: 'pigment', name: 'Coastal Village Painting', category: 'art', price: 320, compareAtPrice: 380, stock: 1, featured: true, tags: ['painting', 'original', 'coastal'],
+    description: 'An original 30 x 40cm painting of a hillside harbour village above the sea, painted on location and supplied in its frame. One of a kind, signed on the reverse.' },
+  { store: 'pigment', name: 'Red Magnolia Watercolour Print', category: 'art', price: 38, compareAtPrice: null, stock: 30, featured: false, tags: ['watercolour', 'print', 'flowers'],
+    description: 'An A4 giclee print of a loose watercolour study of red magnolias, on 310gsm textured cotton rag. Signed, and supplied unframed with a backing board.' },
+  { store: 'pigment', name: 'Abstract Acrylic Canvas', category: 'art', price: 180, compareAtPrice: null, stock: 3, featured: false, tags: ['abstract', 'acrylic', 'canvas'],
+    description: 'An original 50 x 50cm abstract in thickly layered acrylic on deep-edge canvas, in warm ochre, gold and umber. Ready to hang, no frame needed.' },
+  { store: 'pigment', name: 'Charcoal Portrait Study', category: 'art', price: 95, compareAtPrice: null, stock: 4, featured: false, tags: ['charcoal', 'portrait', 'original'],
+    description: 'An original A3 charcoal portrait drawn from life on warm-toned textured paper, fixed and mounted. One of a kind - the smudges are part of it.' },
+  { store: 'pigment', name: 'Hand-Pulled Screen Print', category: 'art', price: 48, compareAtPrice: 60, stock: 20, featured: false, tags: ['screen-print', 'print', 'edition'],
+    description: 'A two-colour screen print pulled by hand one sheet at a time on heavyweight card, in an edition of fifty. Slight variations in the ink make every print its own.' },
+  { store: 'pigment', name: 'Pressed Flower Wall Frame', category: 'art', price: 62, compareAtPrice: null, stock: 10, featured: false, tags: ['pressed-flowers', 'frame', 'botanical'],
+    description: 'Real flowers and grasses from a Scottish meadow, pressed for six weeks and arranged between two panes of glass in a slim frame.' },
+  { store: 'pigment', name: 'Hand-Lettered Calligraphy Print', category: 'art', price: 34, compareAtPrice: null, stock: 25, featured: false, tags: ['calligraphy', 'lettering', 'print'],
+    description: 'A short line - love what you are good at - hand lettered in ink with a pointed pen and printed on textured cotton paper. A5, signed, and made to be framed.' },
+
+  /* ---------------------------------------------------------- woodwork */
+  { store: 'oak', name: 'Hand-Carved Wooden Spoon Set', category: 'woodwork', price: 46, compareAtPrice: null, stock: 20, featured: true, tags: ['spoons', 'carved', 'kitchen'],
+    description: 'Four cooking spoons carved by hand from cherry, birch and walnut with a knife and axe, then oiled. The facets left by the knife stay in the handles.' },
+  { store: 'oak', name: 'Acacia Paddle Chopping Board', category: 'woodwork', price: 64, compareAtPrice: 78, stock: 6, featured: false, tags: ['chopping-board', 'acacia', 'kitchen'],
+    description: 'A thick paddle board cut from a single piece of acacia, with a long handle for carrying straight to the table. Dense, knife-friendly grain, finished with food-safe oil.' },
+  { store: 'oak', name: 'Wooden Serving Tray', category: 'woodwork', price: 68, compareAtPrice: null, stock: 12, featured: false, tags: ['tray', 'serving', 'oak'],
+    description: 'A slim serving tray in pale oak with a raised lip on every side that keeps glasses from sliding off. Finished with food-safe oil.' },
+  { store: 'oak', name: 'Handmade Oak Bar Stool', category: 'woodwork', price: 210, compareAtPrice: 240, stock: 3, featured: false, tags: ['stool', 'oak', 'furniture'],
+    description: 'A tall bar stool in solid oak with a turned seat, splayed legs and a sturdy foot rail, built without a single screw. Seat height 75cm, right for most kitchen counters.' },
+  { store: 'oak', name: 'Wooden Keepsake Box', category: 'woodwork', price: 58, compareAtPrice: null, stock: 14, featured: false, tags: ['box', 'keepsake', 'pine'],
+    description: 'A small lidded box in pale pine with a brass carry handle, lap-jointed at the corners and lined with felt. The right size for letters, photographs or a watch.' },
+  { store: 'oak', name: 'Olive Wood Salad Servers', category: 'woodwork', price: 36, compareAtPrice: null, stock: 25, featured: false, tags: ['salad', 'servers', 'olive-wood'],
+    description: 'A pair of salad servers carved from reclaimed olive wood, whose dense swirling grain makes every set distinct. Hand-wash, and oil them now and then.' },
+  { store: 'oak', name: 'Wooden Wall Clock', category: 'woodwork', price: 88, compareAtPrice: null, stock: 9, featured: false, tags: ['clock', 'wall', 'wood'],
+    description: 'A 30cm wall clock with a face of real wood and a carved leaf pattern, fitted with a silent sweep movement. No numbers - the grain does the talking.' },
+
+  /* ---------------------------------------------------- handmade gifts */
+  { store: 'pigment', name: 'Leather-Bound Travel Journal', category: 'handmade-gifts', price: 54, compareAtPrice: 65, stock: 16, featured: true, tags: ['journal', 'leather', 'notebook'],
+    description: 'A refillable A6 journal with a hand-stitched vegetable-tanned leather cover and a wrap-around cord tie. Comes with two inserts of plain cotton paper.' },
+  { store: 'pigment', name: 'Wax Seal Stamp Kit', category: 'handmade-gifts', price: 32, compareAtPrice: null, stock: 28, featured: false, tags: ['wax-seal', 'stationery', 'kit'],
+    description: 'A brass seal stamp with a hand-engraved botanical design, a turned wooden handle and three sticks of sealing wax. Boxed and ready to give.' },
+  { store: 'pigment', name: 'Watercolour Acorn Bookmark Set', category: 'handmade-gifts', price: 16, compareAtPrice: null, stock: 50, featured: false, tags: ['bookmark', 'watercolour', 'set'],
+    description: 'Two bookmarks hand painted in watercolour with oak leaves and acorns on thick cotton paper, then signed. A small gift that lasts as long as the books it lives in.' },
+  { store: 'oak', name: 'Wooden Toy Train', category: 'handmade-gifts', price: 42, compareAtPrice: null, stock: 15, featured: false, tags: ['toy', 'train', 'kids'],
+    description: 'A pull-along steam train in solid hardwoods, with a coal tender and carriage, finished only with beeswax so it is safe for small hands.' },
+  { store: 'oak', name: 'Hand-Painted Wood Slice Coasters', category: 'handmade-gifts', price: 28, compareAtPrice: null, stock: 30, featured: false, tags: ['coasters', 'hand-painted', 'set'],
+    description: 'A set of four coasters cut from fallen branches and hand painted with folk-art scenes, then sealed against rings and spills. No two sets are alike.' },
+  { store: 'terra', name: 'Soy Candle in Clay Pot', category: 'handmade-gifts', price: 24, compareAtPrice: null, stock: 36, featured: false, tags: ['candle', 'soy', 'terracotta'],
+    description: 'A hand-poured soy wax candle scented with vetiver and orange, in a small terracotta pot you can reuse once it has burnt down. Around 35 hours of burn time.' },
+  { store: 'indigo', name: 'Reusable Fabric Gift Wrap Set', category: 'handmade-gifts', price: 22, compareAtPrice: null, stock: 40, featured: false, tags: ['gift-wrap', 'furoshiki', 'reusable'],
+    description: 'Three reusable cotton wraps in forest green, mustard and oatmeal, in the Japanese furoshiki style: tie one around any gift and it becomes part of the present.' },
+
+  /* ----------------------------------------------------------- pottery */
+  { store: 'terra', name: 'Terracotta Water Jug', category: 'pottery', price: 36, compareAtPrice: null, stock: 20, featured: true, tags: ['jug', 'terracotta', 'water'],
+    description: 'A traditional unglazed terracotta jug that keeps water naturally cool through evaporation. Thrown in Jaipur from local red clay, with a pinched pouring lip.' },
+  { store: 'terra', name: 'Earthenware Cooking Pot', category: 'pottery', price: 58, compareAtPrice: 70, stock: 10, featured: false, tags: ['cooking-pot', 'earthenware', 'kitchen'],
+    description: 'A wide earthenware handi for slow-cooking dal, rice and curries on the hob or in the oven. Season it once with oil and it improves with every use.' },
+  { store: 'terra', name: 'Coil-Built Earthenware Vase', category: 'pottery', price: 78, compareAtPrice: null, stock: 5, featured: false, tags: ['vase', 'coil-built', 'earthenware'],
+    description: 'A tall vase built up coil by coil and burnished smooth with a stone before firing, leaving a soft sheen and a faint, uneven rim.' },
+  { store: 'kiln', name: 'Matte Black Bud Vase', category: 'pottery', price: 28, compareAtPrice: null, stock: 18, featured: false, tags: ['bud-vase', 'stoneware', 'black'],
+    description: 'A slim bud vase in matte black stoneware, made to hold a single stem or a small handful. Its narrow neck keeps flowers standing exactly where you put them.' },
+  { store: 'kiln', name: 'Embossed White Stoneware Pitcher', category: 'pottery', price: 62, compareAtPrice: 74, stock: 11, featured: false, tags: ['pitcher', 'stoneware', 'white'],
+    description: 'A one-litre pitcher in glossy white stoneware with an embossed floral band, a generous handle and a lip that pours without dribbling. For water, milk or a bunch of flowers.' },
+  { store: 'kiln', name: 'Raku Fired Vessel', category: 'pottery', price: 140, compareAtPrice: null, stock: 2, featured: false, tags: ['raku', 'vessel', 'one-of-a-kind'],
+    description: 'A hand-built vessel pulled red-hot from the kiln and smoked in sawdust, which leaves a dark, crackled, gently metallic surface. Its uneven form is part of it - one of a kind.' },
+  { store: 'kiln', name: 'Stoneware Utensil Crock', category: 'pottery', price: 52, compareAtPrice: null, stock: 14, featured: false, tags: ['utensil-holder', 'kitchen', 'stoneware'],
+    description: 'A heavy crock in glazed white stoneware for wooden spoons and spatulas - tall enough that nothing tips out, and wide enough to grab what you need.' },
+  { store: 'kiln', name: 'Blue and White Glazed Planter', category: 'pottery', price: 56, compareAtPrice: null, stock: 16, featured: false, tags: ['planter', 'blue-and-white', 'glazed'],
+    description: 'A generous planter hand painted in cobalt on a white glaze, with a drainage hole in the base. Big enough for a lush fern, and happy indoors or out.' },
+
+  /* -------------------------------------------------------------- bags */
+  { store: 'terra', name: 'Black Canvas Crossbody Bag', category: 'bags', price: 48, compareAtPrice: 58, stock: 14, featured: false, tags: ['crossbody', 'canvas', 'everyday'],
+    description: 'A compact crossbody bag in waxed black canvas with a zip top, an adjustable strap and a slip pocket inside. Room for a phone, keys and a wallet, and not much else.' },
+  { store: 'terra', name: 'Jute Market Bag', category: 'bags', price: 28, compareAtPrice: null, stock: 32, featured: true, tags: ['jute', 'market-bag', 'eco'],
+    description: 'A sturdy woven jute shopper with a lined interior and soft rope handles. Holds a week of vegetables without complaint.' },
+  { store: 'terra', name: 'Quilted Evening Clutch', category: 'bags', price: 36, compareAtPrice: null, stock: 18, featured: false, tags: ['clutch', 'quilted', 'evening'],
+    description: 'A diamond-quilted clutch in soft black with a detachable gold-tone chain, big enough for a phone, keys and a lipstick.' },
+  { store: 'terra', name: 'Cotton Canvas Drawstring Bag', category: 'bags', price: 18, compareAtPrice: null, stock: 45, featured: false, tags: ['drawstring', 'canvas', 'gift'],
+    description: 'A sturdy cotton canvas drawstring bag with double-stitched seams, useful for shoes, laundry or wrapping a present.' },
+  { store: 'indigo', name: 'Woven Straw Basket Bag', category: 'bags', price: 54, compareAtPrice: 66, stock: 12, featured: false, tags: ['basket-bag', 'straw', 'summer'],
+    description: 'A structured basket bag woven by hand from seagrass, with sturdy top handles and a patterned scarf tied at the handle. Built for markets and beaches.' },
+  { store: 'indigo', name: 'Cotton Canvas Shoulder Bag', category: 'bags', price: 46, compareAtPrice: null, stock: 16, featured: false, tags: ['shoulder-bag', 'canvas', 'cotton'],
+    description: 'A roomy shoulder bag in thick natural cotton canvas with dark webbing straps and an inner zip pocket. Carries comfortably even when full.' },
+  { store: 'indigo', name: 'Indigo Canvas Backpack', category: 'bags', price: 88, compareAtPrice: 104, stock: 8, featured: false, tags: ['backpack', 'canvas', 'indigo'],
+    description: 'A canvas backpack dyed in natural indigo with leather trim, a padded laptop sleeve and brass buckles. The blue softens and lightens along the edges with use.' },
+  { store: 'indigo', name: 'Hand-Embroidered Floral Handbag', category: 'bags', price: 68, compareAtPrice: null, stock: 7, featured: false, tags: ['handbag', 'embroidery', 'floral'],
+    description: 'A structured top-handle bag in sunflower yellow, hand embroidered with a garden of flowers in bright thread. Every stitch is placed by hand, so each bag takes weeks to finish.' },
+
+  /* ------------------------------------------------------- accessories */
+  { store: 'fern', name: 'Amber Claw Hair Clip', category: 'accessories', price: 18, compareAtPrice: null, stock: 30, featured: false, tags: ['hair-clip', 'claw', 'acetate'],
+    description: 'A large claw clip in amber-toned acetate, strong enough to hold a full twist of thick hair and gentle enough not to snag it.' },
+  { store: 'fern', name: 'Sterling Silver Cufflinks', category: 'accessories', price: 74, compareAtPrice: null, stock: 10, featured: false, tags: ['cufflinks', 'silver', 'gift'],
+    description: 'A pair of hand-forged sterling silver cufflinks with a round face and a swivel back, presented in a tin gift box. Easily engraved with initials on request.' },
+  { store: 'fern', name: 'Brass Eagle Key Clip', category: 'accessories', price: 34, compareAtPrice: null, stock: 40, featured: false, tags: ['keyring', 'brass', 'cast'],
+    description: 'A solid brass key clip cast in the shape of an eagle’s head, with a snap hook that fastens to a belt loop. It darkens to a warm patina with handling.' },
+  { store: 'fern', name: 'Silver Bangle Trio', category: 'accessories', price: 82, compareAtPrice: 96, stock: 11, featured: true, tags: ['bangles', 'silver', 'set'],
+    description: 'Three twisted sterling silver bangles that chime softly when worn together. Made in three wrist sizes.' },
+  { store: 'indigo', name: 'Geometric Print Silk Scarf', category: 'accessories', price: 68, compareAtPrice: null, stock: 12, featured: false, tags: ['scarf', 'silk', 'print'],
+    description: 'A square silk twill scarf printed in bold geometric shapes in orange, cobalt and gold, with hand-rolled edges. 90cm - tie it at the neck, in the hair, or on a bag.' },
+  { store: 'indigo', name: 'Shibori Cotton Bandana', category: 'accessories', price: 16, compareAtPrice: null, stock: 45, featured: false, tags: ['bandana', 'shibori', 'cotton'],
+    description: 'A 55cm cotton bandana bound and dyed by hand in the shibori technique, so pale starbursts bloom across the dark ground wherever the cloth was tied.' },
+  { store: 'indigo', name: 'Woven Stripe Leather Belt', category: 'accessories', price: 28, compareAtPrice: null, stock: 22, featured: false, tags: ['belt', 'woven', 'leather'],
+    description: 'A leather belt inlaid with a hand-woven stripe of coloured thread and finished with an engraved silver-tone buckle. One size, adjustable to fit most waists.' },
+  { store: 'indigo', name: 'Satin Scrunchie Set', category: 'accessories', price: 14, compareAtPrice: null, stock: 50, featured: false, tags: ['scrunchies', 'satin', 'hair'],
+    description: 'Four soft satin scrunchies in blush, teal, mint and lilac - gentle on hair, and easy to wear on a wrist until they are needed.' },
+];
+
+export default MORE_PRODUCTS;

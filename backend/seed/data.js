@@ -1,5 +1,6 @@
 /** Realistic demo catalogue for the seeded marketplace. */
 import { productPhoto, storePhoto } from '../config/photoManifest.js';
+import { MORE_PRODUCTS } from './more-products.js';
 
 export const DEMO_PASSWORDS = {
   admin: 'DemoAdmin123!',
@@ -204,3 +205,6 @@ PRODUCTS.push(
   { store: 'pigment', name: 'Hand-Bound Sketchbook', category: 'handmade-gifts', price: 46, compareAtPrice: null, stock: 23, featured: false, tags: ['sketchbook', 'bookbinding', 'gift'],
     description: 'An A5 coptic-bound sketchbook with 120 pages of 140gsm cartridge paper and a marbled cover papered by hand. Opens completely flat, which is the whole point.' }
 );
+
+/* Seventy more pieces, so every category holds ten - see more-products.js. */
+PRODUCTS.push(...MORE_PRODUCTS);

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Handmade Ceramic Soap Dish">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F6EBE3"/>
+      <stop offset="100%" stop-color="#E7CFC1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#g)"/>
+  <g transform="translate(0 150)"><circle cx="-15" cy="-535" r="170" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="-27" cy="-334" r="260" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/><circle cx="171" cy="-528" r="350" fill="none" stroke="#8F5739" stroke-width="2" opacity="0.07"/></g>
+  <g transform="translate(600 600) scale(0.86) rotate(0) translate(-600 -450)">
+    <path d="M400 440 q200 250 400 0 z" fill="#8F5739" opacity="0.85"/>
+    <ellipse cx="600" cy="440" rx="200" ry="48" fill="#A96F4C"/>
+    <ellipse cx="600" cy="440" rx="146" ry="33" fill="#F6EBE3" opacity="0.75"/></g>
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Hand-Embroidered Floral Handbag">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#EDF0EC"/>
+      <stop offset="100%" stop-color="#D6DFD3"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#g)"/>
+  <g transform="translate(0 150)"><circle cx="-587" cy="-47" r="170" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/><circle cx="1" cy="-180" r="260" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/><circle cx="-25" cy="-477" r="350" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/></g>
+  <g transform="translate(600 600) scale(0.86) rotate(3.2) translate(-600 -450)">
+    <rect x="440" y="380" width="320" height="290" rx="26" fill="#4B6248" opacity="0.85"/>
+    <path d="M520 380 v-40 q80 -70 160 0 v40" fill="none" stroke="#4B6248" stroke-width="20" stroke-linecap="round"/>
+    <path d="M500 470 h200" stroke="#EDF0EC" stroke-width="14" opacity="0.5" stroke-linecap="round"/>
+    <path d="M500 530 h140" stroke="#EDF0EC" stroke-width="14" opacity="0.35" stroke-linecap="round"/></g>
+</svg>

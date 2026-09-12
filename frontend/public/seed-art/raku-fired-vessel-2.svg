@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Raku Fired Vessel">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#EDF0EC"/>
+      <stop offset="100%" stop-color="#D6DFD3"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#g)"/>
+  <g transform="translate(0 150)"><circle cx="695" cy="215" r="170" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/><circle cx="861" cy="290" r="260" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/><circle cx="482" cy="130" r="350" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/></g>
+  <g transform="translate(600 600) scale(0.86) rotate(1.6) translate(-600 -450)">
+    <path d="M470 330 q-30 130 40 250 q90 90 180 0 q70 -120 40 -250 q-130 40 -260 0 z" fill="#4B6248" opacity="0.82"/>
+    <path d="M470 330 q130 -70 260 0" fill="none" stroke="#4B6248" stroke-width="18" stroke-linecap="round"/>
+    <path d="M520 430 q80 30 160 0" fill="none" stroke="#EDF0EC" stroke-width="10" opacity="0.55"/>
+    <path d="M515 505 q85 32 170 0" fill="none" stroke="#EDF0EC" stroke-width="10" opacity="0.4"/></g>
+</svg>

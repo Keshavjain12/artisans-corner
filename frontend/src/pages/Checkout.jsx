@@ -384,7 +384,7 @@ export default function Checkout() {
         ))}
       </ol>
 
-      <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_340px]">
+      <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div>
           {step === 1 && (
             <div className="card space-y-5 p-6">

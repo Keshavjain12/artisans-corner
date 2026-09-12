@@ -250,7 +250,7 @@ cp .env.example backend/.env      # then edit backend/.env
 # configure the frontend (optional in dev - defaults to the Vite proxy)
 cp frontend/.env.example frontend/.env
 
-# seed demo data (6 shops, 30 products, orders, reviews)
+# seed demo data (6 shops, 100 products, orders, reviews)
 npm run seed
 
 # run API (:5055) and client (:5273) together
@@ -438,7 +438,7 @@ npm run seed
 ```
 
 Creates 10 categories, 1 admin, 3 buyers, 6 vendor accounts with stores,
-30 realistic handmade products, 90 paid orders spread over the last 110 days
+100 realistic handmade products - ten in each category - 90 paid orders spread over the last 110 days
 (each one through the real pricing and payout pipeline, with fulfilment statuses
 that age with the order) and verified reviews on delivered items.
 

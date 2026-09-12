@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Jute Market Bag">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F7EFE8"/>
+      <stop offset="100%" stop-color="#E3D3C4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#g)"/>
+  <g transform="translate(0 150)"><circle cx="-368" cy="92" r="170" fill="none" stroke="#5C3726" stroke-width="2" opacity="0.07"/><circle cx="29" cy="-6" r="260" fill="none" stroke="#5C3726" stroke-width="2" opacity="0.07"/><circle cx="-122" cy="-301" r="350" fill="none" stroke="#5C3726" stroke-width="2" opacity="0.07"/></g>
+  <g transform="translate(600 600) scale(0.86) rotate(-1.6) translate(-600 -450)">
+    <rect x="440" y="380" width="320" height="290" rx="26" fill="#5C3726" opacity="0.85"/>
+    <path d="M520 380 v-40 q80 -70 160 0 v40" fill="none" stroke="#5C3726" stroke-width="20" stroke-linecap="round"/>
+    <path d="M500 470 h200" stroke="#F7EFE8" stroke-width="14" opacity="0.5" stroke-linecap="round"/>
+    <path d="M500 530 h140" stroke="#F7EFE8" stroke-width="14" opacity="0.35" stroke-linecap="round"/></g>
+</svg>

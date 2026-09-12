@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Soy Candle in Clay Pot">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#EDF0EC"/>
+      <stop offset="100%" stop-color="#D6DFD3"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#g)"/>
+  <g transform="translate(0 150)"><circle cx="233" cy="353" r="170" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/><circle cx="704" cy="712" r="260" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/><circle cx="263" cy="775" r="350" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/></g>
+  <g transform="translate(600 600) scale(0.86) rotate(-4.800000000000001) translate(-600 -450)">
+    <rect x="440" y="400" width="320" height="250" rx="20" fill="#4B6248" opacity="0.85"/>
+    <path d="M600 400 v250" stroke="#EDF0EC" stroke-width="26" opacity="0.75"/>
+    <path d="M440 490 h320" stroke="#EDF0EC" stroke-width="26" opacity="0.75"/>
+    <path d="M600 400 q-90 -90 -30 -110 q60 -20 30 110 z" fill="#5F7A5B" opacity="0.9"/>
+    <path d="M600 400 q90 -90 30 -110 q-60 -20 -30 110 z" fill="#5F7A5B" opacity="0.9"/></g>
+</svg>

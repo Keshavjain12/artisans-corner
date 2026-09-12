@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Sterling Silver Curb Chain">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F7EFE8"/>
+      <stop offset="100%" stop-color="#E3D3C4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#g)"/>
+  <g transform="translate(0 150)"><circle cx="-158" cy="62" r="170" fill="none" stroke="#5C3726" stroke-width="2" opacity="0.07"/><circle cx="-445" cy="-503" r="260" fill="none" stroke="#5C3726" stroke-width="2" opacity="0.07"/><circle cx="-581" cy="-456" r="350" fill="none" stroke="#5C3726" stroke-width="2" opacity="0.07"/></g>
+  <g transform="translate(600 600) scale(0.86) rotate(0) translate(-600 -450)">
+    <circle cx="600" cy="500" r="145" fill="none" stroke="#5C3726" stroke-width="34" opacity="0.85"/>
+    <circle cx="600" cy="500" r="145" fill="none" stroke="#D6AF99" stroke-width="10" opacity="0.7"/>
+    <path d="M600 270 l52 78 l-52 72 l-52 -72 z" fill="#D6AF99"/></g>
+</svg>

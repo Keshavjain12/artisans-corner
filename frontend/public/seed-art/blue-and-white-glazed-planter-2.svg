@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200" role="img" aria-label="Blue and White Glazed Planter">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#EDF0EC"/>
+      <stop offset="100%" stop-color="#D6DFD3"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#g)"/>
+  <g transform="translate(0 150)"><circle cx="-317" cy="-17" r="170" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/><circle cx="-65" cy="-13" r="260" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/><circle cx="-534" cy="-384" r="350" fill="none" stroke="#4B6248" stroke-width="2" opacity="0.07"/></g>
+  <g transform="translate(600 600) scale(0.86) rotate(3.2) translate(-600 -450)">
+    <path d="M490 470 h220 l-26 190 q-4 30 -34 30 h-100 q-30 0 -34 -30 z" fill="#4B6248" opacity="0.88"/>
+    <rect x="476" y="440" width="248" height="42" rx="12" fill="#5F7A5B"/>
+    <path d="M600 440 q-10 -120 -90 -160 q60 100 60 160" fill="#5F7A5B" opacity="0.9"/>
+    <path d="M600 440 q10 -140 100 -180 q-70 110 -70 180" fill="#4B6248" opacity="0.7"/></g>
+</svg>

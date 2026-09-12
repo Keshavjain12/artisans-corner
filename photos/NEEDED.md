@@ -1,6 +1,6 @@
 # Photos still needed
 
-0 of 30 products are still using generated artwork.
+0 of 100 products are still using generated artwork.
 Regenerate this file any time with `npm run seed:photos`.
 
 Save each file under **exactly** the filename in the middle column, into the
